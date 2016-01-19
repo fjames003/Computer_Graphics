@@ -11,30 +11,39 @@
     var canvas = document.getElementById("canvas");
     var renderingContext = canvas.getContext("2d");
 
-    // // Declare other variables here.
-    // var radialGradient = renderingContext.createRadialGradient(160, 160, 1, 180, 180, 320);
-
-    // // Put your canvas drawing code (and any other code) here.
-    // radialGradient.addColorStop(0, "white");
-    // radialGradient.addColorStop(1, "blue");
-
     var canvasSize = 1024;
     var borderWidth = 24;
+    var tileSize = ((canvasSize - borderWidth) / 8);
     var isBlack = true;
-    for (var rows = borderWidth; rows <= canvasSize; rows += ((canvasSize - borderWidth) / 8)) {
-        for (var columns = borderWidth; columns <= canvasSize; columns += ((canvasSize - borderWidth) / 8)) {
+    for (var rows = canvasSize - borderWidth - tileSize; rows >= borderWidth; rows -= tileSize) {
+        for (var columns = canvasSize - borderWidth - tileSize; columns >= borderWidth; columns -= tileSize) {
 
             if (isBlack) {
-                renderingContext.fillStyle = "black";
-                renderingContext.fillRect(columns, rows, 120, 120);  
+                renderingContext.fillStyle = "rgb(150, 82, 1)";
+                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 15);  
+
             } else {
-                renderingContext.fillStyle = "red";
-                renderingContext.fillRect(columns, rows, 120, 120);
+                renderingContext.fillStyle = "rgb(192, 155, 76)";
+                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 15);
             }
 
+            tileSize = tileSize - 0.5;
             isBlack = !isBlack;   
         }
     }
-
+    // defineTrapezoid(100, 100, 125, 100, 75, "black");
+    function defineTrapezoid(x, y, bottomSize, topSize, height, color) {
+        var difference = (topSize - bottomSize) / 2;
+        renderingContext.fillStyle = color
+        renderingContext.beginPath();
+        renderingContext.moveTo(x, y);
+        renderingContext.lineTo(x + topSize, y);
+        renderingContext.lineTo(x + bottomSize + difference, y + height);
+        renderingContext.lineTo(x + difference, y + height);
+        renderingContext.closePath();
+        renderingContext.fill();
+    }
     
 }());
+
+ 
