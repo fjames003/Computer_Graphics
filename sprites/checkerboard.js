@@ -8,26 +8,31 @@
 // from the global namespace.
 (function () {
     // Ditto on using jQuery here.
-    var canvas = document.getElementById("canvas");
-    var renderingContext = canvas.getContext("2d");
+    // var canvas = document.getElementById("canvas");
+    // var renderingContext = canvas.getContext("2d");
+    window.SpriteLibrary = window.SpriteLibrary || { };
+    SpriteLibrary.drawBoard = function (canvas, border) {
+        var canvas = canvas;
+        var renderingContext = canvas.getContext("2d");
+        var canvasSize = canvas.width;
+        var borderWidth = border;
+        var tileSize = ((canvasSize - borderWidth) / 8);
+        var isBlack = true;
+        for (var rows = borderWidth; rows <= canvasSize; rows += tileSize) {
+            for (var columns = borderWidth; columns <= canvasSize; columns += tileSize) {
 
-    var canvasSize = 1024;
-    var borderWidth = 24;
-    var tileSize = ((canvasSize - borderWidth) / 8);
-    var isBlack = true;
-    for (var rows = borderWidth; rows <= canvasSize; rows += tileSize) {
-        for (var columns = borderWidth; columns <= canvasSize; columns += tileSize) {
+                if (isBlack) {
+                    renderingContext.fillStyle = "rgb(150, 82, 1)"; 
+                } else {
+                    renderingContext.fillStyle = "rgb(192, 155, 76)";
+                }
 
-            if (isBlack) {
-                renderingContext.fillStyle = "rgb(150, 82, 1)"; 
-            } else {
-                renderingContext.fillStyle = "rgb(192, 155, 76)";
+                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 5);
+                isBlack = !isBlack;   
             }
-
-            renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 5);
-            isBlack = !isBlack;   
         }
     }
+    
     // This is to make an attempt at a more "woody" look... Doesn't even get close
     // var radialGradient = renderingContext.createRadialGradient(0, 0, 500, 0, 0, 1000);
     // radialGradient.addColorStop(0, "rgb(150, 82, 1)");
