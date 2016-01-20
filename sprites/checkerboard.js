@@ -15,34 +15,31 @@
     var borderWidth = 24;
     var tileSize = ((canvasSize - borderWidth) / 8);
     var isBlack = true;
-    for (var rows = canvasSize - borderWidth - tileSize; rows >= borderWidth; rows -= tileSize) {
-        for (var columns = canvasSize - borderWidth - tileSize; columns >= borderWidth; columns -= tileSize) {
+    for (var rows = borderWidth; rows <= canvasSize; rows += tileSize) {
+        for (var columns = borderWidth; columns <= canvasSize; columns += tileSize) {
 
             if (isBlack) {
-                renderingContext.fillStyle = "rgb(150, 82, 1)";
-                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 15);  
-
+                renderingContext.fillStyle = "rgb(150, 82, 1)"; 
             } else {
                 renderingContext.fillStyle = "rgb(192, 155, 76)";
-                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 15);
             }
 
-            tileSize = tileSize - 0.5;
+            renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 5);
             isBlack = !isBlack;   
         }
     }
     // defineTrapezoid(100, 100, 125, 100, 75, "black");
-    function defineTrapezoid(x, y, bottomSize, topSize, height, color) {
-        var difference = (topSize - bottomSize) / 2;
-        renderingContext.fillStyle = color
-        renderingContext.beginPath();
-        renderingContext.moveTo(x, y);
-        renderingContext.lineTo(x + topSize, y);
-        renderingContext.lineTo(x + bottomSize + difference, y + height);
-        renderingContext.lineTo(x + difference, y + height);
-        renderingContext.closePath();
-        renderingContext.fill();
-    }
+    // function defineTrapezoid(x, y, bottomSize, topSize, height, color) {
+    //     var difference = (topSize - bottomSize) / 2;
+    //     renderingContext.fillStyle = color
+    //     renderingContext.beginPath();
+    //     renderingContext.moveTo(x, y);
+    //     renderingContext.lineTo(x + topSize, y);
+    //     renderingContext.lineTo(x + bottomSize + difference, y + height);
+    //     renderingContext.lineTo(x + difference, y + height);
+    //     renderingContext.closePath();
+    //     renderingContext.fill();
+    // }
     
 }());
 
