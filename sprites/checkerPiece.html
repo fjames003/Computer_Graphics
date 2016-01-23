@@ -6,7 +6,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Black Checker Piece Sprite</title>
+    <title>Checker Piece Sprite</title>
   </head>
   <body>
     <!-- No further elements here; strictly minimalist.
@@ -21,6 +21,24 @@
 
     <!-- This is where most of your action really will be:
          rename and edit this file. -->
-    <script src="blackChecker.js"></script>
+    <script src="checkerPiece.js"></script>
+    <script type="text/javascript">
+    (function () {
+      SpriteLibrary.drawPiece({
+        renderingContext: document.getElementById("canvas").getContext("2d"),
+        x: 100,
+        y: 100,
+        color: "black",
+        size: 55
+      });
+      SpriteLibrary.drawPiece({
+        renderingContext: document.getElementById("canvas").getContext("2d"),
+        x: 300,
+        y: 100,
+        color: "red",
+        size: 55
+      });
+    }());
+    </script>
   </body>
 </html>

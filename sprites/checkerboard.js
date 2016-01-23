@@ -11,11 +11,11 @@
     // var canvas = document.getElementById("canvas");
     // var renderingContext = canvas.getContext("2d");
     window.SpriteLibrary = window.SpriteLibrary || { };
-    SpriteLibrary.drawBoard = function (canvas, border) {
-        var canvas = canvas;
+    SpriteLibrary.drawBoard = function (boardSpecification) {
+        var canvas = boardSpecification.canvas;
         var renderingContext = canvas.getContext("2d");
         var canvasSize = canvas.width;
-        var borderWidth = border;
+        var borderWidth = boardSpecification.border || 24;
         var tileSize = ((canvasSize - borderWidth) / 8);
         var isBlack = true;
         for (var rows = borderWidth; rows <= canvasSize; rows += tileSize) {

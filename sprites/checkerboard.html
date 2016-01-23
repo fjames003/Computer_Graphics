@@ -23,7 +23,13 @@
          rename and edit this file. -->
     <script src="checkerboard.js"></script>
     <script type="text/javascript">
-      SpriteLibrary.drawBoard(document.getElementById("canvas"), 10);
+    (function () {
+       SpriteLibrary.drawBoard({
+          canvas: document.getElementById("canvas"), 
+          border: 10
+        });
+    }());
+     
     </script>
   </body>
 </html>
