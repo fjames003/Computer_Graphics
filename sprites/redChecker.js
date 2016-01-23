@@ -13,10 +13,11 @@
 
     var radialGradient = renderingContext.createRadialGradient(100, 100, 55, 100, 100, 35);
 
-    currentColor = "black";
+
+    currentColor = "red";
     for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
         radialGradient.addColorStop(stopper, currentColor);
-        currentColor = (currentColor === "black") ? "red" : "black";
+        currentColor = (currentColor === "red") ? "black" : "red";
     }
 
     renderingContext.fillStyle = radialGradient;
