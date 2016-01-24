@@ -43,10 +43,14 @@
             renderingContext.moveTo(size, 0);
             renderingContext.lineTo((size) + (size / 4 * 3), 0);
             renderingContext.stroke();
-            // renderingContext.save();
-            // renderingContext.translate(size - 5,0);
+            renderingContext.save();
+            renderingContext.translate(size, 0);
             // renderingContext.fillRect(size / 4 * 3 - (size / 7), 0, size / 7, size / 2);
-            // renderingContext.restore();
+            renderingContext.beginPath();
+            renderingContext.moveTo((size / 4 * 3), 0);
+            renderingContext.lineTo((size / 4 * 3), size / 2);
+            renderingContext.stroke();
+            renderingContext.restore();
             renderingContext.restore();
         }
         // drawLimb(Math.PI / 4);
