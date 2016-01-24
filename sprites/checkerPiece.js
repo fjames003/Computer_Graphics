@@ -15,6 +15,7 @@
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
         var size = pieceSpecification.size || 50;
+
         var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - 20);
 
         for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
@@ -26,6 +27,31 @@
         renderingContext.beginPath();
         renderingContext.arc(x, y, size, 0, Math.PI * 2, true);
         renderingContext.fill();
+
+        // time for limbs...
+        var drawLimb = function (limbAngle) {
+            
+            renderingContext.save();
+            renderingContext.translate(x,y);
+            renderingContext.fillStyle = "black";
+            renderingContext.rotate(limbAngle);
+            renderingContext.fillRect(size - 5, 0, size / 4 * 3, size/6);
+
+            renderingContext.restore();
+        }
+        // drawLimb(Math.PI / 4);
+        // drawLimb(-Math.PI / 4);
+        // drawLimb(0);
+        // drawLimb(Math.PI);
+        // drawLimb(Math.PI / 4 * 3);
+        // drawLimb(Math.PI / 4 * 5);
+
+        limbAngle = 0;
+        while(limbAngle < 320) {
+            drawLimb(limbAngle * Math.PI / 180);
+            limbAngle += (limbAngle !== 45 && limbAngle !== 225) ? 45 : 90;
+        }
+
     }
 
 
