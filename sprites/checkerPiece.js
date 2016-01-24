@@ -33,13 +33,20 @@
             
             renderingContext.save();
             renderingContext.translate(x,y);
-            renderingContext.fillStyle = "black";
+            // renderingContext.fillStyle = "black";
             renderingContext.rotate(limbAngle);
-            renderingContext.fillRect(size - 5, 0, size / 4 * 3, size / 6);
-            renderingContext.save();
-            renderingContext.translate(size - 5,0);
-            renderingContext.fillRect(size / 4 * 3 - (size / 7), 0, size / 7, size / 2);
-            renderingContext.restore();
+            // renderingContext.fillRect(size - 5, 0, size / 4 * 3, size / 6);
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineWidth = size / 6;
+            renderingContext.lineCap = "round";
+            renderingContext.beginPath();
+            renderingContext.moveTo(size, 0);
+            renderingContext.lineTo((size) + (size / 4 * 3), 0);
+            renderingContext.stroke();
+            // renderingContext.save();
+            // renderingContext.translate(size - 5,0);
+            // renderingContext.fillRect(size / 4 * 3 - (size / 7), 0, size / 7, size / 2);
+            // renderingContext.restore();
             renderingContext.restore();
         }
         // drawLimb(Math.PI / 4);
