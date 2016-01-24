@@ -29,12 +29,14 @@
         renderingContext.fill();
 
         // time for limbs...
-        var drawLimb = function (limbAngle, leftLimb) {
+        var drawLimb = function (limbPosition, leftLimb, limbAngle) {
             
             renderingContext.save();
             renderingContext.translate(x,y);
-            renderingContext.rotate(limbAngle);
+            renderingContext.rotate(limbPosition);
             renderingContext.translate(size, 0);
+            var direction = (leftLimb) ? 1 : -1;
+            renderingContext.rotate(direction * (90 - limbAngle) * Math.PI / 180)
 
             renderingContext.strokeStyle = "black";
             renderingContext.lineCap = "round";
@@ -98,12 +100,16 @@
         // drawLimb(Math.PI / 4 * 3);
         // drawLimb(Math.PI / 4 * 5);
 
+        
+        // Angle in relation to body, i.e. 90 degrees is straight out of body...
+        // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
+        var limbAngle = pieceSpecification.limbAngle;
         leftLimb = true;
-        limbAngle = -45;
-        while(limbAngle < 300) {
-            drawLimb(limbAngle * Math.PI / 180, leftLimb);
-            limbAngle += (limbAngle !== 45 && limbAngle !== 225) ? 45 : 90;
-            if (limbAngle > 45) {
+        var limbPosition = -45;
+        while(limbPosition < 300) {
+            drawLimb(limbPosition * Math.PI / 180, leftLimb, limbAngle);
+            limbPosition += (limbPosition !== 45 && limbPosition !== 225) ? 45 : 90;
+            if (limbPosition > 45) {
                 leftLimb = false;
             }
         }
