@@ -29,27 +29,65 @@
         renderingContext.fill();
 
         // time for limbs...
-        var drawLimb = function (limbAngle) {
+        var drawLimb = function (limbAngle, leftLimb) {
             
             renderingContext.save();
             renderingContext.translate(x,y);
-            // renderingContext.fillStyle = "black";
             renderingContext.rotate(limbAngle);
-            // renderingContext.fillRect(size - 5, 0, size / 4 * 3, size / 6);
-            renderingContext.strokeStyle = "black";
-            renderingContext.lineWidth = size / 6;
-            renderingContext.lineCap = "round";
-            renderingContext.beginPath();
-            renderingContext.moveTo(size, 0);
-            renderingContext.lineTo((size) + (size / 4 * 3), 0);
-            renderingContext.stroke();
-            renderingContext.save();
             renderingContext.translate(size, 0);
-            // renderingContext.fillRect(size / 4 * 3 - (size / 7), 0, size / 7, size / 2);
-            renderingContext.beginPath();
-            renderingContext.moveTo((size / 4 * 3), 0);
-            renderingContext.lineTo((size / 4 * 3), size / 2);
-            renderingContext.stroke();
+
+            renderingContext.strokeStyle = "black";
+            renderingContext.lineCap = "round";
+            // width of primary limb
+            var primaryLimb = {
+                width: size / 6,
+                length: size / 4 * 3,
+                isHorizontal: true
+            };
+            var secondaryLimb = {
+                width: size / 7,
+                length: size / 2,
+                isHorizontal: false
+
+            };
+            var tertiaryLimb = {
+                width: size / 12,
+                length: size / 4,
+                isHorizontal: false
+
+            };
+
+            var additionalLimbs = function (objectSpecs) {
+                renderingContext.lineWidth = objectSpecs.width;
+                renderingContext.beginPath();
+                renderingContext.moveTo(0,0);
+                if (objectSpecs.isHorizontal) {
+                    renderingContext.lineTo(objectSpecs.length, 0);
+                    renderingContext.translate(objectSpecs.length, 0);
+                } else {
+                    if (leftLimb) {
+                        renderingContext.lineTo(0, objectSpecs.length);
+                        renderingContext.translate(0, objectSpecs.length);
+
+                    } else {
+                        renderingContext.lineTo(0, -objectSpecs.length);
+                        renderingContext.translate(0, -objectSpecs.length);
+                    }
+                    
+                }
+                renderingContext.stroke();
+            };
+
+            additionalLimbs(primaryLimb);
+
+            renderingContext.save();
+            additionalLimbs(secondaryLimb);
+
+            renderingContext.save();
+            additionalLimbs(tertiaryLimb); 
+
+
+            renderingContext.restore();
             renderingContext.restore();
             renderingContext.restore();
         }
@@ -60,10 +98,14 @@
         // drawLimb(Math.PI / 4 * 3);
         // drawLimb(Math.PI / 4 * 5);
 
-        limbAngle = 0;
-        while(limbAngle < 320) {
-            drawLimb(limbAngle * Math.PI / 180);
+        leftLimb = true;
+        limbAngle = -45;
+        while(limbAngle < 300) {
+            drawLimb(limbAngle * Math.PI / 180, leftLimb);
             limbAngle += (limbAngle !== 45 && limbAngle !== 225) ? 45 : 90;
+            if (limbAngle > 45) {
+                leftLimb = false;
+            }
         }
 
     }
