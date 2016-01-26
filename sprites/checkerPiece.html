@@ -25,6 +25,7 @@
     <script type="text/javascript">
     // Angle in relation to body, i.e. 90 degrees is straight out of body...
     // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
+    // For facialExpression, value must be between -5 and 5 inclusive AND not 0... (negative = frown, larger values are less extreme)
     (function () {
       SpriteLibrary.drawPiece({
         renderingContext: document.getElementById("canvas").getContext("2d"),
@@ -32,7 +33,8 @@
         y: 100,
         color: "black",
         size: 55,
-        limbAngle: 120
+        limbAngle: 120,
+        facialExpression: -1
       });
       SpriteLibrary.drawPiece({
         renderingContext: document.getElementById("canvas").getContext("2d"),
@@ -40,7 +42,8 @@
         y: 100,
         color: "red",
         size: 55,
-        limbAngle: 75
+        limbAngle: 75,
+        facialExpression: 1
       });
     }());
     </script>

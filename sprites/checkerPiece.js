@@ -113,24 +113,29 @@
                 leftLimb = false;
             }
         }
-        var drawFace = function () {
+        var drawFace = function (expression) {
+            var expression = (expression >= -5 && expression <= 5 && expression !== 0) ? expression : 1;
+            expression = (expression < 0) ? expression * 2 : expression;
             renderingContext.strokeStyle = "white";
             renderingContext.lineWidth = size / 12;
             renderingContext.save();
             renderingContext.translate(x, y);
+            renderingContext.save();
+            renderingContext.translate(0, size / 8);
             renderingContext.beginPath();
-            renderingContext.moveTo(-size / 3, size / 8);
-            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2)) / 3, Math.sqrt(Math.pow(size, 2)) / 2, Math.sqrt(Math.pow(size, 2)) / 3, Math.sqrt(Math.pow(size, 2)) / 2, size / 3, size / 8);
+            renderingContext.moveTo(-size / 3, 0);
+            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2) / 6), Math.sqrt(Math.pow(size, 2) / 7) / expression, Math.sqrt(Math.pow(size, 2) / 6), Math.sqrt(Math.pow(size, 2) / 7) / expression, size / 3, 0);
             renderingContext.stroke();
+            renderingContext.restore();
 
             renderingContext.fillStyle = "white";
             renderingContext.beginPath();
-            renderingContext.arc(-size / 5, -size / 10, size / 10, 0, Math.PI * 2, true);
-            renderingContext.arc(size / 5, -size / 10, size / 10, 0, Math.PI * 2, true);
+            renderingContext.arc(-size / 5, -size / 6, size / 10, 0, Math.PI * 2, true);
+            renderingContext.arc(size / 5, -size / 6, size / 10, 0, Math.PI * 2, true);
             renderingContext.fill();
             renderingContext.restore();
         }
-        drawFace();
+        drawFace(pieceSpecification.facialExpression);
     }
 
 
