@@ -23,6 +23,8 @@
          rename and edit this file. -->
     <script src="checkerPiece.js"></script>
     <script type="text/javascript">
+    // Angle in relation to body, i.e. 90 degrees is straight out of body...
+    // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
     (function () {
       SpriteLibrary.drawPiece({
         renderingContext: document.getElementById("canvas").getContext("2d"),

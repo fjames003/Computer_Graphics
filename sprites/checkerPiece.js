@@ -113,7 +113,24 @@
                 leftLimb = false;
             }
         }
+        var drawFace = function () {
+            renderingContext.strokeStyle = "white";
+            renderingContext.lineWidth = size / 12;
+            renderingContext.save();
+            renderingContext.translate(x, y);
+            renderingContext.beginPath();
+            renderingContext.moveTo(-size / 3, size / 8);
+            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2)) / 3, Math.sqrt(Math.pow(size, 2)) / 2, Math.sqrt(Math.pow(size, 2)) / 3, Math.sqrt(Math.pow(size, 2)) / 2, size / 3, size / 8);
+            renderingContext.stroke();
 
+            renderingContext.fillStyle = "white";
+            renderingContext.beginPath();
+            renderingContext.arc(-size / 5, -size / 10, size / 10, 0, Math.PI * 2, true);
+            renderingContext.arc(size / 5, -size / 10, size / 10, 0, Math.PI * 2, true);
+            renderingContext.fill();
+            renderingContext.restore();
+        }
+        drawFace();
     }
 
 
