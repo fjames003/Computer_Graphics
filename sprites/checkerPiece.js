@@ -63,6 +63,7 @@
             var additionalLimbs = function (objectSpecs) {
                 renderingContext.lineWidth = objectSpecs.width;
                 var angle = objectSpecs.angle || 90;
+                // angle = (angle)
                 renderingContext.beginPath();
                 // renderingContext.save();
                 renderingContext.moveTo(0,0);
