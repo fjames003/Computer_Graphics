@@ -14,7 +14,7 @@
     SpriteLibrary.drawBoard = function (boardSpecification) {
         var canvas = boardSpecification.canvas;
         var renderingContext = canvas.getContext("2d");
-        var canvasSize = canvas.width;
+        var canvasSize = (canvas.width <= canvas.height) ? canvas.width : canvas.height;
         var borderWidth = boardSpecification.border || 24;
         var tileSize = ((canvasSize - borderWidth) / 8);
         var isBlack = true;

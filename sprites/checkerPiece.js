@@ -49,7 +49,8 @@
             var secondaryLimb = {
                 width: size / 7,
                 length: size / 2,
-                isHorizontal: false
+                isHorizontal: false,
+                angle: pieceSpecification.elbowAngle
 
             };
             var tertiaryLimb = {
@@ -61,17 +62,21 @@
 
             var additionalLimbs = function (objectSpecs) {
                 renderingContext.lineWidth = objectSpecs.width;
+                var angle = objectSpecs.angle || 90;
                 renderingContext.beginPath();
+                // renderingContext.save();
                 renderingContext.moveTo(0,0);
                 if (objectSpecs.isHorizontal) {
                     renderingContext.lineTo(objectSpecs.length, 0);
                     renderingContext.translate(objectSpecs.length, 0);
                 } else {
                     if (leftLimb) {
+                        renderingContext.rotate((90 - angle) * Math.PI / 180)
                         renderingContext.lineTo(0, objectSpecs.length);
                         renderingContext.translate(0, objectSpecs.length);
 
                     } else {
+                        renderingContext.rotate(-(90 - angle) * Math.PI / 180)
                         renderingContext.lineTo(0, -objectSpecs.length);
                         renderingContext.translate(0, -objectSpecs.length);
                     }
