@@ -1,11 +1,5 @@
-/*
- * This template file is meant to be a template for canvas-based
- * web page code.  Nothing here is set in stone; it is mainly
- * intended to save you some typing.
- */
-// Yes, we can use jQuery here, but avoid it just in case you
-// really don't want to use it.  We do still keep things away
-// from the global namespace.
+/* Frankie James */
+
 (function () {
     // Ditto on using jQuery here.
     window.SpriteLibrary = window.SpriteLibrary || { };
@@ -40,6 +34,7 @@
 
             renderingContext.strokeStyle = "black";
             renderingContext.lineCap = "round";
+
             // width of primary limb
             var primaryLimb = {
                 width: size / 6,
@@ -63,9 +58,7 @@
             var additionalLimbs = function (objectSpecs) {
                 renderingContext.lineWidth = objectSpecs.width;
                 var angle = objectSpecs.angle || 90;
-                // angle = (angle)
                 renderingContext.beginPath();
-                // renderingContext.save();
                 renderingContext.moveTo(0,0);
                 if (objectSpecs.isHorizontal) {
                     renderingContext.lineTo(objectSpecs.length, 0);
@@ -99,13 +92,6 @@
             renderingContext.restore();
             renderingContext.restore();
         }
-        // drawLimb(Math.PI / 4);
-        // drawLimb(-Math.PI / 4);
-        // drawLimb(0);
-        // drawLimb(Math.PI);
-        // drawLimb(Math.PI / 4 * 3);
-        // drawLimb(Math.PI / 4 * 5);
-
         
         // Angle in relation to body, i.e. 90 degrees is straight out of body...
         // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
@@ -143,6 +129,4 @@
         }
         drawFace(pieceSpecification.facialExpression);
     }
-
-
 }());
