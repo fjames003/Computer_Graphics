@@ -14,12 +14,15 @@
     SpriteLibrary.drawBoard = function (boardSpecification) {
         var canvas = boardSpecification.canvas;
         var renderingContext = canvas.getContext("2d");
+        renderingContext.canvas.width = window.innerWidth;
+        renderingContext.canvas.height = window.innerHeight;
         var canvasSize = (canvas.width <= canvas.height) ? canvas.width : canvas.height;
         var borderWidth = boardSpecification.border || 24;
-        var tileSize = ((canvasSize - borderWidth) / 8);
+        var tileSize = ((canvasSize - borderWidth * 2) / 8);
         var isBlack = true;
-        for (var rows = borderWidth; rows <= canvasSize; rows += tileSize) {
-            for (var columns = borderWidth; columns <= canvasSize; columns += tileSize) {
+        var newRowCount = 1;
+        for (var rows = borderWidth; rows <= canvasSize - tileSize - borderWidth; rows += tileSize) {
+            for (var columns = borderWidth; columns <= canvasSize - tileSize - borderWidth; columns += tileSize) {
 
                 if (isBlack) {
                     renderingContext.fillStyle = "rgb(150, 82, 1)"; 
@@ -28,7 +31,10 @@
                 }
 
                 renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 5);
-                isBlack = !isBlack;   
+                if (newRowCount % 8 !== 0) {
+                isBlack = !isBlack;                    
+                }
+                newRowCount++;
             }
         }
     }
