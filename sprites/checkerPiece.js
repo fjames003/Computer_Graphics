@@ -1,16 +1,18 @@
 /* Frankie James */
 
 (function () {
-    // Ditto on using jQuery here.
     window.SpriteLibrary = window.SpriteLibrary || { };
     SpriteLibrary.drawPiece = function (pieceSpecification) {
         var renderingContext = pieceSpecification.renderingContext;
-        var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") ? pieceSpecification.color : "black";
+        var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") 
+                            ? pieceSpecification.color : "black";
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
+
+        // maybe not needed...? Ask...
         var size = pieceSpecification.size || 50;
 
-        var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - 20);
+        var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - size / 3);
 
         for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
             radialGradient.addColorStop(stopper, currentColor);
@@ -116,7 +118,11 @@
             renderingContext.translate(0, size / 8);
             renderingContext.beginPath();
             renderingContext.moveTo(-size / 3, 0);
-            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2) / 6), Math.sqrt(Math.pow(size, 2) / 7) / expression, Math.sqrt(Math.pow(size, 2) / 6), Math.sqrt(Math.pow(size, 2) / 7) / expression, size / 3, 0);
+            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2) / 6), 
+                                            Math.sqrt(Math.pow(size, 2) / 7) / expression, 
+                                            Math.sqrt(Math.pow(size, 2) / 6), 
+                                            Math.sqrt(Math.pow(size, 2) / 7) / expression, 
+                                            size / 3, 0);
             renderingContext.stroke();
             renderingContext.restore();
 
