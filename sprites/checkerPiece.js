@@ -3,6 +3,8 @@
 (function () {
     window.SpriteLibrary = window.SpriteLibrary || { };
     SpriteLibrary.drawPiece = function (pieceSpecification) {
+
+        // get specs and draw body of piece...
         var renderingContext = pieceSpecification.renderingContext;
         var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") 
                             ? pieceSpecification.color : "black";
@@ -13,7 +15,6 @@
         var size = pieceSpecification.size || 50;
 
         var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - size / 3);
-
         for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
             radialGradient.addColorStop(stopper, currentColor);
             currentColor = (currentColor === "black") ? "red" : "black";
@@ -93,21 +94,8 @@
             renderingContext.restore();
             renderingContext.restore();
             renderingContext.restore();
-        }
+        };
         
-        // Angle in relation to body, i.e. 90 degrees is straight out of body...
-        // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
-        var limbAngle = (pieceSpecification.limbAngle > 50 || pieceSpecification.limbAngle < 190) ?
-                        pieceSpecification.limbAngle : 90;
-        var leftLimb = true;
-        var limbPosition = -45;
-        while(limbPosition < 300) {
-            drawLimb(limbPosition * Math.PI / 180, leftLimb, limbAngle);
-            limbPosition += (limbPosition !== 45 && limbPosition !== 225) ? 45 : 90;
-            if (limbPosition > 45) {
-                leftLimb = false;
-            }
-        }
         var drawFace = function (expression) {
             var expression = (expression >= -5 && expression <= 5 && expression !== 0) ? expression : 1;
             expression = (expression < 0) ? expression * 2 : expression;
@@ -133,7 +121,22 @@
             renderingContext.arc(size / 5, -size / 6, size / 10, 0, Math.PI * 2, true);
             renderingContext.fill();
             renderingContext.restore();
+        };
+        // Draw limbs...
+        // Angle in relation to body, i.e. 90 degrees is straight out of body...
+        // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
+        var limbAngle = (pieceSpecification.limbAngle > 50 || pieceSpecification.limbAngle < 190) ?
+                        pieceSpecification.limbAngle : 90;
+        var leftLimb = true;
+        var limbPosition = -45;
+        while(limbPosition < 300) {
+            drawLimb(limbPosition * Math.PI / 180, leftLimb, limbAngle);
+            limbPosition += (limbPosition !== 45 && limbPosition !== 225) ? 45 : 90;
+            if (limbPosition > 45) {
+                leftLimb = false;
+            }
         }
+
         drawFace(pieceSpecification.facialExpression);
-    }
+    };
 }());
