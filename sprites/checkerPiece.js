@@ -97,8 +97,9 @@
         
         // Angle in relation to body, i.e. 90 degrees is straight out of body...
         // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
-        var limbAngle = pieceSpecification.limbAngle;
-        leftLimb = true;
+        var limbAngle = (pieceSpecification.limbAngle > 50 || pieceSpecification.limbAngle < 190) ?
+                        pieceSpecification.limbAngle : 90;
+        var leftLimb = true;
         var limbPosition = -45;
         while(limbPosition < 300) {
             drawLimb(limbPosition * Math.PI / 180, leftLimb, limbAngle);
