@@ -1,4 +1,5 @@
-/* Frankie James */
+// Frankie James
+// CMSI371
 
 (function () {
     window.SpriteLibrary = window.SpriteLibrary || { };
@@ -6,12 +7,11 @@
 
         // get specs and draw body of piece...
         var renderingContext = pieceSpecification.renderingContext;
-        var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") 
-                            ? pieceSpecification.color : "black";
+        var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") ?
+                            pieceSpecification.color : "black";
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
 
-        // maybe not needed...? Ask...
         var size = pieceSpecification.size || 50;
 
         var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - size / 3);
@@ -126,7 +126,7 @@
         // Angle in relation to body, i.e. 90 degrees is straight out of body...
         // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
         var limbAngle = (pieceSpecification.limbAngle > 50 || pieceSpecification.limbAngle < 190) ?
-                        pieceSpecification.limbAngle : 90;
+                         pieceSpecification.limbAngle : 90;
         var leftLimb = true;
         var limbPosition = -45;
         while(limbPosition < 300) {
@@ -136,7 +136,6 @@
                 leftLimb = false;
             }
         }
-
         drawFace(pieceSpecification.facialExpression);
     };
 }());

@@ -1,3 +1,6 @@
+<!-- Frankie James
+     CMSI371 -->
+     
 <!doctype html>
 
 <!-- This is a simple, bare-bones canvas web page template.
@@ -31,31 +34,25 @@
         renderingContext.save();
         renderingContext.translate(150, 200);
         renderingContext.scale(0.7, 0.7);
-      SpriteLibrary.drawPiece({
-        renderingContext: renderingContext,
-        // x: 150,
-        // y: 200,
-        color: "black",
-//        size: 35,
-        limbAngle: 120,
-        facialExpression: -1,
-        elbowAngle: 135
-      });
+        SpriteLibrary.drawPiece({
+            renderingContext: renderingContext,
+            color: "black",
+            limbAngle: 120,
+            facialExpression: -1,
+            elbowAngle: 135
+        });
         renderingContext.restore();
 
         renderingContext.save();
         renderingContext.translate(500, 200);
         renderingContext.scale(1.1, 1.1);
-      SpriteLibrary.drawPiece({
-        renderingContext: renderingContext,
-        // x: 500,
-        // y: 200,
-        color: "red",
-//        size: 55,
-        limbAngle: 75,
-        facialExpression: 1,
-        elbowAngle: -135
-      });
+        SpriteLibrary.drawPiece({
+            renderingContext: renderingContext,
+            color: "red",
+            limbAngle: 75,
+            facialExpression: 1,
+            elbowAngle: -135
+        });
         renderingContext.restore();
     }());
     </script>
