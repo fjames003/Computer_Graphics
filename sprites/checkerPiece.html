@@ -27,26 +27,36 @@
     // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
     // For facialExpression, value must be between -5 and 5 inclusive AND not 0... (negative = frown, larger values are less extreme)
     (function () {
+        var renderingContext = document.getElementById("canvas").getContext("2d");
+        renderingContext.save();
+        renderingContext.translate(150, 200);
+        renderingContext.scale(0.7, 0.7);
       SpriteLibrary.drawPiece({
-        renderingContext: document.getElementById("canvas").getContext("2d"),
-        x: 150,
-        y: 200,
+        renderingContext: renderingContext,
+        // x: 150,
+        // y: 200,
         color: "black",
-        size: 55,
+//        size: 35,
         limbAngle: 120,
         facialExpression: -1,
         elbowAngle: 135
       });
+        renderingContext.restore();
+
+        renderingContext.save();
+        renderingContext.translate(500, 200);
+        renderingContext.scale(1.1, 1.1);
       SpriteLibrary.drawPiece({
-        renderingContext: document.getElementById("canvas").getContext("2d"),
-        x: 500,
-        y: 200,
+        renderingContext: renderingContext,
+        // x: 500,
+        // y: 200,
         color: "red",
-        size: 55,
+//        size: 55,
         limbAngle: 75,
         facialExpression: 1,
         elbowAngle: -135
       });
+        renderingContext.restore();
     }());
     </script>
   </body>
