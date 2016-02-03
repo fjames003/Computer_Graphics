@@ -28,16 +28,13 @@
         for (var rows = borderWidth; rows <= boardSize - tileSize - borderWidth; rows += tileSize) {
             for (var columns = borderWidth; columns <= boardSize - tileSize - borderWidth; columns += tileSize) {
 
-                if (isDark) {
-                    renderingContext.fillStyle = darkColor; 
-                } else {
-                    renderingContext.fillStyle = lightColor;
-                }
-
+                renderingContext.fillStyle = (isDark) ? darkColor : lightColor;
                 renderingContext.fillRect(columns, rows, tileSize - betweenPieceSize, tileSize - betweenPieceSize);
+
                 if (newRowCount % initialPieceNumber !== 0) {
                     isDark = !isDark;                    
                 }
+
                 newRowCount++;
             }
         }
@@ -55,9 +52,9 @@
             renderingContext.lineTo(endOfBoardLocation, startofBoardLocation)
             renderingContext.closePath();
             renderingContext.stroke();
-        }
+        };
         coverUp(percentDegraded);
-    }
+    };
     
 }());
 
