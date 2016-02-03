@@ -1,3 +1,6 @@
+<!-- Frankie James
+     CMSI371 -->
+
 <!doctype html>
 
 <!-- This is a simple, bare-bones canvas web page template.
@@ -11,7 +14,7 @@
   <body>
     <!-- No further elements here; strictly minimalist.
          But of course you may resize your canvas as needed. -->
-    <canvas id="canvas" width="512" height="512">
+    <canvas id="canvas" width="1024" height="1024">
       Sorry, but you need a web browser that supports the
       <code>canvas</code> element.
     </canvas>
@@ -25,8 +28,9 @@
     <script type="text/javascript">
     (function () {
        SpriteLibrary.drawBoard({
-          canvas: document.getElementById("canvas"), 
-          border: 10
+          renderingContext: document.getElementById("canvas").getContext("2d"), 
+          border: 12,
+          degradation: 0
         });
     }());
      

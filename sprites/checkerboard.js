@@ -4,41 +4,59 @@
 (function () {
     window.SpriteLibrary = window.SpriteLibrary || { };
     SpriteLibrary.drawBoard = function (boardSpecification) {
-        var canvas = boardSpecification.canvas;
-        var renderingContext = canvas.getContext("2d");
-        var borderWidth = boardSpecification.border || 24;
+        var renderingContext = boardSpecification.renderingContext;
+        var borderWidth = boardSpecification.border || 12;
 
-        // Sets up canvas to be the size of the window,
-        // minus double the border to help ensure
-        // that all of board is seen...
-        renderingContext.canvas.width = window.innerWidth - 2 * borderWidth;
-        renderingContext.canvas.height = window.innerHeight - 2 * borderWidth;
-        var canvasSize = (canvas.width <= canvas.height) ? canvas.width : canvas.height;
-        var tileSize = ((canvasSize - borderWidth * 2) / 8);
-        var isBlack = true;
-        var newRowCount = 1;
+        // Set-up Ideal board using constants, rely on scale and translate to adjust if necessary...
+        // Board size is actually 'boardSize' - 'betweenPieceSize' aka 995 pixels in this default case...
+        var boardSize = 1000,
+            initialPieceNumber = 8,
+            tileSize = ((boardSize - borderWidth * 2) / initialPieceNumber),
+            isDark = true,
+            darkColor = "rgb(150, 82, 1)",
+            lightColor = "rgb(192, 155, 76)",
+            backgroundColor = "black",
+            newRowCount = 1,
+            betweenPieceSize = 5,
+            percentDegraded = boardSpecification.degradation;
 
         // add background to facilitate 'blinking'...
-        renderingContext.fillStyle = "black";
-        renderingContext.fillRect(0, 0, canvasSize - 5, canvasSize - 5);
+        renderingContext.fillStyle = backgroundColor;
+        renderingContext.fillRect(0, 0, boardSize - betweenPieceSize, boardSize - betweenPieceSize);
 
         // draw board...
-        for (var rows = borderWidth; rows <= canvasSize - tileSize - borderWidth; rows += tileSize) {
-            for (var columns = borderWidth; columns <= canvasSize - tileSize - borderWidth; columns += tileSize) {
+        for (var rows = borderWidth; rows <= boardSize - tileSize - borderWidth; rows += tileSize) {
+            for (var columns = borderWidth; columns <= boardSize - tileSize - borderWidth; columns += tileSize) {
 
-                if (isBlack) {
-                    renderingContext.fillStyle = "rgb(150, 82, 1)"; 
+                if (isDark) {
+                    renderingContext.fillStyle = darkColor; 
                 } else {
-                    renderingContext.fillStyle = "rgb(192, 155, 76)";
+                    renderingContext.fillStyle = lightColor;
                 }
 
-                renderingContext.fillRect(columns, rows, tileSize - 5, tileSize - 5);
-                if (newRowCount % 8 !== 0) {
-                    isBlack = !isBlack;                    
+                renderingContext.fillRect(columns, rows, tileSize - betweenPieceSize, tileSize - betweenPieceSize);
+                if (newRowCount % initialPieceNumber !== 0) {
+                    isDark = !isDark;                    
                 }
                 newRowCount++;
             }
         }
+        var coverUp = function (percentage) {
+            var distanceToCover = (boardSize * (percentage / 100)) / 2,
+                startofBoardLocation = borderWidth + distanceToCover / 2,
+                endOfBoardLocation = boardSize - borderWidth - betweenPieceSize - distanceToCover / 2;
+
+            renderingContext.strokeStyle = backgroundColor;
+            renderingContext.lineWidth = distanceToCover;
+            renderingContext.beginPath();
+            renderingContext.moveTo(startofBoardLocation, startofBoardLocation);
+            renderingContext.lineTo(startofBoardLocation, endOfBoardLocation);
+            renderingContext.lineTo(endOfBoardLocation, endOfBoardLocation);
+            renderingContext.lineTo(endOfBoardLocation, startofBoardLocation)
+            renderingContext.closePath();
+            renderingContext.stroke();
+        }
+        coverUp(percentDegraded);
     }
     
 }());
