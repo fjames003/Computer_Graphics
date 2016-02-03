@@ -1,0 +1,66 @@
+<!-- Frankie James
+     CMSI371 -->
+
+<!doctype html>
+
+<!-- This is a simple, bare-bones canvas web page template.
+     Its sole purpose is to save you a little typing when
+     starting up a new web page that uses the canvas element. -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Combination Sprite</title>
+  </head>
+  <body>
+    <!-- No further elements here; strictly minimalist.
+         But of course you may resize your canvas as needed. -->
+    <canvas id="canvas" width="1024" height="1024">
+      Sorry, but you need a web browser that supports the
+      <code>canvas</code> element.
+    </canvas>
+
+    <!-- Let's add jQuery, even if you might not always use it. -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- This is where most of your action really will be:
+         rename and edit this file. -->
+    <script src="checkerboard.js"></script>
+    <script src="checkerPiece.js"></script>
+    <script type="text/javascript">
+    (function () {
+        var renderingContext = document.getElementById("canvas").getContext("2d");
+
+        SpriteLibrary.drawBoard({
+            renderingContext: renderingContext, 
+            border: 12,
+            degradation: 0
+        });
+
+        renderingContext.save();
+        renderingContext.translate(70, 70);
+        renderingContext.scale(0.5, 0.5);
+        SpriteLibrary.drawPiece({
+            renderingContext: renderingContext,
+            color: "black",
+            limbAngle: 120,
+            facialExpression: -1,
+            elbowAngle: 135
+        });
+        renderingContext.restore();
+
+        renderingContext.save();
+        renderingContext.translate(1000 - 150, 1000 - 150);
+        renderingContext.scale(1.1, 1.1);
+        SpriteLibrary.drawPiece({
+            renderingContext: renderingContext,
+            color: "red",
+            limbAngle: 75,
+            facialExpression: 1,
+            elbowAngle: -135
+        });
+        renderingContext.restore();
+    }());
+     
+    </script>
+  </body>
+</html>
