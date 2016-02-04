@@ -97,9 +97,11 @@
         };
         
         var drawFace = function (expression) {
-            var expression = (expression >= -5 && expression <= 5 && expression !== 0) ? 
+            var expression = (expression >= -5 && expression <= 5) ? 
                             ((expression < 0) ? expression * 2 : expression) : 1;
+            
             renderingContext.strokeStyle = "white";
+            renderingContext.lineCap = "round";
             renderingContext.lineWidth = size / 12;
             renderingContext.save();
             renderingContext.translate(x, y);
@@ -107,11 +109,16 @@
             renderingContext.translate(0, size / 8);
             renderingContext.beginPath();
             renderingContext.moveTo(-size / 3, 0);
-            renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2) / 6), 
-                                            Math.sqrt(Math.pow(size, 2) / 7) / expression, 
-                                            Math.sqrt(Math.pow(size, 2) / 6), 
-                                            Math.sqrt(Math.pow(size, 2) / 7) / expression, 
-                                            size / 3, 0);
+            if (expression === 0) {
+                renderingContext.lineTo(size / 3 , 0);
+            } else {
+                renderingContext.bezierCurveTo(-Math.sqrt(Math.pow(size, 2) / 6), 
+                    Math.sqrt(Math.pow(size, 2) / 7) / expression, 
+                    Math.sqrt(Math.pow(size, 2) / 6), 
+                    Math.sqrt(Math.pow(size, 2) / 7) / expression, 
+                    size / 3, 0);
+            }
+            
             renderingContext.stroke();
             renderingContext.restore();
 
