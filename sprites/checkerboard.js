@@ -9,16 +9,16 @@
 
         // Set-up Ideal board using constants, rely on scale and translate to adjust if necessary...
         // Board size is actually 'boardSize' - 'betweenPieceSize' aka 995 pixels in this default case...
-        var boardSize = 1000,
-            initialPieceNumber = 8,
-            tileSize = ((boardSize - borderWidth * 2) / initialPieceNumber),
-            isDark = true,
-            darkColor = "rgb(150, 82, 1)",
-            lightColor = "rgb(192, 155, 76)",
-            backgroundColor = "black",
-            newRowCount = 1,
-            betweenPieceSize = 5,
-            percentDegraded = boardSpecification.degradation;
+        var boardSize = 1000;
+        var initialPieceNumber = 8;
+        var tileSize = ((boardSize - borderWidth * 2) / initialPieceNumber);
+        var isDark = true;
+        var darkColor = "rgb(150, 82, 1)";
+        var lightColor = "rgb(192, 155, 76)";
+        var backgroundColor = "black";
+        var newRowCount = 1;
+        var betweenPieceSize = 5;
+        var percentDegraded = boardSpecification.degradation;
 
         // add background to facilitate 'blinking'...
         renderingContext.fillStyle = backgroundColor;
@@ -39,9 +39,9 @@
             }
         }
         var coverUp = function (percentage) {
-            var distanceToCover = (boardSize * (percentage / 100)) / 2,
-                startofBoardLocation = borderWidth + distanceToCover / 2,
-                endOfBoardLocation = boardSize - borderWidth - betweenPieceSize - distanceToCover / 2;
+            var distanceToCover = (boardSize * (percentage / 100)) / 2;
+            var startofBoardLocation = borderWidth + distanceToCover / 2;
+            var endOfBoardLocation = boardSize - borderWidth - betweenPieceSize - distanceToCover / 2;
 
             renderingContext.strokeStyle = backgroundColor;
             renderingContext.lineWidth = distanceToCover;
