@@ -33,6 +33,7 @@
             renderingContext.rotate(limbPosition);
             renderingContext.translate(size, 0);
             var direction = (leftLimb) ? 1 : -1;
+            limbAngle = (limbAngle >= 50 && limbAngle <= 190) ? limbAngle : 90;
             renderingContext.rotate(direction * (90 - limbAngle) * Math.PI / 180)
 
             renderingContext.strokeStyle = "black";
