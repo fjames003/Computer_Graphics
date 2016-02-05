@@ -18,40 +18,49 @@
     <script src="checkerPiece.js"></script>
     <script type="text/javascript">
     (function () {
-        var renderingContext = document.getElementById("canvas").getContext("2d");
+        var drawScene = function () {
+            var renderingContext = document.getElementById("canvas").getContext("2d");
 
-        renderingContext.save();
-        renderingContext.scale(0.5, 0.5);
-        SpriteLibrary.drawBoard({
-            renderingContext: renderingContext, 
-            border: 12,
-            degradation: 0
-        });
+            renderingContext.save();
+            renderingContext.scale(0.7, 0.7);
+            SpriteLibrary.drawBoard({
+                renderingContext: renderingContext, 
+                border: 12,
+                degradation: 50,
+                waveFrequency: 0.03
+            });
 
-        renderingContext.save();
-        renderingContext.translate(70, 70);
-        renderingContext.scale(0.5, 0.5);
-        SpriteLibrary.drawPiece({
-            renderingContext: renderingContext,
-            color: "black",
-            limbAngle: 120,
-            facialExpression: -1,
-            elbowAngle: 135
-        });
-        renderingContext.restore();
+            renderingContext.save();
+            renderingContext.translate(70, 70);
+            renderingContext.scale(0.5, 0.5);
+            renderingContext.rotate(Math.PI)
+            SpriteLibrary.drawPiece({
+                renderingContext: renderingContext,
+                color: "black",
+                limbAngle: 120,
+                facialExpression: -1,
+                elbowAngle: 135
+            });
+            renderingContext.restore();
 
-        renderingContext.save();
-        renderingContext.translate(1000 - 150, 1000 - 150);
-        renderingContext.scale(1.1, 1.1);
-        SpriteLibrary.drawPiece({
-            renderingContext: renderingContext,
-            color: "red",
-            limbAngle: 75,
-            facialExpression: 0,
-            elbowAngle: -135
-        });
-        renderingContext.restore();
-        renderingContext.restore();
+            renderingContext.save();
+            // This places checker piece in bottom right, will make a function to find location soon.
+            renderingContext.translate(1000 - 135, 1000 - 150);
+            renderingContext.scale(1, 1);
+            SpriteLibrary.drawPiece({
+                renderingContext: renderingContext,
+                color: "red",
+                limbAngle: 75,
+                facialExpression: 0,
+                elbowAngle: -135
+            });
+            renderingContext.restore();
+            renderingContext.restore();
+
+            window.requestAnimationFrame(drawScene);
+        };
+        window.requestAnimationFrame(drawScene);
+
     }());
      
     </script>

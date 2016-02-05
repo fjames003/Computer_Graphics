@@ -13,12 +13,21 @@
         var initialPieceNumber = 8;
         var tileSize = ((boardSize - borderWidth * 2) / initialPieceNumber);
         var isDark = true;
-        var darkColor = "rgb(150, 82, 1)";
-        var lightColor = "rgb(192, 155, 76)";
-        var backgroundColor = "black";
+        var darkTile = "rgb(150, 82, 1)";
+        var lightTile = "rgb(192, 155, 76)";
         var newRowCount = 1;
         var betweenPieceSize = 5;
-        var percentDegraded = boardSpecification.degradation;
+        var percentDegraded = boardSpecification.degradation || 0;
+        var waveFrequency = boardSpecification.waveFrequency || 0.08;
+        
+        var darkWater = "rgb(0,191,255)";
+        var lightWater = "rgb(0,0,205)";
+        var currentColor = darkWater;
+        var backgroundColor = renderingContext.createRadialGradient(500, 500, 1000, 500, 500, 100);
+        for (var stopper = 0.0; stopper <= 1.0; stopper += waveFrequency) {
+            backgroundColor.addColorStop(stopper, currentColor);
+            currentColor = (currentColor === darkWater) ? lightWater : darkWater;
+         }
 
         // add background to facilitate 'blinking'...
         renderingContext.fillStyle = backgroundColor;
@@ -28,7 +37,7 @@
         for (var rows = borderWidth; rows <= boardSize - tileSize - borderWidth; rows += tileSize) {
             for (var columns = borderWidth; columns <= boardSize - tileSize - borderWidth; columns += tileSize) {
 
-                renderingContext.fillStyle = (isDark) ? darkColor : lightColor;
+                renderingContext.fillStyle = (isDark) ? darkTile : lightTile;
                 renderingContext.fillRect(columns, rows, tileSize - betweenPieceSize, tileSize - betweenPieceSize);
 
                 if (newRowCount % initialPieceNumber !== 0) {
@@ -46,10 +55,11 @@
             renderingContext.strokeStyle = backgroundColor;
             renderingContext.lineWidth = distanceToCover;
             renderingContext.beginPath();
-            renderingContext.moveTo(startofBoardLocation, startofBoardLocation);
-            renderingContext.lineTo(startofBoardLocation, endOfBoardLocation);
-            renderingContext.lineTo(endOfBoardLocation, endOfBoardLocation);
-            renderingContext.lineTo(endOfBoardLocation, startofBoardLocation)
+            // ones added to get rid of a 1 pixel border...
+            renderingContext.moveTo(startofBoardLocation - 1, startofBoardLocation - 1);
+            renderingContext.lineTo(startofBoardLocation - 1, endOfBoardLocation + 1);
+            renderingContext.lineTo(endOfBoardLocation + 1, endOfBoardLocation + 1);
+            renderingContext.lineTo(endOfBoardLocation + 1, startofBoardLocation - 1)
             renderingContext.closePath();
             renderingContext.stroke();
         };
