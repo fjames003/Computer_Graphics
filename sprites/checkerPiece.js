@@ -11,8 +11,9 @@
                             pieceSpecification.color : "black";
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
-
         var size = pieceSpecification.size || 50;
+        var limbUpperBound = 190;
+        var limbLowerBound = 50;
 
         var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - size / 3);
         for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
@@ -26,14 +27,14 @@
         renderingContext.fill();
 
         // time for limbs...
-        var drawLimb = function (limbPosition, leftLimb, limbAngle) {
+        var drawLimb = function (limbPosition, rightLimb, limbAngle) {
             
             renderingContext.save();
             renderingContext.translate(x,y);
             renderingContext.rotate(limbPosition);
             renderingContext.translate(size, 0);
-            var direction = (leftLimb) ? 1 : -1;
-            limbAngle = (limbAngle >= 50 && limbAngle <= 190) ? limbAngle : 90;
+            var direction = (rightLimb) ? 1 : -1;
+            limbAngle = (limbAngle >= limbLowerBound && limbAngle <= limbUpperBound) ? limbAngle : 90;
             renderingContext.rotate(direction * (90 - limbAngle) * Math.PI / 180)
 
             renderingContext.strokeStyle = "black";
@@ -68,7 +69,7 @@
                     renderingContext.lineTo(objectSpecs.length, 0);
                     renderingContext.translate(objectSpecs.length, 0);
                 } else {
-                    if (leftLimb) {
+                    if (rightLimb) {
                         renderingContext.rotate((90 - angle) * Math.PI / 180)
                         renderingContext.lineTo(0, objectSpecs.length);
                         renderingContext.translate(0, objectSpecs.length);
@@ -130,18 +131,15 @@
             renderingContext.fill();
             renderingContext.restore();
         };
-        // Draw limbs...
-        // Angle in relation to body, i.e. 90 degrees is straight out of body...
-        // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
-        var limbAngle = (pieceSpecification.limbAngle > 50 || pieceSpecification.limbAngle < 190) ?
-                         pieceSpecification.limbAngle : 90;
-        var leftLimb = true;
+
+        var limbAngle = pieceSpecification.limbAngle || 90;
+        var rightLimb = true;
         var limbPosition = -45;
         while(limbPosition < 300) {
-            drawLimb(limbPosition * Math.PI / 180, leftLimb, limbAngle);
+            drawLimb(limbPosition * Math.PI / 180, rightLimb, limbAngle);
             limbPosition += (limbPosition !== 45 && limbPosition !== 225) ? 45 : 90;
             if (limbPosition > 45) {
-                leftLimb = false;
+                rightLimb = false;
             }
         }
         drawFace(pieceSpecification.facialExpression);
