@@ -18,16 +18,22 @@
     <script src="checkerPiece.js"></script>
     <script type="text/javascript">
     (function () {
+        var waver = 0.03;
+        // var frameCount = 0;
         var drawScene = function () {
+            // For a wave like effect, would need some tweening...
+            // frameCount++;
+            // waver = (frameCount % 15 === 0) ? (waver === 0.03) ? 0.04 : 0.03 : waver;
             var renderingContext = document.getElementById("canvas").getContext("2d");
+            renderingContext.clearRect(0,0, 1024, 1024);
 
             renderingContext.save();
             renderingContext.scale(0.7, 0.7);
             SpriteLibrary.drawBoard({
                 renderingContext: renderingContext, 
                 border: 12,
-                degradation: 50,
-                waveFrequency: 0.03
+                degradation: 25,
+                waveFrequency: waver
             });
 
             renderingContext.save();
@@ -45,7 +51,7 @@
 
             renderingContext.save();
             // This places checker piece in bottom right, will make a function to find location soon.
-            renderingContext.translate(1000 - 135, 1000 - 150);
+            renderingContext.translate(1000 - 265, 1000 - 250);
             renderingContext.scale(1, 1);
             SpriteLibrary.drawPiece({
                 renderingContext: renderingContext,
