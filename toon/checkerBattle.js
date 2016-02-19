@@ -4,20 +4,41 @@
  */
 (function () {
     var canvas = document.getElementById("canvas");
-
+    window.SpriteLibrary = window.SpriteLibrary || { };
     // First, a selection of "drawing functions" from which we
     // can choose.  Their common trait: they all accept a single
     // renderingContext argument.
-    var square = function (renderingContext) {
-        renderingContext.fillStyle = "blue";
-        renderingContext.fillRect(-20, -20, 40, 40);
+    var renderingContext = canvas.getContext("2d");
+    renderingContext.save();
+    renderingContext.scale(0.7, 0.7);
+    var board = function (renderingContext) {
+        SpriteLibrary.drawBoard({
+          renderingContext: renderingContext, 
+          border: 12,
+          degradation: 0,
+          waveFrequency: 0.03
+        });
+
     };
 
-    var circle = function (renderingContext) {
-        renderingContext.strokeStyle = "red";
-        renderingContext.beginPath();
-        renderingContext.arc(0, 0, 50, 0, Math.PI * 2);
-        renderingContext.stroke();
+    var blackPiece = function (renderingContext) {
+        SpriteLibrary.drawPiece({
+                renderingContext: renderingContext,
+                color: "black",
+                limbAngle: 120,
+                facialExpression: -1,
+                elbowAngle: 135
+            });
+    };
+
+    var redPiece = function (renderingContext) {
+        SpriteLibrary.drawPiece({
+                renderingContext: renderingContext,
+                color: "red",
+                limbAngle: 95,
+                facialExpression: 0,
+                elbowAngle: -135
+            });
     };
 
     // Then, we have "easing functions" that determine how
@@ -27,59 +48,78 @@
     // has a drawing function and an array of keyframes.
     var sprites = [
         {
-            draw: square,
+            draw: board,
             keyframes: [
                 {
                     frame: 0,
-                    tx: 20,
-                    ty: 20,
                     ease: KeyframeTweener.linear
                 },
 
                 {
-                    frame: 30,
-                    tx: 100,
-                    ty: 50,
-                    ease: KeyframeTweener.quadEaseInOut
-                },
-
-                // The last keyframe does not need an easing function.
-                {
-                    frame: 80,
-                    tx: 80,
-                    ty: 500,
-                    rotate: 60 // Keyframe.rotate uses degrees.
+                    frame: 200
                 }
             ]
         },
 
         {
-            draw: circle,
+            draw: blackPiece,
             keyframes: [
                 {
-                    frame: 50,
-                    tx: 300,
-                    ty: 600,
-                    sx: 0.5,
-                    sy: 0.5,
+                    frame: 0,
+                    // tx: SpriteLibrary.getTileLocations(1)[0],
+                    // ty: SpriteLibrary.getTileLocations(1)[1],
+                    tx: 73,
+                    ty: 73,
+                    sx: 0.45,
+                    sy: 0.45,
                     ease: KeyframeTweener.quadEaseOut
                 },
 
                 {
                     frame: 100,
-                    tx: 300,
-                    ty: 0,
-                    sx: 3,
-                    sy: 0.25,
+                    // tx: SpriteLibrary.getTileLocations(64)[0],
+                    // ty: SpriteLibrary.getTileLocations(64)[1],
+                    tx: 927,
+                    ty: 927,
+                    sx: 0.45,
+                    sy: 0.45,
                     ease: KeyframeTweener.quadEaseOut
                 },
 
                 {
                     frame: 150,
-                    tx: 300,
-                    ty: 600,
-                    sx: 0.5,
-                    sy: 0.5
+                    // tx: SpriteLibrary.getTileLocations(32)[0],
+                    // ty: SpriteLibrary.getTileLocations(32)[1],
+                    tx: 927,
+                    ty: 439,
+                    sx: 0.45,
+                    sy: 0.45
+                }
+            ]
+        },
+
+        {
+            draw: redPiece,
+            keyframes: [
+                {
+                    frame: 0,
+                    // tx: SpriteLibrary.getTileLocations(57)[0],
+                    // ty: SpriteLibrary.getTileLocations(57)[1],
+                    tx: 73,
+                    ty: 927,
+                    sx: 0.45,
+                    sy: 0.45,
+                    ease: KeyframeTweener.quadEaseOut
+                },
+
+                {
+                    frame: 125,
+                    // tx: SpriteLibrary.getTileLocations(8)[0],
+                    // ty: SpriteLibrary.getTileLocations(8)[1],
+                    tx: 927,
+                    ty: 73,
+                    sx: 0.45,
+                    sy: 0.45
                 }
             ]
         }
