@@ -3,6 +3,13 @@
  * engine is used.
  */
 (function () {
+    var getTileLocations = function(tileNumber) {
+        var tileSize = 122;
+            var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
+            var tileYLocation = Math.ceil(tileNumber / 8) - 1;
+            tileOne = (12 + tileSize / 2);
+            return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
+        };
     var canvas = document.getElementById("canvas");
     window.SpriteLibrary = window.SpriteLibrary || { };
     // First, a selection of "drawing functions" from which we
@@ -66,10 +73,10 @@
             keyframes: [
                 {
                     frame: 0,
-                    // tx: SpriteLibrary.getTileLocations(1)[0],
-                    // ty: SpriteLibrary.getTileLocations(1)[1],
-                    tx: 73,
-                    ty: 73,
+                    tx: getTileLocations(1)[0],
+                    ty: getTileLocations(1)[1],
+                    // tx: 73,
+                    // ty: 73,
                     sx: 0.45,
                     sy: 0.45,
                     ease: KeyframeTweener.quadEaseOut
@@ -77,10 +84,10 @@
 
                 {
                     frame: 100,
-                    // tx: SpriteLibrary.getTileLocations(64)[0],
-                    // ty: SpriteLibrary.getTileLocations(64)[1],
-                    tx: 927,
-                    ty: 927,
+                    tx: getTileLocations(64)[0],
+                    ty: getTileLocations(64)[1],
+                    // tx: 927,
+                    // ty: 927,
                     sx: 0.45,
                     sy: 0.45,
                     ease: KeyframeTweener.quadEaseOut
@@ -88,10 +95,10 @@
 
                 {
                     frame: 150,
-                    // tx: SpriteLibrary.getTileLocations(32)[0],
-                    // ty: SpriteLibrary.getTileLocations(32)[1],
-                    tx: 927,
-                    ty: 439,
+                    tx: getTileLocations(32)[0],
+                    ty: getTileLocations(32)[1],
+                    // tx: 927,
+                    // ty: 439,
                     sx: 0.45,
                     sy: 0.45
                 }
@@ -103,10 +110,10 @@
             keyframes: [
                 {
                     frame: 0,
-                    // tx: SpriteLibrary.getTileLocations(57)[0],
-                    // ty: SpriteLibrary.getTileLocations(57)[1],
-                    tx: 73,
-                    ty: 927,
+                    tx: getTileLocations(57)[0],
+                    ty: getTileLocations(57)[1],
+                    // tx: 73,
+                    // ty: 927,
                     sx: 0.45,
                     sy: 0.45,
                     ease: KeyframeTweener.quadEaseOut
@@ -114,10 +121,10 @@
 
                 {
                     frame: 125,
-                    // tx: SpriteLibrary.getTileLocations(8)[0],
-                    // ty: SpriteLibrary.getTileLocations(8)[1],
-                    tx: 927,
-                    ty: 73,
+                    tx: getTileLocations(8)[0],
+                    ty: getTileLocations(8)[1],
+                    // tx: 927,
+                    // ty: 73,
                     sx: 0.45,
                     sy: 0.45
                 }
