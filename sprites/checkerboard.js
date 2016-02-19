@@ -3,7 +3,7 @@
 
 (function () {
     window.SpriteLibrary = window.SpriteLibrary || { };
-    SpriteLibrary.drawBoard = function (boardSpecification) {
+    window.SpriteLibrary.drawBoard = function (boardSpecification) {
         var renderingContext = boardSpecification.renderingContext;
         var borderWidth = boardSpecification.border || 12;
 
@@ -48,12 +48,12 @@
             }
         }
 
-        SpriteLibrary.getTileLocations = function(tileNumber) {
+        window.SpriteLibrary.getTileLocations = function(tileNumber) {
             var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 8;
             var tileYLocation = Math.ceil(tileNumber / 8) - 1;
             tileOne = (borderWidth + tileSize / 2);
             return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
-        }
+        };
         var coverUp = function (percentage) {
             var distanceToCover = (boardSize * (percentage / 100)) / 2;
             var startofBoardLocation = borderWidth + distanceToCover / 2;

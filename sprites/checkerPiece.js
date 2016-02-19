@@ -3,7 +3,7 @@
 
 (function () {
     window.SpriteLibrary = window.SpriteLibrary || { };
-    SpriteLibrary.drawPiece = function (pieceSpecification) {
+    window.SpriteLibrary.drawPiece = function (pieceSpecification) {
 
         // get specs and draw body of piece...
         var renderingContext = pieceSpecification.renderingContext;
