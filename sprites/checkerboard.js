@@ -49,7 +49,7 @@
         }
 
         // window.SpriteLibrary.getTileLocations = function(tileNumber) {
-        //     var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 8;
+        //     var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
         //     var tileYLocation = Math.ceil(tileNumber / 8) - 1;
         //     tileOne = (borderWidth + tileSize / 2);
         //     return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
