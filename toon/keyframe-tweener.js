@@ -75,6 +75,14 @@
 
                         // Set up our start and distance values, using defaults
                         // if necessary.
+                        // var propertyChanges = {};
+                        // for (var property in startKeyframe) {
+                        //     if (startKeyframe.hasOwnProperty(property)) {
+                        //         var notProvidedProperty = (property === "tx" || property === "rotate") ? 0 : 1;
+                        //         propertyChanges["Start"][property] = startKeyframe[property] || notProvidedProperty;
+                        //         propertyChanges["Distance"][property] = (endKeyframe[property] || notProvidedProperty) - startKeyframe[property]; 
+                        //     }
+                        // }
                         var ease = startKeyframe.ease || KeyframeTweener.linear;
 
                         var txStart = startKeyframe.tx || 0;
@@ -107,6 +115,10 @@
                         renderingContext.rotate(
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
+
+                        if (sprites[i].parameterize) {
+                            sprites[i].parameterize(ease, startKeyframe, endKeyframe, currentTweenFrame, duration);
+                        }
 
                         // Draw the sprite.
                         sprites[i].draw(renderingContext);
