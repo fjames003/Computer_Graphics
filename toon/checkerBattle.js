@@ -9,6 +9,7 @@
             var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
             var tileYLocation = Math.ceil(tileNumber / 8) - 1;
             tileOne = (12 + tileSize / 2);
+            // console.log("I just returned (cuz of " + tileNumber + "): " + (tileOne + (tileSize * tileXLocation)) + " and " + (tileOne + (tileSize * tileYLocation)));
             return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
     };
 
@@ -19,7 +20,7 @@
     // renderingContext argument.
     var renderingContext = canvas.getContext("2d");
     renderingContext.save();
-    renderingContext.scale(0.7, 0.7);
+    renderingContext.scale(0.6, 0.6);
 
     var sprites = [
         {
@@ -46,7 +47,7 @@
             },
 
             {
-                frame: 200,
+                frame: 1000,
                 waveFrequency: 0.1,
                 degradation: 100
             }
@@ -77,31 +78,32 @@
                 this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
             },
             keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(1)[0],
-                    ty: getTileLocations(1)[1],
-                    limbAngle: 50,
-                    elbowAngle: 0,
-                    ease: KeyframeTweener.quadEaseOut
-                },
+                // {
+                //     frame: 0,
+                //     tx: getTileLocations(1)[0],
+                //     ty: getTileLocations(1)[1],
+                //     limbAngle: 120,
+                //     elbowAngle: 90,
+                //     facialExpression: 1,
+                //     ease: KeyframeTweener.quadEaseOut
+                // },
 
-                {
-                    frame: 100,
-                    tx: getTileLocations(64)[0],
-                    ty: getTileLocations(64)[1],
-                    limbAngle: 190,
-                    elbowAngle: 360,
-                    ease: KeyframeTweener.quadEaseOut
-                },
+                // {
+                //     frame: 24,
+                //     tx: getTileLocations(64)[0],
+                //     ty: getTileLocations(64)[1],
+                //     limbAngle: 190,
+                //     elbowAngle: 360,
+                //     ease: KeyframeTweener.quadEaseOut
+                // },
 
-                {
-                    frame: 150,
-                    tx: getTileLocations(32)[0],
-                    ty: getTileLocations(32)[1],
-                    limbAngle: 90,
-                    elbowAngle: 90
-                }
+                // {
+                //     frame: 48,
+                //     tx: getTileLocations(32)[0],
+                //     ty: getTileLocations(32)[1],
+                //     limbAngle: 90,
+                //     elbowAngle: 90
+                // }
             ]
         },
 
@@ -129,35 +131,78 @@
                 this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
             },
             keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(57)[0],
-                    ty: getTileLocations(57)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
+                // {
+                //     frame: 0,
+                //     tx: getTileLocations(43)[0],
+                //     ty: getTileLocations(43)[1],
+                //     ease: KeyframeTweener.backwardsAndPast
+                // },
 
-                {
-                    frame: 125,
-                    tx: getTileLocations(8)[0],
-                    ty: getTileLocations(8)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
+                // {
+                //     frame: 125,
+                //     tx: getTileLocations(15)[0],
+                //     ty: getTileLocations(15)[1],
+                //     ease: KeyframeTweener.backwardsAndPast
+                // },
 
-                {
-                    frame: 195,
-                    tx: getTileLocations(28)[0],
-                    ty: getTileLocations(28)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
+                // {
+                //     frame: 195,
+                //     tx: getTileLocations(28)[0],
+                //     ty: getTileLocations(28)[1],
+                //     ease: KeyframeTweener.backwardsAndPast
+                // },
 
-                {
-                    frame: 200,
-                    tx: getTileLocations(29)[0],
-                    ty: getTileLocations(29)[1],
-                }
+                // {
+                //     frame: 500,
+                //     tx: getTileLocations(29)[0],
+                //     ty: getTileLocations(29)[1],
+                // }
             ]
         }
     ];
+
+    var pieceMover = function(specs) {
+        var parameterHolder = {
+            limbAngle: 120,
+            limbUpdater: -5,
+            elbowAngle: 90,
+            elbowUpdater: -2,
+            facialExpression: 1,
+            faceUpdater: 0.25
+        }
+        for (var i = 0; i < specs.frames; i += specs.frameUpdate) {
+            parameterHolder.limbUpdater *= (parameterHolder.limbAngle - parameterHolder.limbUpdater < 50) ?
+            -1 : 1;
+            parameterHolder.elbowAngle += parameterHolder.elbowUpdater;
+            parameterHolder.facialExpression += parameterHolder.faceUpdater;
+            if (parameterHolder.facialExpression >= 5 || parameterHolder.facialExpression <= -5) {
+                parameterHolder.faceUpdater *= -1;
+            }
+
+            for (var sprite = 0; sprite < specs.sprites.length; sprite++) {
+                var moveBy = Math.floor(specs.frames / specs.tiles[sprite].length);
+                console.log(moveBy);
+                sprites[sprite + 1].keyframes[i / specs.frameUpdate] = {
+                    frame: i,
+                    tx: getTileLocations(specs.tiles[sprite][Math.floor(i / moveBy)])[0],
+                    ty: getTileLocations(specs.tiles[sprite][Math.floor(i / moveBy)])[1],
+                    limbAngle: parameterHolder.limbAngle,
+                    elbowAngle: parameterHolder.elbowAngle,
+                    facialExpression: parameterHolder.facialExpression,
+                    ease: specs.easer[sprite]
+                }  
+            }
+            
+        }
+    }
+    pieceMover({
+        sprites: [1,2],
+        tiles: [[1,2,10,11,12,20,21,22,30,29], [43,44,45,46,38,30,28]],
+        easer: [KeyframeTweener.inOutCirc, KeyframeTweener.backwardsAndPast],
+        frames: 200,
+        frameUpdate: 5
+    })
+    
 
     // Finally, we initialize the engine.  Mainly, it needs
     // to know the rendering context to use.  And the animations
