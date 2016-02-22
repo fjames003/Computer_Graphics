@@ -99,7 +99,8 @@
         };
         
         var drawFace = function (expression) {
-            var expression = (expression >= -5 && expression <= 5) ? 
+            var expression = Math.floor(expression);
+            expression = (expression >= -5 && expression <= 5) ? 
                             ((expression < 0) ? expression * 2 : expression) : 1;
             
             renderingContext.strokeStyle = "white";
