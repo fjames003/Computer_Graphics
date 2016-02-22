@@ -133,13 +133,27 @@
                     frame: 0,
                     tx: getTileLocations(57)[0],
                     ty: getTileLocations(57)[1],
-                    ease: KeyframeTweener.quadEaseOut
+                    ease: KeyframeTweener.backwardsAndPast
                 },
 
                 {
                     frame: 125,
                     tx: getTileLocations(8)[0],
-                    ty: getTileLocations(8)[1]
+                    ty: getTileLocations(8)[1],
+                    ease: KeyframeTweener.backwardsAndPast
+                },
+
+                {
+                    frame: 195,
+                    tx: getTileLocations(28)[0],
+                    ty: getTileLocations(28)[1],
+                    ease: KeyframeTweener.backwardsAndPast
+                },
+
+                {
+                    frame: 200,
+                    tx: getTileLocations(29)[0],
+                    ty: getTileLocations(29)[1],
                 }
             ]
         }

@@ -73,16 +73,6 @@
                         // Save the rendering context state.
                         renderingContext.save();
 
-                        // Set up our start and distance values, using defaults
-                        // if necessary.
-                        // var propertyChanges = {};
-                        // for (var property in startKeyframe) {
-                        //     if (startKeyframe.hasOwnProperty(property)) {
-                        //         var notProvidedProperty = (property === "tx" || property === "rotate") ? 0 : 1;
-                        //         propertyChanges["Start"][property] = startKeyframe[property] || notProvidedProperty;
-                        //         propertyChanges["Distance"][property] = (endKeyframe[property] || notProvidedProperty) - startKeyframe[property]; 
-                        //     }
-                        // }
                         var ease = startKeyframe.ease || KeyframeTweener.linear;
 
                         var txStart = startKeyframe.tx || 0;
@@ -160,6 +150,26 @@
             return (percentComplete < 1) ?
                     (distance / 2) * percentComplete * percentComplete + start :
                     (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
+        },
+
+        inOutCirc: function (currentTime, start, distance, duration) {
+            if ((currentTime /= duration / 2) < 1) {
+                return -distance / 2 * (Math.sqrt(1 - currentTime * currentTime) - 1) + start;
+            } else {
+                return distance / 2 * (Math.sqrt(1 - (currentTime -= 2) * currentTime) + 1) + start;
+            }
+        },
+
+        backAndForth: function(currentTime, start, distance, duration) {
+            var ts = (currentTime /= duration) * currentTime;
+            var tc = ts * currentTime;
+            return start + distance * (-8.7 * tc * ts + 37.3 * ts * ts + -41 * tc + 11.4 * ts + 2 * currentTime);
+        },
+
+        backwardsAndPast: function(currentTime, start, distance, duration) {
+            var ts = (currentTime /= duration) * currentTime;
+            var tc = ts * currentTime;
+            return start + distance * (57.205*tc*ts + -132.15*ts*ts + 93.285*tc + -16.075*ts + -1.265*currentTime);
         },
 
         initialize: initializeAnimation
