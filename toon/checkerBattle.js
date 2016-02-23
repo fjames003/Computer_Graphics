@@ -8,8 +8,7 @@
         var tileSize = 122;
             var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
             var tileYLocation = Math.ceil(tileNumber / 8) - 1;
-            tileOne = (12 + tileSize / 2);
-            // console.log("I just returned (cuz of " + tileNumber + "): " + (tileOne + (tileSize * tileXLocation)) + " and " + (tileOne + (tileSize * tileYLocation)));
+            var tileOne = (12 + tileSize / 2);
             return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
     };
 
@@ -32,7 +31,7 @@
             waveFrequency: specs.waveFrequency
         }); 
     };
-    
+
     var sprites = [
     // The CheckerBoard...
         {
@@ -50,7 +49,7 @@
             {
                 frame: 1000,
                 parameters: {
-                   waveFrequency: 0.1,
+                    waveFrequency: 0.1,
                     degradation: 100 
                 }
                 
@@ -460,12 +459,6 @@
         height: canvas.height,
         sprites: sprites
     });
-    var parameterUpdate = function(propDefault, property, ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                var start_property = startKeyFrame[property] || propDefault
-                var property_distance = (endKeyframe[property] || propDefault) - start_property;
-                propDefault = ease(currentTweenFrame, start_property, property_distance, duration);
-                return propDefault;
-    };
 }());
 
 
