@@ -106,12 +106,20 @@
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
-                        if (sprites[i].parameterize) {
-                            sprites[i].parameterize(ease, startKeyframe, endKeyframe, currentTweenFrame, duration);
+                        // Update any parameters the sprites may have...
+                        var updatedDrawObject = {
+                            renderingContext: renderingContext
+                        };
+                        // What about Default values...
+                        for (var property in startKeyframe.parameters) {
+                            var start_property = startKeyframe.parameters[property];
+                            var property_distance = endKeyframe.parameters[property] - start_property;
+                            updatedDrawObject[property] = ease(currentTweenFrame, start_property, property_distance, duration);
                         }
 
+
                         // Draw the sprite.
-                        sprites[i].draw(renderingContext);
+                        sprites[i].draw(updatedDrawObject);
 
                         // Clean up.
                         renderingContext.restore();

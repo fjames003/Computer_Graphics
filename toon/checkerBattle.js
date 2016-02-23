@@ -24,379 +24,380 @@
     renderingContext.save();
     renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
+    var board = function(specs) {
+        SpriteLibrary.drawBoard({
+            renderingContext: specs.renderingContext,
+            border: specs.border,
+            degradation: specs.degradation,
+            waveFrequency: specs.waveFrequency
+        }); 
+    };
+    
     var sprites = [
     // The CheckerBoard...
         {
-        wavesDefault: 0.03,
-        degradationDefault: 0,
-        draw: function (renderingContext) {
-            SpriteLibrary.drawBoard({
-                renderingContext: renderingContext, 
-                border: 12,
-                degradation: this.degradationDefault,
-                waveFrequency: this.wavesDefault
-            })
-        },
-        parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-            this.wavesDefault = parameterUpdate(this.wavesDefault, "waveFrequency", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            this.degradationDefault = parameterUpdate(this.degradationDefault, "degradation", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-        },
+        draw: board,
         keyframes: [
             {
                 frame: 0,
                 ease: KeyframeTweener.linear,
-                waveFrequency: 0.03,
-                degradation: 0.000001
+                parameters: {
+                    waveFrequency: 0.03,
+                    degradation: 0.000001
+                }
             },
 
             {
                 frame: 1000,
-                waveFrequency: 0.1,
-                degradation: 100
+                parameters: {
+                   waveFrequency: 0.1,
+                    degradation: 100 
+                }
+                
             }
         ]
-        },
-    // Black Piece 1
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "black",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(2)[0],
-                    ty: getTileLocations(2)[1],
-                    limbAngle: 120,
-                    elbowAngle: 90,
-                    facialExpression: 1,
-                    ease: KeyframeTweener.quadEaseOut
-                },
-
-                {
-                    frame: 125,
-                    tx: getTileLocations(11)[0],
-                    ty: getTileLocations(11)[1],
-                    limbAngle: 190,
-                    elbowAngle: 360,
-                    ease: KeyframeTweener.quadEaseOut
-                }
-            ]
-        },
-    // Black Piece 2
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "black",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(4)[0],
-                    ty: getTileLocations(4)[1],
-                    limbAngle: 120,
-                    elbowAngle: 90,
-                    facialExpression: 1,
-                    ease: KeyframeTweener.quadEaseOut
-                },
-
-                {
-                    frame: 101,
-                    tx: getTileLocations(12)[0],
-                    ty: getTileLocations(12)[1],
-                    limbAngle: 190,
-                    elbowAngle: 360,
-                    ease: KeyframeTweener.quadEaseOut
-                }
-            ]
-        },
-    // Black Piece 3
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "black",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(6)[0],
-                    ty: getTileLocations(6)[1],
-                    limbAngle: 120,
-                    elbowAngle: 90,
-                    facialExpression: 1,
-                    ease: KeyframeTweener.quadEaseOut
-                },
-
-                {
-                    frame: 101,
-                    tx: getTileLocations(14)[0],
-                    ty: getTileLocations(14)[1],
-                    limbAngle: 190,
-                    elbowAngle: 360,
-                    ease: KeyframeTweener.quadEaseOut
-                },
-
-            ]
-        },
-    // Black Piece 4
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "black",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(8)[0],
-                    ty: getTileLocations(8)[1],
-                    limbAngle: 120,
-                    elbowAngle: 90,
-                    facialExpression: 1,
-                    ease: KeyframeTweener.quadEaseOut
-                },
-
-                {
-                    frame: 125,
-                    tx: getTileLocations(15)[0],
-                    ty: getTileLocations(15)[1],
-                    limbAngle: 190,
-                    elbowAngle: 360,
-                    ease: KeyframeTweener.quadEaseOut
-                }
-            ]
-        },
-    // Red Piece 1
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "red",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(57)[0],
-                    ty: getTileLocations(57)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-
-                {
-                    frame: 101,
-                    tx: getTileLocations(50)[0],
-                    ty: getTileLocations(50)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                }
-            ]
-        },
-    // Red Piece 2
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "red",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(59)[0],
-                    ty: getTileLocations(59)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-
-                {
-                    frame: 125,
-                    tx: getTileLocations(51)[0],
-                    ty: getTileLocations(51)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                }
-            ]
-        },
-    // Red Piece 3
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "red",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(61)[0],
-                    ty: getTileLocations(61)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-
-                {
-                    frame: 125,
-                    tx: getTileLocations(53)[0],
-                    ty: getTileLocations(53)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                }
-            ]
-        },
-    // Red Piece 4
-        {
-            limbAngleDefault: 90,
-            facialExpressionDefault: 1,
-            elbowAngleDefault: 90,
-            draw: function (renderingContext) {
-                renderingContext.save();
-                renderingContext.scale(0.48, 0.48);
-                SpriteLibrary.drawPiece({
-                    renderingContext: renderingContext,
-                    color: "red",
-                    limbAngle: this.limbAngleDefault,
-                    facialExpression: this.facialExpressionDefault,
-                    elbowAngle: this.elbowAngleDefault
-                })
-                renderingContext.restore();
-            },
-            parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
-                this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-
-                this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
-            },
-            keyframes: [
-                {
-                    frame: 0,
-                    tx: getTileLocations(63)[0],
-                    ty: getTileLocations(63)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-
-                {
-                    frame: 101,
-                    tx: getTileLocations(54)[0],
-                    ty: getTileLocations(54)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                }
-            ]
         }
+    // // Black Piece 1
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "black",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(2)[0],
+    //                 ty: getTileLocations(2)[1],
+    //                 limbAngle: 120,
+    //                 elbowAngle: 90,
+    //                 facialExpression: 1,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             },
+
+    //             {
+    //                 frame: 125,
+    //                 tx: getTileLocations(11)[0],
+    //                 ty: getTileLocations(11)[1],
+    //                 limbAngle: 190,
+    //                 elbowAngle: 360,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             }
+    //         ]
+    //     },
+    // // Black Piece 2
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "black",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(4)[0],
+    //                 ty: getTileLocations(4)[1],
+    //                 limbAngle: 120,
+    //                 elbowAngle: 90,
+    //                 facialExpression: 1,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             },
+
+    //             {
+    //                 frame: 101,
+    //                 tx: getTileLocations(12)[0],
+    //                 ty: getTileLocations(12)[1],
+    //                 limbAngle: 190,
+    //                 elbowAngle: 360,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             }
+    //         ]
+    //     },
+    // // Black Piece 3
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "black",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(6)[0],
+    //                 ty: getTileLocations(6)[1],
+    //                 limbAngle: 120,
+    //                 elbowAngle: 90,
+    //                 facialExpression: 1,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             },
+
+    //             {
+    //                 frame: 101,
+    //                 tx: getTileLocations(14)[0],
+    //                 ty: getTileLocations(14)[1],
+    //                 limbAngle: 190,
+    //                 elbowAngle: 360,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             },
+
+    //         ]
+    //     },
+    // // Black Piece 4
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "black",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(8)[0],
+    //                 ty: getTileLocations(8)[1],
+    //                 limbAngle: 120,
+    //                 elbowAngle: 90,
+    //                 facialExpression: 1,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             },
+
+    //             {
+    //                 frame: 125,
+    //                 tx: getTileLocations(15)[0],
+    //                 ty: getTileLocations(15)[1],
+    //                 limbAngle: 190,
+    //                 elbowAngle: 360,
+    //                 ease: KeyframeTweener.quadEaseOut
+    //             }
+    //         ]
+    //     },
+    // // Red Piece 1
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "red",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(57)[0],
+    //                 ty: getTileLocations(57)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             },
+
+    //             {
+    //                 frame: 101,
+    //                 tx: getTileLocations(50)[0],
+    //                 ty: getTileLocations(50)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             }
+    //         ]
+    //     },
+    // // Red Piece 2
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "red",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(59)[0],
+    //                 ty: getTileLocations(59)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             },
+
+    //             {
+    //                 frame: 125,
+    //                 tx: getTileLocations(51)[0],
+    //                 ty: getTileLocations(51)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             }
+    //         ]
+    //     },
+    // // Red Piece 3
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "red",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(61)[0],
+    //                 ty: getTileLocations(61)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             },
+
+    //             {
+    //                 frame: 125,
+    //                 tx: getTileLocations(53)[0],
+    //                 ty: getTileLocations(53)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             }
+    //         ]
+    //     },
+    // // Red Piece 4
+    //     {
+    //         limbAngleDefault: 90,
+    //         facialExpressionDefault: 1,
+    //         elbowAngleDefault: 90,
+    //         draw: function (renderingContext) {
+    //             renderingContext.save();
+    //             renderingContext.scale(0.48, 0.48);
+    //             SpriteLibrary.drawPiece({
+    //                 renderingContext: renderingContext,
+    //                 color: "red",
+    //                 limbAngle: this.limbAngleDefault,
+    //                 facialExpression: this.facialExpressionDefault,
+    //                 elbowAngle: this.elbowAngleDefault
+    //             })
+    //             renderingContext.restore();
+    //         },
+    //         parameterize: function(ease, startKeyFrame, endKeyframe, currentTweenFrame, duration) {
+    //             this.limbAngleDefault = parameterUpdate(this.limbAngleDefault, "limbAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.elbowAngleDefault = parameterUpdate(this.elbowAngleDefault, "elbowAngle", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+
+    //             this.facialExpressionDefault = parameterUpdate(this.facialExpressionDefault, "facialExpression", ease, startKeyFrame, endKeyframe, currentTweenFrame, duration);
+    //         },
+    //         keyframes: [
+    //             {
+    //                 frame: 0,
+    //                 tx: getTileLocations(63)[0],
+    //                 ty: getTileLocations(63)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             },
+
+    //             {
+    //                 frame: 101,
+    //                 tx: getTileLocations(54)[0],
+    //                 ty: getTileLocations(54)[1],
+    //                 ease: KeyframeTweener.backwardsAndPast
+    //             }
+    //         ]
+    //     }
     ];
 
     // Will add keyframes to sprites (starting from their last keyframe)
