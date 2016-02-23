@@ -110,12 +110,24 @@
                         var updatedDrawObject = {
                             renderingContext: renderingContext
                         };
-                        // What about Default values...
-                        for (var property in startKeyframe.parameters) {
-                            var start_property = startKeyframe.parameters[property];
-                            var property_distance = endKeyframe.parameters[property] - start_property;
-                            updatedDrawObject[property] = ease(currentTweenFrame, start_property, property_distance, duration);
+                        var startingParameters = (startKeyframe.parameters) ?
+                                                Object.keys(startKeyframe.parameters) : [];
+                        var endingParameters = (endKeyframe.parameters) ?
+                                                Object.keys(endKeyframe.parameters) : [];
+                        var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
+                        // By Looping over the union of the two, I can obtain defaults by simply grabbing,
+                        // the starting or ending parameter if the other is missing... 
+                        // This ensures that all parameters are taken care of and defaults provided if not in start
+                        // but in end or vice versa
+                        for (var index in startingOrEndingParameters) {
+                            var property = startingOrEndingParameters[index];
+                            var start_property = startKeyframe.parameters[property] ||
+                                                 endKeyframe.parameters[property];
+                            var property_distance = (endKeyframe.parameters[property] ||
+                                                     startKeyframe.parameters[property]) - start_property;
+                            updatedDrawObject[property] = ease(currentTweenFrame, start_property, property_distance,duration);
                         }
+
 
 
                         // Draw the sprite.
