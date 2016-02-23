@@ -19,8 +19,10 @@
     // can choose.  Their common trait: they all accept a single
     // renderingContext argument.
     var renderingContext = canvas.getContext("2d");
+    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth: window.innerHeight;
+    console.log(smallestScreenLength);
     renderingContext.save();
-    renderingContext.scale(0.9, 0.9);
+    renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
     var sprites = [
     // The CheckerBoard...
