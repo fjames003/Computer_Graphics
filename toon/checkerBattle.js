@@ -57,7 +57,7 @@
                 ease: KeyframeTweener.linear,
                 parameters: {
                     waveFrequency: 0.03,
-                    degradation: 0.000001
+                    degradation: 0
                 }
             },
 
