@@ -98,6 +98,22 @@
                         renderingContext.save();
 
                         var ease = startKeyframe.ease || KeyframeTweener.linear;
+                        var easingFunctions = {
+                            tx: ease,
+                            sx: ease,
+                            ty: ease,
+                            sy: ease,
+                            rotate: ease
+                        };
+                        var easingParameterAdjustments = {};
+                        for (var change in startKeyframe.easeAdjust) {
+                            var newEase = startKeyframe.easeAdjust[change];
+                            if (change in easingFunctions) {
+                                easingFunctions[change] = newEase;
+                            } else {
+                                easingParameterAdjustments[change] = newEase; 
+                            }
+                        }
 
                         var txStart = startKeyframe.tx || 0;
                         var txDistance = (endKeyframe.tx || 0) - txStart;
@@ -119,15 +135,15 @@
 
                         // Build our transform according to where we should be.
                         renderingContext.translate(
-                            ease(currentTweenFrame, txStart, txDistance, duration),
-                            ease(currentTweenFrame, tyStart, tyDistance, duration)
+                            easingFunctions.tx(currentTweenFrame, txStart, txDistance, duration),
+                            easingFunctions.ty(currentTweenFrame, tyStart, tyDistance, duration)
                         );
                         renderingContext.scale(
-                            ease(currentTweenFrame, sxStart, sxDistance, duration),
-                            ease(currentTweenFrame, syStart, syDistance, duration)
+                            easingFunctions.sx(currentTweenFrame, sxStart, sxDistance, duration),
+                            easingFunctions.sy(currentTweenFrame, syStart, syDistance, duration)
                         );
                         renderingContext.rotate(
-                            ease(currentTweenFrame, rotateStart, rotateDistance, duration)
+                            easingFunctions.rotate(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
                         // Update any parameters the sprites may have...
@@ -155,11 +171,11 @@
                             endKeyframe.parameters[property] : endKeyframe.parameters[property] ||
                             startKeyframe.parameters[property]) - start_property;
 
-                            updatedDrawObject[property] = ease(currentTweenFrame,
-                                                               start_property, 
-                                                               property_distance,
-                                                               duration
-                                                               );
+                            updatedDrawObject[property] = (easingParameterAdjustments[property]) ? 
+                            easingParameterAdjustments[property](currentTweenFrame, start_property,
+                            property_distance, duration) : ease(currentTweenFrame, start_property,
+                            property_distance, duration);
+
                         }
 
                         // Draw the sprite.

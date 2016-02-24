@@ -84,7 +84,11 @@
                         elbowAngle: 90,
                         facialExpression: 1
                     },
-                    ease: KeyframeTweener.inOutCirc
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut
+                    }
                 },
 
                 {
@@ -95,7 +99,12 @@
                         limbAngle: 190,
                         elbowAngle: 0
                     },                    
-                    ease: KeyframeTweener.inOutCirc
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        rotate: KeyframeTweener.quadEaseOut,
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut
+                    }
                 },
 
                 {
@@ -106,6 +115,7 @@
                     limbAngle: 90,
                     elbowAngle: -270
                 },
+                rotate: -360,
                 ease: KeyframeTweener.inOutCirc
                 }
             ]
@@ -282,7 +292,7 @@
         }
     }
     holdSpritePositions(sprites[0].keyframes[sprites[0].keyframes.length - 1].frame);
-    
+
     // Will add keyframes to sprites (starting from their last keyframe)
     // Accepts a list of tiles that the sprites will move to (evenly spaced over the frame number)
     // var pieceMover = function(specs) {
