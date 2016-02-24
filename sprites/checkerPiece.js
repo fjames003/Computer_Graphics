@@ -2,7 +2,9 @@
 // CMSI371
 
 (function () {
+
     window.SpriteLibrary = window.SpriteLibrary || { };
+
     window.SpriteLibrary.drawPiece = function (pieceSpecification) {
 
         // get specs and draw body of piece...
@@ -12,6 +14,7 @@
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
         var size = pieceSpecification.size || 50;
+
         var limbUpperBound = 190;
         var limbLowerBound = 50;
 
@@ -33,8 +36,10 @@
             renderingContext.translate(x,y);
             renderingContext.rotate(limbPosition);
             renderingContext.translate(size, 0);
+
             var direction = (rightLimb) ? 1 : -1;
             limbAngle = (limbAngle >= limbLowerBound && limbAngle <= limbUpperBound) ? limbAngle : 90;
+
             renderingContext.rotate(direction * (90 - limbAngle) * Math.PI / 180)
 
             renderingContext.strokeStyle = "black";
@@ -63,6 +68,7 @@
             var additionalLimbs = function (objectSpecs) {
                 renderingContext.lineWidth = objectSpecs.width;
                 var angle = objectSpecs.angle || 90;
+
                 renderingContext.beginPath();
                 renderingContext.moveTo(0,0);
                 if (objectSpecs.isHorizontal) {
@@ -106,10 +112,13 @@
             renderingContext.strokeStyle = "white";
             renderingContext.lineCap = "round";
             renderingContext.lineWidth = size / 12;
+
             renderingContext.save();
             renderingContext.translate(x, y);
+
             renderingContext.save();
             renderingContext.translate(0, size / 8);
+
             renderingContext.beginPath();
             renderingContext.moveTo(-size / 3, 0);
             if (expression === 0) {
@@ -136,7 +145,7 @@
         var limbAngle = pieceSpecification.limbAngle || 90;
         var rightLimb = true;
         var limbPosition = -45;
-        while(limbPosition < 300) {
+        while (limbPosition < 300) {
             drawLimb(limbPosition * Math.PI / 180, rightLimb, limbAngle);
             limbPosition += (limbPosition !== 45 && limbPosition !== 225) ? 45 : 90;
             if (limbPosition > 45) {

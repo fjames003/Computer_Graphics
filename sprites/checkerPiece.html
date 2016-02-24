@@ -30,7 +30,9 @@
     // Bounds: Lower = 50 (bottom feet begin to touch), Upper = 190 (limbs touch body)
     // For facialExpression, value must be between -5 and 5 inclusive AND not 0... (negative = frown, larger values are less extreme)
     (function () {
+
         var renderingContext = document.getElementById("canvas").getContext("2d");
+        
         renderingContext.save();
         renderingContext.translate(150, 200);
         renderingContext.scale(0.7, 0.7);

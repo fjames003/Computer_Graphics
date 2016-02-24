@@ -115,6 +115,7 @@
                         var endingParameters = (endKeyframe.parameters) ?
                                                 Object.keys(endKeyframe.parameters) : [];
                         var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
+
                         // By Looping over the union of the two, I can obtain defaults by simply grabbing,
                         // the starting or ending parameter if the other is missing... 
                         // This ensures that all parameters are taken care of and defaults provided if not in start
@@ -127,8 +128,6 @@
                                                      startKeyframe.parameters[property]) - start_property;
                             updatedDrawObject[property] = ease(currentTweenFrame, start_property, property_distance,duration);
                         }
-
-
 
                         // Draw the sprite.
                         sprites[i].draw(updatedDrawObject);

@@ -4,6 +4,15 @@
  */
 (function () {
 
+    window.SpriteLibrary = window.SpriteLibrary || { };
+
+    var canvas = document.getElementById("canvas");
+    var renderingContext = canvas.getContext("2d");
+
+    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth: window.innerHeight;
+    renderingContext.save();
+    renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
+
     var getTileLocations = function(tileNumber) {
         var tileSize = 122;
             var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
@@ -11,16 +20,6 @@
             var tileOne = (12 + tileSize / 2);
             return [tileOne + (tileSize * tileXLocation), tileOne + (tileSize * tileYLocation)];
     };
-
-    var canvas = document.getElementById("canvas");
-    window.SpriteLibrary = window.SpriteLibrary || { };
-    // First, a selection of "drawing functions" from which we
-    // can choose.  Their common trait: they all accept a single
-    // renderingContext argument.
-    var renderingContext = canvas.getContext("2d");
-    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth: window.innerHeight;
-    renderingContext.save();
-    renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
     var board = function(specs) {
         SpriteLibrary.drawBoard({
