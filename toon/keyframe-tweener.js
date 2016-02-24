@@ -40,8 +40,32 @@
         var height = settings.height;
         var sprites = settings.sprites;
 
+        // This function will prevent the spacebar from scrolling the page...
+        window.onkeydown = function(e) {
+            if(e.keyCode == 32 && e.target == document.body) {
+                e.preventDefault();
+                return false;
+            }
+        };
+
+        // This will make 'shouldPause' = true in the event that spacebar is pushed...
+        var shouldPause = false;
+        document.body.onkeyup = function(e){
+            if(e.keyCode == 32){
+                shouldPause = !shouldPause;
+            }
+            return false;
+         };
+
         var previousTimestamp = null;
         var nextFrame = function (timestamp) {
+
+            // Manual Bail-out that allows user to pause animation...
+            if (shouldPause) {
+                window.requestAnimationFrame(nextFrame);
+                return;
+            }
+            
             // Bail-out #1: We just started.
             if (!previousTimestamp) {
                 previousTimestamp = timestamp;
@@ -130,7 +154,7 @@
                             var property_distance = ((endKeyframe.parameters[property] === 0) ? 
                             endKeyframe.parameters[property] : endKeyframe.parameters[property] ||
                             startKeyframe.parameters[property]) - start_property;
-                            
+
                             updatedDrawObject[property] = ease(currentTweenFrame,
                                                                start_property, 
                                                                property_distance,
