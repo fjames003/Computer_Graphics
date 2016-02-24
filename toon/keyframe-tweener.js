@@ -122,11 +122,20 @@
                         // but in end or vice versa
                         for (var index in startingOrEndingParameters) {
                             var property = startingOrEndingParameters[index];
-                            var start_property = startKeyframe.parameters[property] ||
-                                                 endKeyframe.parameters[property];
-                            var property_distance = (endKeyframe.parameters[property] ||
-                                                     startKeyframe.parameters[property]) - start_property;
-                            updatedDrawObject[property] = ease(currentTweenFrame, start_property, property_distance,duration);
+
+                            var start_property = (startKeyframe.parameters[property] === 0) ? 
+                            startKeyframe.parameters[property] : startKeyframe.parameters[property] ||
+                            endKeyframe.parameters[property];
+                                                
+                            var property_distance = ((endKeyframe.parameters[property] === 0) ? 
+                            endKeyframe.parameters[property] : endKeyframe.parameters[property] ||
+                            startKeyframe.parameters[property]) - start_property;
+                            
+                            updatedDrawObject[property] = ease(currentTweenFrame,
+                                                               start_property, 
+                                                               property_distance,
+                                                               duration
+                                                               );
                         }
 
                         // Draw the sprite.

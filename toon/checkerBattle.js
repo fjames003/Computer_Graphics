@@ -93,7 +93,7 @@
                     ty: getTileLocations(11)[1],
                     parameters: {
                         limbAngle: 190,
-                        elbowAngle: 360
+                        elbowAngle: 0
                     },                    
                     ease: KeyframeTweener.quadEaseOut
                 }
@@ -121,7 +121,7 @@
                     ty: getTileLocations(12)[1],
                     parameters: {
                         limbAngle: 190,
-                        elbowAngle: 360
+                        elbowAngle: 0
                     },
                     ease: KeyframeTweener.quadEaseOut
                 }
@@ -149,7 +149,7 @@
                     ty: getTileLocations(14)[1],
                     parameters: {
                         limbAngle: 190,
-                        elbowAngle: 360
+                        elbowAngle: 0
                     },
                     ease: KeyframeTweener.quadEaseOut
                 },
@@ -178,7 +178,7 @@
                     ty: getTileLocations(15)[1],
                     parameters: {
                         limbAngle: 190,
-                        elbowAngle: 360
+                        elbowAngle: 0
                     },
                     ease: KeyframeTweener.quadEaseOut
                 }
