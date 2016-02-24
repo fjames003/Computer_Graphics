@@ -370,6 +370,30 @@
             sprites[sprite].keyframes[previousKeyframeLength].frame = frame;
         }
     }
+
+
+    var keyframeCopier = function(piece, oldFrame, newFrame, updates) {
+        var sprite = 5;
+        var previousKeyframeLength = sprites[sprite].keyframes.length;
+        for (var keyframe = 0; keyframe < previousKeyframeLength; keyframe++) {
+            if (sprites[sprite].keyframes[keyframe].frame === oldFrame) {
+
+                sprites[sprite].keyframes[previousKeyframeLength] = 
+                Object.create(sprites[sprite].keyframes[keyframe]);
+
+                sprites[sprite].keyframes[previousKeyframeLength].frame = newFrame;
+                for (var update in updates) {
+                    sprites[sprite].keyframes[previousKeyframeLength][update] = updates[update];
+                }
+            }
+        }
+    }
+
+    keyframeCopier("red1", 101, 150);
+    keyframeCopier("red1", 150, 200, {
+        tx: getTileLocations(51)[0]
+    });
+
     holdSpritePositions(sprites[0].keyframes[sprites[0].keyframes.length - 1].frame);
 
     // Will add keyframes to sprites (starting from their last keyframe)
