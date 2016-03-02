@@ -163,9 +163,23 @@
                         for (var index in startingOrEndingParameters) {
                             var property = startingOrEndingParameters[index];
 
-                            var start_property = startKeyframe.parameters[property] || (startKeyframe.parameters[property] === 0) ? startKeyframe.parameters[property] : endKeyframe.parameters[property];
+                            console.log(currentFrame);
+                            // var start_property = (typeof startKeyframe.parameters === "undefined") ? 
+                            // endKeyframe.parameters[property] : startKeyframe.parameters[property];
                             
-                            var property_distance = (endKeyframe.parameters[property] || (endKeyframe.parameters[property] === 0) ? endKeyframe.parameters[property] : startKeyframe.parameters[property]) - start_property;       
+                            // var property_distance = (typeof endKeyframe.parameters === "undefined") ?
+                            // startKeyframe.parameters[property] : endKeyframe.parameters[property];
+
+                            if (!startKeyframe.parameters) {
+                                startKeyframe.parameters = {};
+                            } else if (!endKeyframe.parameters) {
+                                endKeyframe.parameters = {};
+                            }
+                             var start_property = (startKeyframe.parameters[property] === 0) ? 
+                                 startKeyframe.parameters[property] : startKeyframe.parameters[property] ||
+                                 sprites[i].default[property];
+                                             
+                            var property_distance = ((endKeyframe.parameters[property] === 0) ?                         endKeyframe.parameters[property] : endKeyframe.parameters[property] ||             sprites[i].default[property]) - start_property;   
 
                             updatedDrawObject[property] = (easingParameterAdjustments[property]) ? 
                             easingParameterAdjustments[property](currentTweenFrame, start_property,

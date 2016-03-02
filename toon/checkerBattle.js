@@ -45,6 +45,12 @@
             renderingContext.restore();
         }
     }
+
+    var pieceDefaults = {
+        limbAngle: 90,
+        elbowAngle: 90,
+        facialExpression: 1
+    }
     
 
     var sprites = [
@@ -74,6 +80,7 @@
     // Black Piece 1
         {
             draw: piece("black"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -116,16 +123,19 @@
                         elbowAngle: -270
                     },
                     rotate: -360,
-                    ease: KeyframeTweener.inOutCirc
-                },
-                {
-                    frame: 200
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        rotate: KeyframeTweener.quadEaseOut
+                    }
                 }
             ]
         },
     // Black Piece 2
         {
             draw: piece("black"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -176,15 +186,13 @@
                         rotate: KeyframeTweener.quadEaseOut
                     }
                     
-                },
-                {
-                    frame: 200
                 }
             ]
         },
     // Black Piece 3
         {
             draw: piece("black"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -233,9 +241,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
-                },
-                {
-                    frame: 200
                 }
 
             ]
@@ -243,6 +248,7 @@
     // Black Piece 4
         {
             draw: piece("black"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -290,15 +296,13 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
-                },
-                {
-                    frame: 200
                 }
             ]
         },
     // Red Piece 1
         {
             draw: piece("red"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -315,12 +319,19 @@
                 },
                 {
                     frame: 125,
+                    tx: getTileLocations(50)[0],
+                    ty: getTileLocations(50)[1],
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth
+                    }
                 },
                 {
                     frame: 200,
                     tx: getTileLocations(51)[0],
+                    ty: getTileLocations(51)[1],
                     parameters: {
-                        limbAngle: 0
+                        limbAngle: 190
                     },
                     ease: KeyframeTweener.backwardsAndPast
                 }
@@ -329,6 +340,7 @@
     // Red Piece 2
         {
             draw: piece("red"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -341,16 +353,17 @@
                     frame: 125,
                     tx: getTileLocations(51)[0],
                     ty: getTileLocations(51)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-                {
-                    frame: 125,
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth
+                    }
                 },
                 {
                     frame: 200,
                     tx: getTileLocations(52)[0],
+                    ty: getTileLocations(52)[1],
                     parameters: {
-                        limbAngle: 0
+                        limbAngle: 190
                     },
                     ease: KeyframeTweener.backwardsAndPast
                 }
@@ -359,6 +372,7 @@
     // Red Piece 3
         {
             draw: piece("red"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -371,16 +385,17 @@
                     frame: 125,
                     tx: getTileLocations(53)[0],
                     ty: getTileLocations(53)[1],
-                    ease: KeyframeTweener.backwardsAndPast
-                },
-                {
-                    frame: 125,
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth
+                    }
                 },
                 {
                     frame: 200,
                     tx: getTileLocations(54)[0],
+                    ty: getTileLocations(54)[1],                 
                     parameters: {
-                        limbAngle: 0
+                        limbAngle: 190
                     },
                     ease: KeyframeTweener.backwardsAndPast
                 }
@@ -389,6 +404,7 @@
     // Red Piece 4
         {
             draw: piece("red"),
+            default: pieceDefaults,
             keyframes: [
                 {
                     frame: 0,
@@ -405,12 +421,19 @@
                 },
                 {
                     frame: 125,
+                    tx: getTileLocations(54)[0],
+                    ty: getTileLocations(54)[1],
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth
+                    }
                 },
                 {
                     frame: 200,
                     tx: getTileLocations(55)[0],
+                    ty: getTileLocations(55)[1],
                     parameters: {
-                        limbAngle: 0
+                        limbAngle: 190
                     },
                     ease: KeyframeTweener.backwardsAndPast
                 }
