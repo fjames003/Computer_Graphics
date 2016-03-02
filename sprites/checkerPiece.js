@@ -9,8 +9,11 @@
 
         // get specs and draw body of piece...
         var renderingContext = pieceSpecification.renderingContext;
-        var currentColor = (pieceSpecification.color === "black" || pieceSpecification.color === "red") ?
-                            pieceSpecification.color : "black";
+        var opacity = pieceSpecification.opacity || 255;
+        var BLACK = "rgba(0,0,0," + opacity / 255 + ")";
+        var RED   = "rgba(255,0,0," + opacity / 255 + ")";
+        var WHITE = "rgba(255,255,255," + opacity / 255 + ")";
+        var currentColor = (pieceSpecification.color === "black") ? BLACK : (pieceSpecification.color === "red") ? RED : BLACK;
         var x = pieceSpecification.x || 0;
         var y = pieceSpecification.y || 0;
         var size = pieceSpecification.size || 50;
@@ -18,10 +21,12 @@
         var limbUpperBound = 190;
         var limbLowerBound = 50;
 
+
+
         var radialGradient = renderingContext.createRadialGradient(x, y, size, x, y, size - size / 3);
         for (var stopper = 0.0; stopper <= 1.0; stopper += 0.1) {
             radialGradient.addColorStop(stopper, currentColor);
-            currentColor = (currentColor === "black") ? "red" : "black";
+            currentColor = (currentColor === BLACK) ? RED : BLACK;
         }
 
         renderingContext.fillStyle = radialGradient;
@@ -42,7 +47,7 @@
 
             renderingContext.rotate(direction * (90 - limbAngle) * Math.PI / 180)
 
-            renderingContext.strokeStyle = "black";
+            renderingContext.strokeStyle = BLACK;
             renderingContext.lineCap = "round";
 
             // width of primary limb
@@ -108,7 +113,7 @@
             expression = (expression >= -5 && expression <= 5) ? 
                             ((expression < 0) ? expression * 2 : expression) : 1;
             
-            renderingContext.strokeStyle = "white";
+            renderingContext.strokeStyle = WHITE;
             renderingContext.lineCap = "round";
             renderingContext.lineWidth = size / 12;
 
@@ -133,7 +138,7 @@
             renderingContext.stroke();
             renderingContext.restore();
 
-            renderingContext.fillStyle = "white";
+            renderingContext.fillStyle = WHITE;
             renderingContext.beginPath();
             renderingContext.arc(-size / 5, -size / 6, size / 10, 0, Math.PI * 2, true);
             renderingContext.arc(size / 5, -size / 6, size / 10, 0, Math.PI * 2, true);

@@ -9,7 +9,7 @@
     var canvas = document.getElementById("canvas");
     var renderingContext = canvas.getContext("2d");
 
-    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth: window.innerHeight;
+    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth * 0.95: window.innerHeight * 0.95;
     renderingContext.save();
     renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
@@ -40,7 +40,8 @@
                 color: color,
                 limbAngle: specs.limbAngle,
                 elbowAngle: specs.elbowAngle,
-                facialExpression: specs.facialExpression
+                facialExpression: specs.facialExpression,
+                opacity: specs.opacity
             }); 
             renderingContext.restore();
         }
@@ -49,7 +50,8 @@
     var pieceDefaults = {
         limbAngle: 90,
         elbowAngle: 90,
-        facialExpression: 1
+        facialExpression: 1, 
+        opacity: 255
     }
     
 
@@ -129,7 +131,32 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(10)[0],
+                    ty: getTileLocations(10)[1],
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: -270
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        rotate: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 225,
+                    tx: getTileLocations(19)[0],
+                    ty: getTileLocations(19)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 120
+                    }
                 }
+
             ]
         },
     // Black Piece 2
@@ -184,8 +211,31 @@
                         limbAngle: KeyframeTweener.quadEaseOut,
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
+                    } 
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(10)[0],
+                    ty: getTileLocations(10)[1],
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: -270
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        rotate: KeyframeTweener.quadEaseOut
                     }
-                    
+                },
+                {
+                    frame: 225,
+                    tx: getTileLocations(20)[0],
+                    ty: getTileLocations(20)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 120
+                    }
                 }
             ]
         },
@@ -240,6 +290,44 @@
                         limbAngle: KeyframeTweener.quadEaseOut,
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(10)[0],
+                    ty: getTileLocations(10)[1],
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: -270
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        rotate: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 225,
+                    tx: getTileLocations(22)[0],
+                    ty: getTileLocations(22)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 120
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(21)[0],
+                    ty: getTileLocations(21)[1],
+                    parameters: {
+                        limbAngle: 50,
+                        elbowAngle: -120
                     }
                 }
 
@@ -296,6 +384,44 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(10)[0],
+                    ty: getTileLocations(10)[1],
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: -270
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        rotate: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 225,
+                    tx: getTileLocations(23)[0],
+                    ty: getTileLocations(23)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 120
+                    },
+                    ease: KeyframeTweener.inOutCirc,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(22)[0],
+                    ty: getTileLocations(22)[1],
+                    parameters: {
+                        limbAngle: 50,
+                        elbowAngle: -120
+                    }
                 }
             ]
         },
@@ -333,7 +459,25 @@
                     parameters: {
                         limbAngle: 190
                     },
-                    ease: KeyframeTweener.backwardsAndPast
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(43)[0],
+                    ty: getTileLocations(43)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 135
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
                 }
             ]
         },
@@ -365,7 +509,25 @@
                     parameters: {
                         limbAngle: 190
                     },
-                    ease: KeyframeTweener.backwardsAndPast
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(44)[0],
+                    ty: getTileLocations(44)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 135
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
                 }
             ]
         },
@@ -397,7 +559,25 @@
                     parameters: {
                         limbAngle: 190
                     },
-                    ease: KeyframeTweener.backwardsAndPast
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(46)[0],
+                    ty: getTileLocations(46)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 135
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
                 }
             ]
         },
@@ -435,7 +615,59 @@
                     parameters: {
                         limbAngle: 190
                     },
-                    ease: KeyframeTweener.backwardsAndPast
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 250,
+                    tx: getTileLocations(47)[0],
+                    ty: getTileLocations(47)[1],
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 135
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 325,
+                    tx: getTileLocations(47)[0],
+                    ty: getTileLocations(47)[1],
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 0,
+                        facialExpression: -1
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        facialExpression: KeyframeTweener.backAndForth,
+                        opacity: KeyframeTweener.linear
+                    }
+                },
+                {
+                    frame: 1000,
+                    tx: getTileLocations(47)[0],
+                    ty: getTileLocations(47)[1],
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 0,
+                        facialExpression: -1,
+                        opacity: 0
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        facialExpression: KeyframeTweener.backAndForth
+                    }
                 }
             ]
         }
