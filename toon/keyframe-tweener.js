@@ -163,13 +163,9 @@
                         for (var index in startingOrEndingParameters) {
                             var property = startingOrEndingParameters[index];
 
-                            var start_property = (startKeyframe.parameters[property] === 0) ? 
-                            startKeyframe.parameters[property] : startKeyframe.parameters[property] ||
-                            endKeyframe.parameters[property];
-                                                
-                            var property_distance = ((endKeyframe.parameters[property] === 0) ? 
-                            endKeyframe.parameters[property] : endKeyframe.parameters[property] ||
-                            startKeyframe.parameters[property]) - start_property;
+                            var start_property = startKeyframe.parameters[property] || (startKeyframe.parameters[property] === 0) ? startKeyframe.parameters[property] : endKeyframe.parameters[property];
+                            
+                            var property_distance = (endKeyframe.parameters[property] || (endKeyframe.parameters[property] === 0) ? endKeyframe.parameters[property] : startKeyframe.parameters[property]) - start_property;       
 
                             updatedDrawObject[property] = (easingParameterAdjustments[property]) ? 
                             easingParameterAdjustments[property](currentTweenFrame, start_property,

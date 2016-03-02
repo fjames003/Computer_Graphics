@@ -117,6 +117,9 @@
                     },
                     rotate: -360,
                     ease: KeyframeTweener.inOutCirc
+                },
+                {
+                    frame: 200
                 }
             ]
         },
@@ -173,6 +176,9 @@
                         rotate: KeyframeTweener.quadEaseOut
                     }
                     
+                },
+                {
+                    frame: 200
                 }
             ]
         },
@@ -227,6 +233,9 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
+                },
+                {
+                    frame: 200
                 }
 
             ]
@@ -281,6 +290,9 @@
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
                     }
+                },
+                {
+                    frame: 200
                 }
             ]
         },
@@ -299,6 +311,17 @@
                     frame: 101,
                     tx: getTileLocations(50)[0],
                     ty: getTileLocations(50)[1],
+                    ease: KeyframeTweener.backwardsAndPast
+                },
+                {
+                    frame: 125,
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(51)[0],
+                    parameters: {
+                        limbAngle: 0
+                    },
                     ease: KeyframeTweener.backwardsAndPast
                 }
             ]
@@ -319,6 +342,17 @@
                     tx: getTileLocations(51)[0],
                     ty: getTileLocations(51)[1],
                     ease: KeyframeTweener.backwardsAndPast
+                },
+                {
+                    frame: 125,
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(52)[0],
+                    parameters: {
+                        limbAngle: 0
+                    },
+                    ease: KeyframeTweener.backwardsAndPast
                 }
             ]
         },
@@ -337,6 +371,17 @@
                     frame: 125,
                     tx: getTileLocations(53)[0],
                     ty: getTileLocations(53)[1],
+                    ease: KeyframeTweener.backwardsAndPast
+                },
+                {
+                    frame: 125,
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(54)[0],
+                    parameters: {
+                        limbAngle: 0
+                    },
                     ease: KeyframeTweener.backwardsAndPast
                 }
             ]
@@ -357,6 +402,17 @@
                     tx: getTileLocations(54)[0],
                     ty: getTileLocations(54)[1],
                     ease: KeyframeTweener.backwardsAndPast
+                },
+                {
+                    frame: 125,
+                },
+                {
+                    frame: 200,
+                    tx: getTileLocations(55)[0],
+                    parameters: {
+                        limbAngle: 0
+                    },
+                    ease: KeyframeTweener.backwardsAndPast
                 }
             ]
         }
@@ -372,84 +428,62 @@
     }
 
 
-    var keyframeCopier = function(piece, oldFrame, newFrame, updates) {
-        var sprite = 5;
-        var previousKeyframeLength = sprites[sprite].keyframes.length;
-        for (var keyframe = 0; keyframe < previousKeyframeLength; keyframe++) {
-            if (sprites[sprite].keyframes[keyframe].frame === oldFrame) {
+    // var keyframeCopier = function(sprite, oldFrame, newFrame, updates) {
+    //     var previousKeyframeLength = sprites[sprite].keyframes.length;
+    //     for (var keyframe = 0; keyframe < previousKeyframeLength; keyframe++) {
+    //         if (sprites[sprite].keyframes[keyframe].frame === oldFrame) {
 
-                sprites[sprite].keyframes[previousKeyframeLength] = 
-                Object.create(sprites[sprite].keyframes[keyframe]);
+    //             sprites[sprite].keyframes[previousKeyframeLength] = {};
+    //             for (var property in sprites[sprite].keyframes[keyframe]) {
+    //                 if (sprites[sprite].keyframes[keyframe].hasOwnProperty(property)) {
+    //                     sprites[sprite].keyframes[previousKeyframeLength][property] = 
+    //                     sprites[sprite].keyframes[keyframe][property];
+    //                 }
+    //             }
 
-                sprites[sprite].keyframes[previousKeyframeLength].frame = newFrame;
-                for (var update in updates) {
-                    sprites[sprite].keyframes[previousKeyframeLength][update] = updates[update];
-                }
-            }
-        }
-    }
+    //             console.log(sprites[sprite].keyframes[previousKeyframeLength]);
+    //             sprites[sprite].keyframes[previousKeyframeLength].frame = newFrame;
+    //             for (var update in updates) {
+    //                 if (update === "parameters") {
+    //                     for (var paramUpdate in updates[update]) {
+    //                         console.log(sprites[sprite].keyframes[previousKeyframeLength][update]);
+    //                         console.log(!sprites[sprite].keyframes[previousKeyframeLength][update]);
+    //                         if (!sprites[sprite].keyframes[previousKeyframeLength][update]) {
+    //                             sprites[sprite].keyframes[previousKeyframeLength][update] = {};
+    //                         }
+    //                         sprites[sprite].keyframes[previousKeyframeLength][update][paramUpdate] = updates[update][paramUpdate];
+    //                     }
+    //                 } else {
+    //                 sprites[sprite].keyframes[previousKeyframeLength][update] = updates[update];                       
+    //                 }
+    //             }
+    //             console.log(sprites[sprite].keyframes[previousKeyframeLength]);
+    //         }
+    //     }
+    // }
 
-    keyframeCopier("red1", 101, 150);
-    keyframeCopier("red1", 150, 200, {
-        tx: getTileLocations(51)[0]
-    });
+    // keyframeCopier(5, 101, 125, {});
+    // keyframeCopier(8, 101, 125, {});
+    // // Sprites currently [0 = board, 1-4 = black pieces, 5-8 = red pieces]
+    // // Current Ending frames, 150 for black, 125 for red...
+    // keyframeCopier(5, 125, 200, {tx: getTileLocations(51)[0], parameters: {limbAngle: 0}});
+    // keyframeCopier(6, 125, 200, {tx: getTileLocations(52)[0], parameters: {limbAngle: 0}});
+    // keyframeCopier(7, 125, 200, {tx: getTileLocations(54)[0], parameters: {limbAngle: 0}});
+    // keyframeCopier(8, 125, 200, {tx: getTileLocations(55)[0], parameters: {limbAngle: 0}});
+    // keyframeCopier(1, 150, 200, {});
+    // keyframeCopier(2, 150, 200, {});
+    // keyframeCopier(3, 150, 200, {});
+    // keyframeCopier(4, 150, 200, {});
+    // // All at frame 200...
+    // keyframeCopier(1, 200, 250, {tx: getTileLocations(19)[0], ty: getTileLocations(19)[1], parameters: {limbAngle: 190}});
+    // keyframeCopier(2, 200, 250, {tx: getTileLocations(20)[0], ty: getTileLocations(20)[1], parameters: {limbAngle: 190}});
+    // keyframeCopier(3, 200, 250, {tx: getTileLocations(22)[0], ty: getTileLocations(22)[1], parameters: {limbAngle: 190}});
+    // keyframeCopier(4, 200, 250, {tx: getTileLocations(23)[0], ty: getTileLocations(23)[1], parameters: {limbAngle: 190}});
+
+
 
     holdSpritePositions(sprites[0].keyframes[sprites[0].keyframes.length - 1].frame);
 
-    // Will add keyframes to sprites (starting from their last keyframe)
-    // Accepts a list of tiles that the sprites will move to (evenly spaced over the frame number)
-    // var pieceMover = function(specs) {
-    //     var parameterHolder = {
-    //         limbAngle: 120,
-    //         limbUpdater: -5,
-    //         elbowAngle: 90,
-    //         elbowUpdater: -2,
-    //         facialExpression: 1,
-    //         faceUpdater: 0.25
-    //     }
-    //     for (var sprite = 0; sprite < specs.sprites.length; sprite++) {
-    //         var previousKeyframeLength = sprites[sprite + 1].keyframes.length;
-    //         console.log(previousKeyframeLength);
-    //         console.log(1);
-    //         for (var i = 0; i < specs.frames; i += specs.frameUpdate) {
-
-    //             // Update parameters based on parameter holder...
-    //             parameterHolder.limbUpdater *= (parameterHolder.limbAngle - parameterHolder.limbUpdater < 50) ?
-    //             -1 : 1;
-    //             parameterHolder.elbowAngle += parameterHolder.elbowUpdater;
-    //             parameterHolder.facialExpression += parameterHolder.faceUpdater;
-    //             if (parameterHolder.facialExpression >= 5 || parameterHolder.facialExpression <= -5) {
-    //                 parameterHolder.faceUpdater *= -1;
-    //             }
-                    
-    //             var moveBy = Math.floor(specs.frames / specs.tiles[sprite].length);
-
-    //             console.log(previousKeyframeLength + (i / specs.frameUpdate));
-    //             sprites[sprite + 1].keyframes[previousKeyframeLength + (i / specs.frameUpdate)] = {
-    //                 frame: i,
-    //                 tx: getTileLocations(specs.tiles[sprite][Math.floor(i / moveBy)])[0],
-    //                 ty: getTileLocations(specs.tiles[sprite][Math.floor(i / moveBy)])[1],
-    //                 limbAngle: parameterHolder.limbAngle,
-    //                 elbowAngle: parameterHolder.elbowAngle,
-    //                 facialExpression: parameterHolder.facialExpression,
-    //                 ease: specs.easer[sprite]
-    //             }  
-    //         }
-            
-    //     }
-    // }
-    // pieceMover({
-    //     sprites: [1,2],
-    //     tiles: [[1,2,10,11,12,20,21,22,30,29], [43,44,45,46,38,30,28]],
-    //     easer: [KeyframeTweener.inOutCirc, KeyframeTweener.backwardsAndPast],
-    //     frames: 500,
-    //     frameUpdate: 5
-    // })
-    
-
-    // Finally, we initialize the engine.  Mainly, it needs
-    // to know the rendering context to use.  And the animations
-    // to display, of course.
     KeyframeTweener.initialize({
         renderingContext: canvas.getContext("2d"),
         width: canvas.width,
