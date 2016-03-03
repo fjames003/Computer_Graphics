@@ -19,7 +19,7 @@
         var size = pieceSpecification.size || 50;
 
         var limbUpperBound = 190;
-        var limbLowerBound = 50;
+        var limbLowerBound = 0;
 
 
 

@@ -476,6 +476,26 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        facialExpression: KeyframeTweener.backAndForth,
+                        rotate: KeyframeTweener.inOutCirc,
+                        tx: KeyframeTweener.inOutCirc,
+                        ty: KeyframeTweener.inOutCirc
+                    }
+                },
+                {
+                    frame: 325,
+                    tx: getTileLocations(44)[0],
+                    ty: getTileLocations(44)[1],
+                    rotate: -360,
+                    parameters: {
+                        limbAngle: 1,
+                        elbowAngle: 225,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
                         elbowAngle: KeyframeTweener.backAndForth
                     }
                 }
@@ -528,6 +548,21 @@
                         limbAngle: KeyframeTweener.backAndForth,
                         elbowAngle: KeyframeTweener.backAndForth
                     }
+                },
+                {
+                    frame: 325,
+                    tx: getTileLocations(36)[0],
+                    ty: getTileLocations(36)[1],
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
                 }
             ]
         },
@@ -572,6 +607,21 @@
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 135
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 325,
+                    tx: getTileLocations(37)[0],
+                    ty: getTileLocations(37)[1],
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 5
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -632,41 +682,27 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        facialExpression: KeyframeTweener.backAndForth,
+                        rotate: KeyframeTweener.inOutCirc,
+                        tx: KeyframeTweener.inOutCirc,
+                        ty: KeyframeTweener.inOutCirc
                     }
                 },
                 {
                     frame: 325,
-                    tx: getTileLocations(47)[0],
-                    ty: getTileLocations(47)[1],
+                    tx: getTileLocations(45)[0],
+                    ty: getTileLocations(45)[1],
+                    rotate: 360,
                     parameters: {
-                        limbAngle: 190,
-                        elbowAngle: 0,
-                        facialExpression: -1
+                        limbAngle: 1,
+                        elbowAngle: 225,
+                        facialExpression: 5
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
                         elbowAngle: KeyframeTweener.backAndForth,
-                        facialExpression: KeyframeTweener.backAndForth,
-                        opacity: KeyframeTweener.linear
-                    }
-                },
-                {
-                    frame: 1000,
-                    tx: getTileLocations(47)[0],
-                    ty: getTileLocations(47)[1],
-                    parameters: {
-                        limbAngle: 190,
-                        elbowAngle: 0,
-                        facialExpression: -1,
-                        opacity: 0
-                    },
-                    ease: KeyframeTweener.backwardsAndPast,
-                    easeAdjust: {
-                        limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth,
-                        facialExpression: KeyframeTweener.backAndForth
                     }
                 }
             ]
