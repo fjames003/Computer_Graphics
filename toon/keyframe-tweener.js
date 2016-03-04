@@ -154,7 +154,13 @@
                                                 Object.keys(startKeyframe.parameters) : [];
                         var endingParameters = (endKeyframe.parameters) ?
                                                 Object.keys(endKeyframe.parameters) : [];
-                        var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
+                        //var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
+                        var startingOrEndingParameters = startingParameters;
+                        for (var param = endingParameters.length - 1; param >= 0; param--) {
+                            if (!param in startingOrEndingParameters) {
+                                startingOrEndingParameters[startingOrEndingParameters.length] = param
+                            }
+                        };
 
                         // By Looping over the union of the two, I can obtain defaults by simply grabbing,
                         // the starting or ending parameter if the other is missing... 
