@@ -29,6 +29,14 @@
     // - tx, ty: the location of the sprite (default is 0, 0)
     // - sx, sy: the scale factor of the sprite (default is 1, 1)
     // - rotate: the rotation angle of the sprite (default is 0)
+    var contains = function (a, obj) {
+        for (var i = 0; i < a.length; i++) {
+            if (a[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    }
     var initializeAnimation = function (settings) {
         // We need to keep track of the current frame.
         var currentFrame = 0;
@@ -156,9 +164,9 @@
                                                 Object.keys(endKeyframe.parameters) : [];
                         //var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
                         var startingOrEndingParameters = startingParameters;
-                        for (var param = endingParameters.length - 1; param >= 0; param--) {
-                            if (!param in startingOrEndingParameters) {
-                                startingOrEndingParameters[startingOrEndingParameters.length] = param
+                        for (var param in endingParameters) {
+                            if (! contains(startingOrEndingParameters, endingParameters[param])) {
+                                startingOrEndingParameters[startingOrEndingParameters.length] = endingParameters[param]
                             }
                         };
 
@@ -183,9 +191,11 @@
                             }
                              var start_property = (startKeyframe.parameters[property] === 0) ? 
                                  startKeyframe.parameters[property] : startKeyframe.parameters[property] ||
-                                 sprites[i].default[property];
+                                 sprites[i].defaulter[property];
                                              
-                            var property_distance = ((endKeyframe.parameters[property] === 0) ?                         endKeyframe.parameters[property] : endKeyframe.parameters[property] ||             sprites[i].default[property]) - start_property;   
+                            var property_distance = ((endKeyframe.parameters[property] === 0) ?
+                                endKeyframe.parameters[property] : endKeyframe.parameters[property] ||
+                                sprites[i].defaulter[property]) - start_property;   
 
                             updatedDrawObject[property] = (easingParameterAdjustments[property]) ? 
                             easingParameterAdjustments[property](currentTweenFrame, start_property,
