@@ -47,7 +47,7 @@
         }
     }
 
-    var pieceDefaults = {
+    var pieceDefaulters = {
         limbAngle: 90,
         elbowAngle: 90,
         facialExpression: 1, 
@@ -82,7 +82,7 @@
     // Black Piece 1
         {
             draw: piece("black"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -176,7 +176,7 @@
     // Black Piece 2
         {
             draw: piece("black"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -284,9 +284,18 @@
                     },
                     ease: KeyframeTweener.inOutCirc,
                     easeAdjust: {
-                        limbAngle: KeyframeTweener.quadEaseOut,
-                        elbowAngle: KeyframeTweener.quadEaseOut,
-                        rotate: KeyframeTweener.inOutCirc
+                        opacity: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 650,
+                    tx: getTileLocations(19)[0],
+                    ty: getTileLocations(19)[1],
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: -1,
+                        opacity: 0
                     }
                 }
             ]
@@ -294,7 +303,7 @@
     // Black Piece 3
         {
             draw: piece("black"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -426,7 +435,7 @@
     // Black Piece 4
         {
             draw: piece("black"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -532,7 +541,7 @@
     // Red Piece 1
         {
             draw: piece("red"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -566,7 +575,9 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        tx: KeyframeTweener.inOutCirc,
+                        ty: KeyframeTweener.inOutCirc
                     }
                 },
                 {
@@ -608,7 +619,7 @@
     // Red Piece 2
         {
             draw: piece("red"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -673,7 +684,7 @@
     // Red Piece 3
         {
             draw: piece("red"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -738,7 +749,7 @@
     // Red Piece 4
         {
             draw: piece("red"),
-            default: pieceDefaults,
+            defaulter: pieceDefaulters,
             keyframes: [
                 {
                     frame: 0,
@@ -772,7 +783,9 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        tx: KeyframeTweener.inOutCirc,
+                        ty: KeyframeTweener.inOutCirc
                     }
                 },
                 {
