@@ -92,7 +92,8 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                Nanoshop.darkener
+                // Nanoshop.darkener
+                Nanoshop.grayScale
             ),
             0, 0
         );

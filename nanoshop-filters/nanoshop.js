@@ -10,6 +10,12 @@ var Nanoshop = {
         return [ r / 2, g / 2, b / 2, a ];
     },
 
+    // Simple conversion to gray scale i.e. black and white...
+    grayScale: function (x, y, r, g, b, a) {
+        var average = (r + g + b) / 3;
+        return [average, average, average, a];
+    },
+
     /*
      * Applies the given filter to the given ImageData object,
      * then modifies its pixels according to the given filter.
