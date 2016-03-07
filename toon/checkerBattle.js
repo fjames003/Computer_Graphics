@@ -13,15 +13,15 @@
     renderingContext.save();
     renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
+    var tileSize = 122;
     var getTileLocations = function(tileNumber) {
-        var tileSize = 122;
-            var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
-            var tileYLocation = Math.ceil(tileNumber / 8) - 1;
-            var tileOne = (12 + tileSize / 2);
-            return {
-                tx: tileOne + (tileSize * tileXLocation),
-                ty: tileOne + (tileSize * tileYLocation)
-            }
+        var tileXLocation = (tileNumber % 8) ? (tileNumber % 8) - 1 : 7;
+        var tileYLocation = Math.ceil(tileNumber / 8) - 1;
+        var tileOne = (12 + tileSize / 2);
+        return {
+            tx: tileOne + (tileSize * tileXLocation),
+            ty: tileOne + (tileSize * tileYLocation)
+        }
     };
 
     var board = function(specs) {
@@ -48,39 +48,36 @@
             }); 
             renderingContext.restore();
         }
-    }
+    };
 
     var pieceDefaulters = {
         limbAngle: 90,
         elbowAngle: 90,
         facialExpression: 1, 
         opacity: 255
-    }
+    };
     
-
     var sprites = [
     // The CheckerBoard...
         {
-        draw: board,
-        keyframes: [
-            {
-                frame: 0,
-                ease: KeyframeTweener.linear,
-                parameters: {
-                    waveFrequency: 0.03,
-                    degradation: 0
+            draw: board,
+            keyframes: [
+                {
+                    frame: 0,
+                    ease: KeyframeTweener.linear,
+                    parameters: {
+                        waveFrequency: 0.03,
+                        degradation: 0
+                    }
+                },
+                {
+                    frame: 1000,
+                    parameters: {
+                        waveFrequency: 0.1,
+                        degradation: 100 
+                    }  
                 }
-            },
-
-            {
-                frame: 1000,
-                parameters: {
-                    waveFrequency: 0.1,
-                    degradation: 100 
-                }
-                
-            }
-        ]
+            ]
         },
     // Black Piece 1
         {
@@ -102,7 +99,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 101,
                     tx: getTileLocations(11)["tx"],
@@ -118,7 +114,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 150,
                     tx: getTileLocations(10)["tx"],
@@ -172,8 +167,38 @@
                         limbAngle: 50,
                         elbowAngle: -120
                     }
+                },
+                {
+                    frame: 695,
+                    tx: getTileLocations(28)["tx"],
+                    ty: getTileLocations(28)["ty"],
+                    rotate: -360,
+                    parameters: {
+                        limbAngle: 50,
+                        elbowAngle: -120
+                    }
+                },
+                {
+                    frame: 715,
+                    tx: getTileLocations(27.5)["tx"],
+                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 0
+                    }
+                },
+                {
+                    frame: 750,
+                    tx: getTileLocations(27.5)["tx"],
+                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 0,
+                        opacity: 0
+                    }
                 }
-
             ]
         },
     // Black Piece 2
@@ -196,7 +221,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 125,
                     tx: getTileLocations(12)["tx"],
@@ -210,10 +234,8 @@
                         limbAngle: KeyframeTweener.quadEaseOut,
                         elbowAngle: KeyframeTweener.quadEaseOut,
                         rotate: KeyframeTweener.quadEaseOut
-                    }
-                    
+                    }       
                 },
-
                 {
                     frame: 150,
                     tx: getTileLocations(11)["tx"],
@@ -297,7 +319,7 @@
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
-                        facialExpression: -1,
+                        facialExpression: 5,
                         opacity: 0
                     }
                 }
@@ -323,7 +345,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 101,
                     tx: getTileLocations(14)["tx"],
@@ -339,7 +360,6 @@
                         rotate: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 150,
                     tx: getTileLocations(13)["tx"],
@@ -465,7 +485,6 @@
                         elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
-
                 {
                     frame: 125,
                     tx: getTileLocations(15)["tx"],
@@ -548,6 +567,37 @@
                         limbAngle: 135,
                         elbowAngle: 120
                     }
+                },
+                {
+                    frame: 695,
+                    tx: getTileLocations(29)["tx"],
+                    ty: getTileLocations(29)["ty"],
+                    rotate: 360,
+                    parameters: {
+                        limbAngle: 135,
+                        elbowAngle: 120
+                    }
+                },
+                {
+                    frame: 715,
+                    tx: getTileLocations(29.5)["tx"],
+                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 0
+                    }
+                },
+                {
+                    frame: 750,
+                    tx: getTileLocations(29.5)["tx"],
+                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 0,
+                        opacity: 0
+                    }
                 }
             ]
         },
@@ -562,7 +612,6 @@
                     ty: getTileLocations(57)["ty"],
                     ease: KeyframeTweener.backwardsAndPast
                 },
-
                 {
                     frame: 101,
                     tx: getTileLocations(50)["tx"],
@@ -662,7 +711,7 @@
                 {
                     frame: 725,
                     tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + 61,
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
                     rotate: -450,
                     parameters: {
                         limbAngle: 60,
@@ -678,12 +727,30 @@
                 {
                     frame: 950,
                     tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + 61,
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
                     rotate: -360,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 90,
                         facialExpression: -1
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 1050,
+                    tx: getTileLocations(28.5)["tx"],
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    rotate: -360,
+                    sx: 3,
+                    sy: 3,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 90,
+                        facialExpression: 1
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -704,7 +771,6 @@
                     ty: getTileLocations(59)["ty"],
                     ease: KeyframeTweener.backwardsAndPast
                 },
-
                 {
                     frame: 125,
                     tx: getTileLocations(51)["tx"],
@@ -755,6 +821,51 @@
                         limbAngle: KeyframeTweener.backAndForth,
                         elbowAngle: KeyframeTweener.backAndForth
                     }
+                },
+                {
+                    frame: 500,
+                    tx: getTileLocations(35.5)["tx"],
+                    ty: getTileLocations(36)["ty"],
+                    rotate: 450,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 675,
+                    tx: getTileLocations(35.5)["tx"],
+                    ty: getTileLocations(36)["ty"],
+                    rotate: -450,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 180,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        opacity: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 800,
+                    tx: getTileLocations(35.5)["tx"],
+                    ty: getTileLocations(36)["ty"],
+                    rotate: -450,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 180,
+                        facialExpression: 5,
+                        opacity: 0
+                    }
                 }
             ]
         },
@@ -765,11 +876,10 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(61)["tx"],
-                    ty: getTileLocations(61)["ty"],
+                    tx: getTileLocations(tileSize / 2)["tx"],
+                    ty: getTileLocations(tileSize / 2)["ty"],
                     ease: KeyframeTweener.backwardsAndPast
                 },
-
                 {
                     frame: 125,
                     tx: getTileLocations(53)["tx"],
@@ -820,6 +930,51 @@
                         limbAngle: KeyframeTweener.backAndForth,
                         elbowAngle: KeyframeTweener.backAndForth
                     }
+                },
+                {
+                    frame: 500,
+                    tx: getTileLocations(37.5)["tx"],
+                    ty: getTileLocations(37.5)["ty"],
+                    rotate: -450,
+                    parameters: {
+                        limbAngle: 190,
+                        elbowAngle: 225,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 675,
+                    tx: getTileLocations(37.5)["tx"],
+                    ty: getTileLocations(37.5)["ty"],
+                    rotate: 450,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 180,
+                        facialExpression: 5
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        opacity: KeyframeTweener.quadEaseOut
+                    }
+                },
+                {
+                    frame: 800,
+                    tx: getTileLocations(37.5)["tx"],
+                    ty: getTileLocations(37.5)["ty"],
+                    rotate: 450,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 180,
+                        facialExpression: 5,
+                        opacity: 0
+                    }
                 }
             ]
         },
@@ -834,7 +989,6 @@
                     ty: getTileLocations(63)["ty"],
                     ease: KeyframeTweener.backwardsAndPast
                 },
-
                 {
                     frame: 101,
                     tx: getTileLocations(54)["tx"],
@@ -934,7 +1088,7 @@
                 {
                     frame: 725,
                     tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + 61,
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
                     rotate: 270,
                     parameters: {
                         limbAngle: 60,
@@ -950,8 +1104,26 @@
                 {
                     frame: 950,
                     tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + 61,
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
                     rotate: 360,
+                    parameters: {
+                        limbAngle: 90,
+                        elbowAngle: 270,
+                        facialExpression: -1
+                    },
+                    ease: KeyframeTweener.backwardsAndPast,
+                    easeAdjust: {
+                        limbAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
+                    }
+                },
+                {
+                    frame: 1050,
+                    tx: getTileLocations(28.5)["tx"],
+                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    rotate: 360,
+                    sx: 3,
+                    sy: 3,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 270,
@@ -974,64 +1146,9 @@
             sprites[sprite].keyframes[previousKeyframeLength] = Object.create(sprites[sprite].keyframes[previousKeyframeLength - 1]);
             sprites[sprite].keyframes[previousKeyframeLength].frame = frame;
         }
-    }
+    };
 
-
-    // var keyframeCopier = function(sprite, oldFrame, newFrame, updates) {
-    //     var previousKeyframeLength = sprites[sprite].keyframes.length;
-    //     for (var keyframe = 0; keyframe < previousKeyframeLength; keyframe++) {
-    //         if (sprites[sprite].keyframes[keyframe].frame === oldFrame) {
-
-    //             sprites[sprite].keyframes[previousKeyframeLength] = {};
-    //             for (var property in sprites[sprite].keyframes[keyframe]) {
-    //                 if (sprites[sprite].keyframes[keyframe].hasOwnProperty(property)) {
-    //                     sprites[sprite].keyframes[previousKeyframeLength][property] = 
-    //                     sprites[sprite].keyframes[keyframe][property];
-    //                 }
-    //             }
-
-    //             console.log(sprites[sprite].keyframes[previousKeyframeLength]);
-    //             sprites[sprite].keyframes[previousKeyframeLength].frame = newFrame;
-    //             for (var update in updates) {
-    //                 if (update === "parameters") {
-    //                     for (var paramUpdate in updates[update]) {
-    //                         console.log(sprites[sprite].keyframes[previousKeyframeLength][update]);
-    //                         console.log(!sprites[sprite].keyframes[previousKeyframeLength][update]);
-    //                         if (!sprites[sprite].keyframes[previousKeyframeLength][update]) {
-    //                             sprites[sprite].keyframes[previousKeyframeLength][update] = {};
-    //                         }
-    //                         sprites[sprite].keyframes[previousKeyframeLength][update][paramUpdate] = updates[update][paramUpdate];
-    //                     }
-    //                 } else {
-    //                 sprites[sprite].keyframes[previousKeyframeLength][update] = updates[update];                       
-    //                 }
-    //             }
-    //             console.log(sprites[sprite].keyframes[previousKeyframeLength]);
-    //         }
-    //     }
-    // }
-
-    // keyframeCopier(5, 101, 125, {});
-    // keyframeCopier(8, 101, 125, {});
-    // // Sprites currently [0 = board, 1-4 = black pieces, 5-8 = red pieces]
-    // // Current Ending frames, 150 for black, 125 for red...
-    // keyframeCopier(5, 125, 200, {tx: getTileLocations(51)[0], parameters: {limbAngle: 0}});
-    // keyframeCopier(6, 125, 200, {tx: getTileLocations(52)[0], parameters: {limbAngle: 0}});
-    // keyframeCopier(7, 125, 200, {tx: getTileLocations(54)[0], parameters: {limbAngle: 0}});
-    // keyframeCopier(8, 125, 200, {tx: getTileLocations(55)[0], parameters: {limbAngle: 0}});
-    // keyframeCopier(1, 150, 200, {});
-    // keyframeCopier(2, 150, 200, {});
-    // keyframeCopier(3, 150, 200, {});
-    // keyframeCopier(4, 150, 200, {});
-    // // All at frame 200...
-    // keyframeCopier(1, 200, 250, {tx: getTileLocations(19)[0], ty: getTileLocations(19)[1], parameters: {limbAngle: 190}});
-    // keyframeCopier(2, 200, 250, {tx: getTileLocations(20)[0], ty: getTileLocations(20)[1], parameters: {limbAngle: 190}});
-    // keyframeCopier(3, 200, 250, {tx: getTileLocations(22)[0], ty: getTileLocations(22)[1], parameters: {limbAngle: 190}});
-    // keyframeCopier(4, 200, 250, {tx: getTileLocations(23)[0], ty: getTileLocations(23)[1], parameters: {limbAngle: 190}});
-
-
-
-    holdSpritePositions(sprites[0].keyframes[sprites[0].keyframes.length - 1].frame);
+    // holdSpritePositions(sprites[0].keyframes[sprites[0].keyframes.length - 1].frame);
 
     KeyframeTweener.initialize({
         renderingContext: canvas.getContext("2d"),
