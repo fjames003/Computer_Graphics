@@ -109,7 +109,7 @@
         };
         
         var drawFace = function (expression) {
-            var expression = Math.floor(expression);
+            var expression = Math.round(expression);
             expression = (expression >= -5 && expression <= 5) ? 
                             ((expression < 0) ? expression * 2 : expression) : 1;
             

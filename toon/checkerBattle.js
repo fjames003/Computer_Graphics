@@ -1114,7 +1114,8 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth
+                        elbowAngle: KeyframeTweener.backAndForth,
+                        facialExpression: KeyframeTweener.quadEaseOut
                     }
                 },
                 {
@@ -1127,7 +1128,7 @@
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 270,
-                        facialExpression: -1
+                        facialExpression: 1
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
