@@ -9,24 +9,40 @@
   </head>
   <body>
     <!-- Where the action will happen. -->
-    <canvas id="picture" width="800" height="440">
+    <canvas id="picture" width="512" height="512">
       All your <code>canvas</code> are belong to us!
     </canvas>
 
     <!-- A little UI to trigger the filter. -->
-    <button id="apply-filter-button">Apply</button>
+
+    <button id="apply-filter-button">Apply Filter</button>
+    <p></p>
+    <button id="apply-neighborhood-filter-button">Apply Neighborhood Filter</button>
 
     <!-- To at least make the above a little easier, we
          at least recruit jQuery's services. -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="cup.js"></script>
-    <script src="wall.js"></script>
-    <script src="roomlight.js"></script>
-    <script src="counter.js"></script>
-    <script src="shelf.js"></script>
-    <script src="chalkboard.js"></script>
+
+    <script src="../sprites/checkerboard.js"></script>
+    <script src="../sprites/checkerPiece.js"></script>
 
     <script src="nanoshop.js"></script>
     <script src="nanoshop-demo.js"></script>
+
+    <script src="nanoshop-neighborhood.js"></script>
+
+    <!-- Center Everything -->
+    <style>
+        canvas {
+            margin: auto;
+            display: block
+        }
+
+        button {
+            margin: auto;
+            display: block
+        }
+    </style>
+
   </body>
 </html>
