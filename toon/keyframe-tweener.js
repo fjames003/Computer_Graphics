@@ -177,7 +177,6 @@
                         for (var index in startingOrEndingParameters) {
                             var property = startingOrEndingParameters[index];
 
-                            console.log(currentFrame);
                             // var start_property = (typeof startKeyframe.parameters === "undefined") ? 
                             // endKeyframe.parameters[property] : startKeyframe.parameters[property];
                             
