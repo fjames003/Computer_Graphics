@@ -1139,7 +1139,6 @@
         }
     ];
 
-
     var holdSpritePositions = function(frame) {
         for (var sprite = 1; sprite < sprites.length; sprite++) {
             var previousKeyframeLength = sprites[sprite].keyframes.length;
@@ -1157,6 +1156,3 @@
         sprites: sprites
     });
 }());
-
-
-
