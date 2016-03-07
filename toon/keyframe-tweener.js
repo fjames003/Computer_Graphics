@@ -48,6 +48,8 @@
         var height = settings.height;
         var sprites = settings.sprites;
 
+        var frameSpeed = 24 / (settings.frameRate || 24);
+
         // This function will prevent the spacebar from scrolling the page...
         window.onkeydown = function(e) {
             if(e.keyCode == 32 && e.target == document.body) {
@@ -213,7 +215,7 @@
             }
 
             // Move to the next frame.
-            currentFrame += 1;
+            currentFrame += frameSpeed;
             previousTimestamp = timestamp;
             window.requestAnimationFrame(nextFrame);
         };

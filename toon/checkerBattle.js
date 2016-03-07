@@ -1149,6 +1149,7 @@
         renderingContext: canvas.getContext("2d"),
         width: canvas.width,
         height: canvas.height,
-        sprites: sprites
+        sprites: sprites,
+        frameRate: 36
     });
 }());
