@@ -39,7 +39,9 @@
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
                 // Nanoshop.darkener
-                Nanoshop.grayScale
+                // Nanoshop.grayScale
+                // Nanoshop.brighten
+                Nanoshop.inverse
             ),
             0, 0
         );

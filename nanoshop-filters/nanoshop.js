@@ -16,6 +16,14 @@ var Nanoshop = {
         return [average, average, average, a];
     },
 
+    brighten: function (x, y, r, g, b, a) {
+        return [(r * 2) % 255, (g * 2) % 255, (b * 2) % 255, a];
+    },
+
+    inverse: function (x, y, r, g, b, a) {
+        return [255 - r, 255 - g, 255 - b, a];
+    },
+
     /*
      * Applies the given filter to the given ImageData object,
      * then modifies its pixels according to the given filter.
