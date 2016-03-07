@@ -109,9 +109,12 @@
         };
         
         var drawFace = function (expression) {
-            var expression = Math.round(expression);
-            expression = (expression >= -5 && expression <= 5) ? 
+            // var expression = Math.round(expression);
+            var expression = (expression >= -5 && expression <= 5) ? 
                             ((expression < 0) ? expression * 2 : expression) : 1;
+
+            expression = ((expression < 0 && expression > -1) || (expression > 0 && expression < 1)) ?
+                           Math.round(expression) : expression;
             
             renderingContext.strokeStyle = WHITE;
             renderingContext.lineCap = "round";

@@ -212,8 +212,7 @@
                     ty: getTileLocations(4)["ty"],
                     parameters: {
                         limbAngle: 120,
-                        elbowAngle: 90, 
-                        facialExpression: 1 
+                        elbowAngle: 90
                     },
                     ease: KeyframeTweener.inOutCirc,
                     easeAdjust: {
@@ -684,7 +683,7 @@
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 90,
-                        facialExpression: -5
+                        facialExpression: 5
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -699,8 +698,7 @@
                     rotate: -270,
                     parameters: {
                         limbAngle: 120,
-                        elbowAngle: 90,
-                        facialExpression: -3
+                        elbowAngle: 90
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -715,8 +713,7 @@
                     rotate: -450,
                     parameters: {
                         limbAngle: 60,
-                        elbowAngle: 90,
-                        facialExpression: -2
+                        elbowAngle: 90
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -731,8 +728,7 @@
                     rotate: -360,
                     parameters: {
                         limbAngle: 90,
-                        elbowAngle: 90,
-                        facialExpression: -1
+                        elbowAngle: 90
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -749,8 +745,7 @@
                     sy: 3,
                     parameters: {
                         limbAngle: 90,
-                        elbowAngle: 90,
-                        facialExpression: 1
+                        elbowAngle: 90
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -1061,7 +1056,7 @@
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 270,
-                        facialExpression: -5
+                        facialExpression: 5
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -1077,7 +1072,7 @@
                     parameters: {
                         limbAngle: 120,
                         elbowAngle: 270,
-                        facialExpression: -3
+                        facialExpression: 4
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -1093,7 +1088,7 @@
                     parameters: {
                         limbAngle: 60,
                         elbowAngle: 270,
-                        facialExpression: -2
+                        facialExpression: 3
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
@@ -1109,7 +1104,7 @@
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: 270,
-                        facialExpression: -1
+                        facialExpression: 2
                     },
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
