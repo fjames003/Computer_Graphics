@@ -31,9 +31,28 @@
     });
     renderingContext.restore();
 
+    var setUpLists = function (library, idName) {
+        var htmlSpot = document.getElementById(idName);
+        var optionList = document.createElement("select");
+        optionList.id = idName + "-select";
+        htmlSpot.appendChild(optionList);
+        console.log(library)
+        for (var filter in library) {
+            if (filter !== "applyFilter") {
+                var option = document.createElement("option");
+                option.value = filter;
+                option.text = filter;
+                optionList.appendChild(option);
+            }
+        }
+    };
 
+    setUpLists(Nanoshop, "nanoshop-options");
     // Set a little event handler to apply the filter.
     $("#apply-filter-button").click(function () {
+        var filter = $("#nanoshop-options-select").val();
+        var filterFunc = Nanoshop[filter];
+
         // Filter time.
         renderingContext.putImageData(
             Nanoshop.applyFilter(
@@ -41,14 +60,16 @@
                 // Nanoshop.darkener
                 // Nanoshop.grayScale
                 // Nanoshop.brighten
-                Nanoshop.inverse
+                // Nanoshop.inverse
+                filterFunc
             ),
             0, 0
         );
     });
 
+    setUpLists(NanoshopNeighborhood, "neighborhood-options"); 
     $("#apply-neighborhood-filter-button").click(function () {
-        var filter = $("#mySelect").val();
+        var filter = $("#neighborhood-options-select").val();
         var filterFunc = NanoshopNeighborhood[filter];
 
         // Filter time.
@@ -65,17 +86,4 @@
             0, 0
         );
     });
-
-    var htmlSpot = document.getElementById("filter")
-    var selectList = document.createElement("select");
-    selectList.id = "mySelect";
-    htmlSpot.appendChild(selectList);
-    for (var filter in NanoshopNeighborhood) {
-        if (filter !== "applyFilter") {
-            var option = document.createElement("option");
-            option.value = filter;
-            option.text = filter;
-            selectList.appendChild(option);
-        }
-    }
 }());
