@@ -16,7 +16,7 @@ var Nanoshop = {
         return [average, average, average, a];
     },
 
-    brighten: function (x, y, r, g, b, a) {
+    modulo: function (x, y, r, g, b, a) {
         return [(r * 2) % 255, (g * 2) % 255, (b * 2) % 255, a];
     },
 
