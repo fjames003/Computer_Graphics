@@ -48,6 +48,9 @@
     });
 
     $("#apply-neighborhood-filter-button").click(function () {
+        var filter = $("#mySelect").val();
+        var filterFunc = NanoshopNeighborhood[filter];
+
         // Filter time.
         renderingContext.putImageData(
             NanoshopNeighborhood.applyFilter(
@@ -55,9 +58,24 @@
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
                 // NanoshopNeighborhood.darkener
                 // NanoshopNeighborhood.averager // Convenience comment for easy switching.
-                NanoshopNeighborhood.basicEdgeDetector
+                // NanoshopNeighborhood.basicEdgeDetector
+                // NanoshopNeighborhood.lowerThresholdAverager
+                filterFunc
             ),
             0, 0
         );
     });
+
+    var htmlSpot = document.getElementById("filter")
+    var selectList = document.createElement("select");
+    selectList.id = "mySelect";
+    htmlSpot.appendChild(selectList);
+    for (var filter in NanoshopNeighborhood) {
+        if (filter !== "applyFilter") {
+            var option = document.createElement("option");
+            option.value = filter;
+            option.text = filter;
+            selectList.appendChild(option);
+        }
+    }
 }());

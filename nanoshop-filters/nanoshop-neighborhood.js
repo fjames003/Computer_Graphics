@@ -55,6 +55,31 @@ var NanoshopNeighborhood = {
                 [ 255, 255, 255, rgbaNeighborhood[4].a ];
     },
 
+    lowerThresholdAverager: function (x, y, rgbaNeighborhood) {
+        var rthresh = 0;
+        var gthresh = 0;
+        var bthresh = 0;
+        var athresh = 0;
+
+        for (var i = 0; i < 9; i += 1) {
+            rthresh += rgbaNeighborhood[i].r;
+            gthresh += rgbaNeighborhood[i].g;
+            bthresh += rgbaNeighborhood[i].b;
+            athresh += rgbaNeighborhood[i].a;
+        }
+        rthresh /= 8;
+        gthresh /= 8;
+        bthresh /= 8;
+        athresh /= 8;
+
+        var rResult = (rthresh < 128) ? 255 - rthresh : rthresh;
+        var gResult = (gthresh < 128) ? 255 - gthresh : gthresh;
+        var bResult = (bthresh < 128) ? 255 - bthresh : bthresh;
+        var aResult = (athresh < 128) ? 255 - athresh : athresh;
+
+        return [rResult, gResult, bResult, aResult];
+    },
+
     /*
      * Applies the given filter to the given ImageData object,
      * then modifies its pixels according to the given filter.
