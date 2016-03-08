@@ -56,10 +56,6 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                // Nanoshop.darkener
-                // Nanoshop.grayScale
-                // Nanoshop.brighten
-                // Nanoshop.inverse
                 filterFunc
             ),
             0, 0
@@ -76,10 +72,6 @@
             NanoshopNeighborhood.applyFilter(
                 renderingContext,
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                // NanoshopNeighborhood.darkener
-                // NanoshopNeighborhood.averager // Convenience comment for easy switching.
-                // NanoshopNeighborhood.basicEdgeDetector
-                // NanoshopNeighborhood.lowerThresholdAverager
                 filterFunc
             ),
             0, 0

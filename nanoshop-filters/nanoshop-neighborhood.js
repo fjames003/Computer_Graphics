@@ -2,6 +2,24 @@
  * This is a very simple module that demonstrates rudimentary,
  * pixel-level image processing using a pixel's "neighborhood."
  */
+var neighborTotals = function (includeMiddle, rgbaNeighborhood) {
+    var neighborTotal = {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 0
+    };
+        
+    for (var i = 0; i < 9; i += 1) {
+        if (i !== 4 || includeMiddle) {
+            neighborTotal.r += rgbaNeighborhood[i].r;
+            neighborTotal.g += rgbaNeighborhood[i].g;
+            neighborTotal.b += rgbaNeighborhood[i].b;
+            neighborTotal.a += rgbaNeighborhood[i].a;
+        }
+    }
+    return neighborTotal;
+}
 var NanoshopNeighborhood = {
     /*
      * A basic "darkener"---this one does not even use the entire pixel neighborhood;
@@ -21,19 +39,9 @@ var NanoshopNeighborhood = {
      * given neighborhood.
      */
     averager: function (x, y, rgbaNeighborhood) {
-        var rTotal = 0;
-        var gTotal = 0;
-        var bTotal = 0;
-        var aTotal = 0;
+        var neighborTotal = neighborTotals(true, rgbaNeighborhood);
 
-        for (var i = 0; i < 9; i += 1) {
-            rTotal += rgbaNeighborhood[i].r;
-            gTotal += rgbaNeighborhood[i].g;
-            bTotal += rgbaNeighborhood[i].b;
-            aTotal += rgbaNeighborhood[i].a;
-        }
-
-        return [ rTotal / 9, gTotal / 9, bTotal / 9, aTotal / 9 ];
+        return [ neighborTotal.r / 9, neighborTotal.g / 9, neighborTotal.b / 9, neighborTotal.a / 9 ];
     },
 
     /*
@@ -41,78 +49,39 @@ var NanoshopNeighborhood = {
      * without knowing about the other pixels in our neighborhood.
      */
     basicEdgeDetector: function (x, y, rgbaNeighborhood) {
-        var neighborTotal = 0;
-        for (var i = 0; i < 9; i += 1) {
-            if (i !== 4) {
-                neighborTotal += (rgbaNeighborhood[i].r + rgbaNeighborhood[i].g + rgbaNeighborhood[i].b);
-            }
-        }
+        var neighborTotal = neighborTotals(false, rgbaNeighborhood);
 
         var myAverage = (rgbaNeighborhood[4].r + rgbaNeighborhood[4].g + rgbaNeighborhood[4].b) / 3;
-        var neighborAverage = neighborTotal / 3 / 8; // Three components, eight neighbors.
+        var neighborAverage = (neighborTotal.r + neighborTotal.g + neighborTotal.b) / 3 / 8; // Three components, eight neighbors.
 
         return myAverage < neighborAverage ? [ 0, 0, 0, rgbaNeighborhood[4].a ] :
                 [ 255, 255, 255, rgbaNeighborhood[4].a ];
     },
 
+    // Will make sure that all RGB values are above 128...
     lowerThresholdAverager: function (x, y, rgbaNeighborhood) {
-        var rthresh = 0;
-        var gthresh = 0;
-        var bthresh = 0;
-        var athresh = 0;
+        var neighborTotal = neighborTotals(true, rgbaNeighborhood);
 
-        for (var i = 0; i < 9; i += 1) {
-            rthresh += rgbaNeighborhood[i].r;
-            gthresh += rgbaNeighborhood[i].g;
-            bthresh += rgbaNeighborhood[i].b;
-        }
-        rthresh /= 9;
-        gthresh /= 9;
-        bthresh /= 9;
-
-        var rResult = (rthresh < 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
-        var gResult = (gthresh < 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
-        var bResult = (bthresh < 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
+        var rResult = (neighborTotal.r / 9 < 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
+        var gResult = (neighborTotal.g / 9 < 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
+        var bResult = (neighborTotal.b / 9 < 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
 
         return [rResult, gResult, bResult, rgbaNeighborhood[4].a];
     },
 
+    // Will make sure that all RGB values are below 128...
     upperThresholdAverager: function (x, y, rgbaNeighborhood) {
-        var rthresh = 0;
-        var gthresh = 0;
-        var bthresh = 0;
-        var athresh = 0;
+        var neighborTotal = neighborTotals(true, rgbaNeighborhood);
 
-        for (var i = 0; i < 9; i += 1) {
-            rthresh += rgbaNeighborhood[i].r;
-            gthresh += rgbaNeighborhood[i].g;
-            bthresh += rgbaNeighborhood[i].b;
-        }
-        rthresh /= 9;
-        gthresh /= 9;
-        bthresh /= 9;
-
-        var rResult = (rthresh > 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
-        var gResult = (gthresh > 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
-        var bResult = (bthresh > 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
+        var rResult = (neighborTotal.r / 9 > 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
+        var gResult = (neighborTotal.g / 9 > 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
+        var bResult = (neighborTotal.b / 9 > 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
 
         return [rResult, gResult, bResult, rgbaNeighborhood[4].a];
     },
 
     nonConformer: function (x, y, rgbaNeighborhood) {
-        var neighborTotal = {
-            "r": 0,
-            "g": 0,
-            "b": 0
-        };
-        
-        for (var i = 0; i < 9; i += 1) {
-            if (i !== 4) {
-                neighborTotal.r += rgbaNeighborhood[i].r;
-                neighborTotal.g += rgbaNeighborhood[i].g;
-                neighborTotal.b += rgbaNeighborhood[i].b;
-            }
-        }
+        var neighborTotal = neighborTotals(false, rgbaNeighborhood);
 
         var neighborAverage = {
             "r": 0,
