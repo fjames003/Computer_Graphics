@@ -72,10 +72,10 @@ var NanoshopNeighborhood = {
         bthresh /= 8;
         athresh /= 8;
 
-        var rResult = (rthresh < 128) ? 255 - rthresh : rthresh;
-        var gResult = (gthresh < 128) ? 255 - gthresh : gthresh;
-        var bResult = (bthresh < 128) ? 255 - bthresh : bthresh;
-        var aResult = (athresh < 128) ? 255 - athresh : athresh;
+        var rResult = (rthresh < 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
+        var gResult = (gthresh < 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
+        var bResult = (bthresh < 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
+        var aResult = (athresh < 128) ? 255 - rgbaNeighborhood[4].a : rgbaNeighborhood[4].a;
 
         return [rResult, gResult, bResult, aResult];
     },
