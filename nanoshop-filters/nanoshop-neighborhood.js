@@ -99,6 +99,40 @@ var NanoshopNeighborhood = {
         return [rResult, gResult, bResult, rgbaNeighborhood[4].a];
     },
 
+    nonConformer: function (x, y, rgbaNeighborhood) {
+        var neighborTotal = {
+            "r": 0,
+            "g": 0,
+            "b": 0
+        };
+        
+        for (var i = 0; i < 9; i += 1) {
+            if (i !== 4) {
+                neighborTotal.r += rgbaNeighborhood[i].r;
+                neighborTotal.g += rgbaNeighborhood[i].g;
+                neighborTotal.b += rgbaNeighborhood[i].b;
+            }
+        }
+
+        var neighborAverage = {
+            "r": 0,
+            "g": 0,
+            "b": 0
+        };
+
+        neighborAverage.r = neighborTotal.r / 8;
+        neighborAverage.g = neighborTotal.g / 8;
+        neighborAverage.b = neighborTotal.b / 8; // Three components, eight neighbors.
+
+        var result = {};
+        for (var colorPart in neighborAverage) {
+            result[colorPart] = (rgbaNeighborhood[4][colorPart] > neighborAverage[colorPart]) ? 
+                rgbaNeighborhood[4][colorPart] + (255 - rgbaNeighborhood[4][colorPart]) / 2 :
+                rgbaNeighborhood[4][colorPart] / 2;
+        }
+        return [result.r, result.g, result.b, rgbaNeighborhood[4].a];
+    },
+
     /*
      * Applies the given filter to the given ImageData object,
      * then modifies its pixels according to the given filter.
