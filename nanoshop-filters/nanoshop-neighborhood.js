@@ -65,19 +65,38 @@ var NanoshopNeighborhood = {
             rthresh += rgbaNeighborhood[i].r;
             gthresh += rgbaNeighborhood[i].g;
             bthresh += rgbaNeighborhood[i].b;
-            athresh += rgbaNeighborhood[i].a;
         }
-        rthresh /= 8;
-        gthresh /= 8;
-        bthresh /= 8;
-        athresh /= 8;
+        rthresh /= 9;
+        gthresh /= 9;
+        bthresh /= 9;
 
         var rResult = (rthresh < 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
         var gResult = (gthresh < 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
         var bResult = (bthresh < 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
-        var aResult = (athresh < 128) ? 255 - rgbaNeighborhood[4].a : rgbaNeighborhood[4].a;
 
-        return [rResult, gResult, bResult, aResult];
+        return [rResult, gResult, bResult, rgbaNeighborhood[4].a];
+    },
+
+    upperThresholdAverager: function (x, y, rgbaNeighborhood) {
+        var rthresh = 0;
+        var gthresh = 0;
+        var bthresh = 0;
+        var athresh = 0;
+
+        for (var i = 0; i < 9; i += 1) {
+            rthresh += rgbaNeighborhood[i].r;
+            gthresh += rgbaNeighborhood[i].g;
+            bthresh += rgbaNeighborhood[i].b;
+        }
+        rthresh /= 9;
+        gthresh /= 9;
+        bthresh /= 9;
+
+        var rResult = (rthresh > 128) ? 255 - rgbaNeighborhood[4].r : rgbaNeighborhood[4].r;
+        var gResult = (gthresh > 128) ? 255 - rgbaNeighborhood[4].g : rgbaNeighborhood[4].g;
+        var bResult = (bthresh > 128) ? 255 - rgbaNeighborhood[4].b : rgbaNeighborhood[4].b;
+
+        return [rResult, gResult, bResult, rgbaNeighborhood[4].a];
     },
 
     /*

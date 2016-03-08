@@ -36,7 +36,6 @@
         var optionList = document.createElement("select");
         optionList.id = idName + "-select";
         htmlSpot.appendChild(optionList);
-        console.log(library)
         for (var filter in library) {
             if (filter !== "applyFilter") {
                 var option = document.createElement("option");
