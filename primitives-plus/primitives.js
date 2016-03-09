@@ -290,7 +290,6 @@ var Primitives = {
         var right = xc + r;
 
         var fillCircNoColor = function () {
-            console.log("NONE")
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i);
                 module.setPixel(context, xc - x, i);
@@ -301,7 +300,6 @@ var Primitives = {
             }
         }
         var fillCircOneColor = function () {
-            console.log("ONE")
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
@@ -312,7 +310,6 @@ var Primitives = {
             }
         }
         var fillCircTwoColors = function () {
-            console.log("TWO")
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
@@ -336,7 +333,6 @@ var Primitives = {
             }
         }
         var fillCircFourColors = function () {
-            console.log("FOUR")
             var amountFromTop;
             var amountFromLeft;
             var calculateColors = function (x, y) {
