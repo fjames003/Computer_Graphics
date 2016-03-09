@@ -275,16 +275,17 @@ var Primitives = {
     plotCirclePoints: function (context, xc, yc, x, y, c1, c2, c3, c4) {
         var module = this;
         var leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
-        // var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
+        var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
         var leftVDelta;
         var rightVDelta;
         var hDelta;
         var currentColor;
+        var h = 2 * (Math.sqrt(x * x + y * y));
 
         var circMin = Math.min(-y, -x);
         var circMax
         var fillCircNoColor = function () {
-            console.log("WAT")
+            console.log("NONE")
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i);
                 module.setPixel(context, xc - x, i);
@@ -306,6 +307,7 @@ var Primitives = {
             }
         }
         var fillCircTwoColors = function () {
+            console.log("TWO")
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
@@ -329,7 +331,28 @@ var Primitives = {
             }
         }
         var fillCircFourColors = function () {
-            // Pass until two colors is figured out
+            console.log("FOUR")
+            for (var i = -x; i <= x; i += 1) {
+                currentColor = [leftColor[0], leftColor[1], leftColor[2]];
+
+                hDelta = [(rightColor[0] - leftColor[0]) / (h),
+                          (rightColor[1] - leftColor[1]) / (h),
+                          (rightColor[2] - leftColor[2]) / (h)];
+                for (var j = -y; j <= y; j += 1) {
+                    // console.log("Damn")
+                    module.setPixel(context, xc + j, yc + i, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc + i, yc + j, currentColor[0], currentColor[1], currentColor[2]);
+                    currentColor[0] += hDelta[0];
+                    currentColor[1] += hDelta[1];
+                    currentColor[2] += hDelta[2];
+                }
+                leftColor[0] += leftVDelta[0];
+                leftColor[1] += leftVDelta[1];
+                leftColor[2] += leftVDelta[2];
+                rightColor[0] += rightVDelta[0];
+                rightColor[1] += rightVDelta[1];
+                rightColor[2] += rightVDelta[2];
+             } 
         }
 
         if (!c1) {
@@ -337,13 +360,18 @@ var Primitives = {
         } else if (!c2) {
             fillCircOneColor();
         } else if (!c3) {
-            var h = 2 * (Math.sqrt(x * x + y * y));
             leftVDelta = [(c2[0] - c1[0]) / h,
                       (c2[1] - c1[1]) / h,
                       (c2[2] - c1[2]) / h];
             fillCircTwoColors();
         } else {
-            c4 = c4 ? c4: c3;
+            c4 = c4 || c3;
+            leftVDelta = [(c3[0] - c1[0]) / (h * 0.5),
+                      (c3[1] - c1[1]) / (h * 0.5),
+                      (c3[2] - c1[2]) / (h * 0.5)];
+            rightVDelta = [(c4[0] - c2[0]) / (h * 0.5),
+                      (c4[1] - c2[1]) / (h * 0.5),
+                      (c4[2] - c2[2]) / (h * 0.5)];
             fillCircFourColors();
         }        
     },
