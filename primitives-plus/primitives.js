@@ -331,27 +331,35 @@ var Primitives = {
             }
         }
         var fillCircFourColors = function () {
+            var oppositeX = (x < 0) ? -x : x;
+            var oppositeY = (y < 0) ? -y : y;
             console.log("FOUR")
-            for (var i = -y; i <= y; i += 1) {
+            for (var i = -oppositeY; i <= 0; i += 1) {
                 currentColor = [leftColor[0], leftColor[1], leftColor[2]];
 
-                hDelta = [(rightColor[0] - leftColor[0]) / (h),
-                          (rightColor[1] - leftColor[1]) / (h),
-                          (rightColor[2] - leftColor[2]) / (h)];
-                for (var j = -x; j <= x; j += 1) {
+                hDelta = [(rightColor[0] - leftColor[0]) / (h * 0.5),
+                          (rightColor[1] - leftColor[1]) / (h * 0.5),
+                          (rightColor[2] - leftColor[2]) / (h * 0.5)];
+                for (var j = -oppositeX; j <= 0; j += 1) {
                     // console.log("Damn")
                     module.setPixel(context, xc + j, yc + i, currentColor[0], currentColor[1], currentColor[2]);
                     module.setPixel(context, xc + i, yc + j, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc - j, yc - i, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc - i, yc - j, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc + j, yc - i, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc + i, yc - j, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc - j, yc + i, currentColor[0], currentColor[1], currentColor[2]);
+                    module.setPixel(context, xc - i, yc + j, currentColor[0], currentColor[1], currentColor[2]);
                     currentColor[0] += hDelta[0];
                     currentColor[1] += hDelta[1];
                     currentColor[2] += hDelta[2];
                 }
-                // leftColor[0] += leftVDelta[0];
-                // leftColor[1] += leftVDelta[1];
-                // leftColor[2] += leftVDelta[2];
-                // rightColor[0] += rightVDelta[0];
-                // rightColor[1] += rightVDelta[1];
-                // rightColor[2] += rightVDelta[2];
+                leftColor[0] += leftVDelta[0];
+                leftColor[1] += leftVDelta[1];
+                leftColor[2] += leftVDelta[2];
+                rightColor[0] += rightVDelta[0];
+                rightColor[1] += rightVDelta[1];
+                rightColor[2] += rightVDelta[2];
              } 
         }
 
