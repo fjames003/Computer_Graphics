@@ -273,8 +273,8 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, r, c1, c2, c3, c4) {
-        x = Math.round(x);
-        y = Math.round(y);
+        var x = Math.round(x);
+        var y = Math.round(y);
         var module = this;
         var leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
         var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
@@ -313,8 +313,6 @@ var Primitives = {
             for (var i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
-                // module.setPixel(context, i, xc - x, leftColor[0], leftColor[1], leftColor[2]);   // These will also begin drawing another circle...
-                // module.setPixel(context, i, xc + x, leftColor[0], leftColor[1], leftColor[2]);
 
                 leftColor[0] += leftVDelta[0];
                 leftColor[1] += leftVDelta[1];
@@ -324,8 +322,6 @@ var Primitives = {
             for (var i = yc - x; i <= yc + x; i += 1) {
                 module.setPixel(context, xc + y, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - y, i, leftColor[0], leftColor[1], leftColor[2]);
-                // module.setPixel(context, i, xc + y, leftColor[0], leftColor[1], leftColor[2]);
-                // module.setPixel(context, i, xc - y, leftColor[0], leftColor[1], leftColor[2]);
 
                 leftColor[0] += leftVDelta[0];
                 leftColor[1] += leftVDelta[1];
