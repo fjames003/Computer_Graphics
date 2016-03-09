@@ -281,26 +281,62 @@ var Primitives = {
         var hDelta;
         var currentColor;
 
+        var circMin = Math.min(-y, -x);
+        var circMax
         var fillCircNoColor = function () {
-            for (var i = -y; i <= y; i += 1) {
-                for (var j = -x; j <= x; j += 1) {
-                    // console.log("Damn")
-                    module.setPixel(context, xc + j, yc + i);
-                    module.setPixel(context, xc + i, yc + j);
-                }
-            } 
+            console.log("WAT")
+             for (var i = xc - x; i <= xc + x; i += 1) {
+                module.setPixel(context, i, yc + y);
+                module.setPixel(context, i, yc - y);
+                module.setPixel(context, yc - y, i);
+                module.setPixel(context, yc + y, i);
+
+            }
+            for (var i = xc - y; i <= xc + y; i += 1) {
+                module.setPixel(context, i, yc + x);
+                module.setPixel(context, i, yc - x);
+                module.setPixel(context, yc + x, i);
+                module.setPixel(context, yc - x, i);
+            }
         }
         var fillCircOneColor = function () {
-            for (var i = -y; i <= y; i += 1) {
-                for (var j = -x; j <= x; j += 1) {
-                    // console.log("Damn")
-                    module.setPixel(context, xc + j, yc + i, leftColor[0], leftColor[1], leftColor[2]);
-                    module.setPixel(context, xc + i, yc + j, leftColor[0], leftColor[1], leftColor[2]);
-                }
-            } 
+            console.log("ONE")
+            for (var i = xc - x; i <= xc + x; i += 1) {
+                module.setPixel(context, i, yc + y, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, i, yc - y, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc - y, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc + y, i, leftColor[0], leftColor[1], leftColor[2]);
+
+            }
+            for (var i = xc - y; i <= xc + y; i += 1) {
+                module.setPixel(context, i, yc + x, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, i, yc - x, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc + x, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc - x, i, leftColor[0], leftColor[1], leftColor[2]);
+            }
         }
         var fillCircTwoColors = function () {
+            for (var i = xc - x; i <= xc + x; i += 1) {
+                module.setPixel(context, i, yc + y, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, i, yc - y, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc - y, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc + y, i, leftColor[0], leftColor[1], leftColor[2]);
 
+
+                leftColor[0] += leftVDelta[0];
+                leftColor[1] += leftVDelta[1];
+                leftColor[2] += leftVDelta[2];
+            }
+            for (var i = xc - y; i <= xc + y; i += 1) {
+                module.setPixel(context, i, yc + x, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, i, yc - x, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc + x, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, yc - x, i, leftColor[0], leftColor[1], leftColor[2]);
+
+                leftColor[0] += leftVDelta[0];
+                leftColor[1] += leftVDelta[1];
+                leftColor[2] += leftVDelta[2];
+            }
         }
         var fillCircFourColors = function () {
 
@@ -310,6 +346,10 @@ var Primitives = {
         } else if (!c2) {
             fillCircOneColor();
         } else if (!c3) {
+            var h = 2 * (Math.sqrt(x * x + y * y));
+            leftVDelta = [(c2[0] - c1[0]) / h,
+                      (c2[1] - c1[1]) / h,
+                      (c2[2] - c1[2]) / h];
             fillCircTwoColors();
         } else {
             c4 = c4 ? c4: c3;
