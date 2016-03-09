@@ -301,18 +301,14 @@ var Primitives = {
         }
         var fillCircOneColor = function () {
             console.log("ONE")
-            for (var i = xc - x; i <= xc + x; i += 1) {
-                module.setPixel(context, i, yc + y, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, i, yc - y, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, yc - y, i, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, yc + y, i, leftColor[0], leftColor[1], leftColor[2]);
-
+            for (var i = yc - y; i <= yc + y; i += 1) {
+                module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
             }
-            for (var i = xc - y; i <= xc + y; i += 1) {
-                module.setPixel(context, i, yc + x, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, i, yc - x, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, yc + x, i, leftColor[0], leftColor[1], leftColor[2]);
-                module.setPixel(context, yc - x, i, leftColor[0], leftColor[1], leftColor[2]);
+            leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
+            for (var i = yc - x; i <= yc + x; i += 1) {
+                module.setPixel(context, xc + y, i, leftColor[0], leftColor[1], leftColor[2]);
+                module.setPixel(context, xc - y, i, leftColor[0], leftColor[1], leftColor[2]);
             }
         }
         var fillCircTwoColors = function () {
