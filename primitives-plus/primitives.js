@@ -273,26 +273,51 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, c1, c2, c3, c4) {
-        var bottom = yc + r;
-        var top = yc - r;
-        var left = xc - r;
-        var right = xc + r;
+        var module = this;
         var leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
-        var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
+        // var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
         var leftVDelta;
         var rightVDelta;
         var hDelta;
         var currentColor;
 
+        var fillCircNoColor = function () {
+            for (var i = -y; i <= y; i += 1) {
+                for (var j = -x; j <= x; j += 1) {
+                    // console.log("Damn")
+                    module.setPixel(context, xc + j, yc + i);
+                    module.setPixel(context, xc + i, yc + j);
+                }
+            } 
+        }
+        var fillCircOneColor = function () {
+            for (var i = -y; i <= y; i += 1) {
+                for (var j = -x; j <= x; j += 1) {
+                    // console.log("Damn")
+                    module.setPixel(context, xc + j, yc + i, leftColor[0], leftColor[1], leftColor[2]);
+                    module.setPixel(context, xc + i, yc + j, leftColor[0], leftColor[1], leftColor[2]);
+                }
+            } 
+        }
+        var fillCircTwoColors = function () {
 
-        // this.setPixel(context, xc + x, yc + y, color[0], color[1], color[2]);
-        this.setPixel(context, xc + x, yc - y, color[0], color[1], color[2]);
-        this.setPixel(context, xc + y, yc + x, color[0], color[1], color[2]);
-        this.setPixel(context, xc + y, yc - x, color[0], color[1], color[2]);
-        this.setPixel(context, xc - x, yc + y, color[0], color[1], color[2]);
-        this.setPixel(context, xc - x, yc - y, color[0], color[1], color[2]);
-        this.setPixel(context, xc - y, yc + x, color[0], color[1], color[2]);
-        this.setPixel(context, xc - y, yc - x, color[0], color[1], color[2]);
+        }
+        var fillCircFourColors = function () {
+
+        }
+        if (!c1) {
+            fillCircNoColor();
+        } else if (!c2) {
+            fillCircOneColor();
+        } else if (!c3) {
+            fillCircTwoColors();
+        } else {
+            c4 = c4 ? c4: c3;
+            fillCircFourColors();
+        }
+        
+        // console.log("one line done...")
+        
     },
 
     // First, the most naive possible implementation: circle by trigonometry.
