@@ -273,6 +273,8 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, c1, c2, c3, c4) {
+        x = Math.round(x);
+        y = Math.round(y);
         var module = this;
         var leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
         var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
