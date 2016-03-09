@@ -285,18 +285,13 @@ var Primitives = {
         var circMax
         var fillCircNoColor = function () {
             console.log("WAT")
-             for (var i = xc - x; i <= xc + x; i += 1) {
-                module.setPixel(context, i, yc + y);
-                module.setPixel(context, i, yc - y);
-                // module.setPixel(context, yc - y, i);     // These will draw another circle...
-                // module.setPixel(context, yc + y, i);
-
+            for (var i = yc - y; i <= yc + y; i += 1) {
+                module.setPixel(context, xc + x, i);
+                module.setPixel(context, xc - x, i);
             }
-            for (var i = xc - y; i <= xc + y; i += 1) {
-                module.setPixel(context, i, yc + x);
-                module.setPixel(context, i, yc - x);
-                // module.setPixel(context, yc + x, i);
-                // module.setPixel(context, yc - x, i);
+            for (var i = yc - x; i <= yc + x; i += 1) {
+                module.setPixel(context, xc + y, i);
+                module.setPixel(context, xc - y, i);
             }
         }
         var fillCircOneColor = function () {
@@ -305,7 +300,6 @@ var Primitives = {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
             }
-            leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
             for (var i = yc - x; i <= yc + x; i += 1) {
                 module.setPixel(context, xc + y, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - y, i, leftColor[0], leftColor[1], leftColor[2]);
