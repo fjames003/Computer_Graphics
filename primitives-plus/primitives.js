@@ -339,61 +339,40 @@ var Primitives = {
             console.log("FOUR")
             var amountFromTop;
             var amountFromLeft;
+            var calculateColors = function (x, y) {
+                amountFromTop = (yc + y - top) / (bottom - top);
+                leftColor = [(c1[0] + leftVDelta[0] * amountFromTop), 
+                             (c1[1] + leftVDelta[1] * amountFromTop), 
+                             (c1[2] + leftVDelta[2] * amountFromTop)];
+
+                rightColor = [(c2[0] + rightVDelta[0] * amountFromTop),
+                              (c2[1] + rightVDelta[1] * amountFromTop), 
+                              (c2[2] + rightVDelta[2] * amountFromTop)];
+
+                currentColor = [leftColor[0], leftColor[1], leftColor[2]];
+                
+                hDelta = [(rightColor[0] - leftColor[0]),
+                          (rightColor[1] - leftColor[1]),
+                          (rightColor[2] - leftColor[2])];
+                amountFromLeft  = (x - left) / (right - left);
+                currentColor = [currentColor[0] + hDelta[0] * amountFromLeft,
+                                currentColor[1] + hDelta[1] * amountFromLeft, 
+                                currentColor[2] + hDelta[2] * amountFromLeft];
+                return currentColor;
+            }
             
             for (var i = xc - y; i <= xc + y; i += 1) {
-                amountFromTop = (yc + x - top) / (bottom - top);
-                
-                leftColor = [(c1[0] + leftVDelta[0] * amountFromTop), (c1[1] + leftVDelta[1] * amountFromTop), (c1[2] + leftVDelta[2] * amountFromTop)];
-                rightColor = [(c2[0] + rightVDelta[0] * amountFromTop), (c2[1] + rightVDelta[1] * amountFromTop), (c2[2] + rightVDelta[2] * amountFromTop)];                currentColor = [leftColor[0], leftColor[1], leftColor[2]];
-                hDelta = [(rightColor[0] - leftColor[0]),
-                          (rightColor[1] - leftColor[1]),
-                          (rightColor[2] - leftColor[2])];
-                amountFromLeft  = (i - left) / (right - left);
-                currentColor = [currentColor[0] + hDelta[0] * amountFromLeft, currentColor[1] + hDelta[1] * amountFromLeft, currentColor[2] + hDelta[2] * amountFromLeft];
-                
+                calculateColors(i, x);
                 module.setPixel(context, i, yc + x, currentColor[0], currentColor[1], currentColor[2]);
-            }
-            for (var i = xc - y; i <= xc + y; i += 1) {
-                                
 
-                amountFromTop = (yc - x - top) / (bottom - top);
-                leftColor = [(c1[0] + leftVDelta[0] * amountFromTop), (c1[1] + leftVDelta[1] * amountFromTop), (c1[2] + leftVDelta[2] * amountFromTop)];
-                rightColor = [(c2[0] + rightVDelta[0] * amountFromTop), (c2[1] + rightVDelta[1] * amountFromTop), (c2[2] + rightVDelta[2] * amountFromTop)];                currentColor = [leftColor[0], leftColor[1], leftColor[2]];
-                hDelta = [(rightColor[0] - leftColor[0]),
-                          (rightColor[1] - leftColor[1]),
-                          (rightColor[2] - leftColor[2])];
-                amountFromLeft  = (i - left) / (right - left);
-                currentColor = [currentColor[0] + hDelta[0] * amountFromLeft, currentColor[1] + hDelta[1] * amountFromLeft, currentColor[2] + hDelta[2] * amountFromLeft];
-                
+                calculateColors(i, -x);               
                 module.setPixel(context, i, yc - x, currentColor[0], currentColor[1], currentColor[2]);
             }
             for (var i = xc - x; i <= xc + x; i += 1) {
-                                
-
-                amountFromTop = (yc + y - top) / (bottom - top);
-                leftColor = [(c1[0] + leftVDelta[0] * amountFromTop), (c1[1] + leftVDelta[1] * amountFromTop), (c1[2] + leftVDelta[2] * amountFromTop)];
-                rightColor = [(c2[0] + rightVDelta[0] * amountFromTop), (c2[1] + rightVDelta[1] * amountFromTop), (c2[2] + rightVDelta[2] * amountFromTop)];
-               currentColor = [leftColor[0], leftColor[1], leftColor[2]];
-                hDelta = [(rightColor[0] - leftColor[0]),
-                          (rightColor[1] - leftColor[1]),
-                          (rightColor[2] - leftColor[2])];
-                amountFromLeft  = (i - left) / (right - left);
-                currentColor = [currentColor[0] + hDelta[0] * amountFromLeft, currentColor[1] + hDelta[1] * amountFromLeft, currentColor[2] + hDelta[2] * amountFromLeft];
-                
+                calculateColors(i, y);                
                 module.setPixel(context, i, yc + y, currentColor[0], currentColor[1], currentColor[2]);
-            }
-            for (var i = xc - x; i <= xc + x; i += 1) {
-                                
 
-                amountFromTop = (yc - y - top) / (bottom - top);
-                leftColor = [(c1[0] + leftVDelta[0] * amountFromTop), (c1[1] + leftVDelta[1] * amountFromTop), (c1[2] + leftVDelta[2] * amountFromTop)];
-                rightColor = [(c2[0] + rightVDelta[0] * amountFromTop), (c2[1] + rightVDelta[1] * amountFromTop), (c2[2] + rightVDelta[2] * amountFromTop)];               currentColor = [leftColor[0], leftColor[1], leftColor[2]];
-                hDelta = [(rightColor[0] - leftColor[0]),
-                          (rightColor[1] - leftColor[1]),
-                          (rightColor[2] - leftColor[2])];
-                amountFromLeft  = (i - left) / (right - left);
-                currentColor = [currentColor[0] + hDelta[0] * amountFromLeft, currentColor[1] + hDelta[1] * amountFromLeft, currentColor[2] + hDelta[2] * amountFromLeft];
-                
+                calculateColors(i, -y);
                 module.setPixel(context, i, yc - y, currentColor[0], currentColor[1], currentColor[2]);
             }
         }
