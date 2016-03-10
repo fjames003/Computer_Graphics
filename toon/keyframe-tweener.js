@@ -36,7 +36,7 @@
             }
         }
         return false;
-    }
+    };
     var initializeAnimation = function (settings) {
         // We need to keep track of the current frame.
         var currentFrame = 0;
@@ -52,7 +52,7 @@
 
         // This function will prevent the spacebar from scrolling the page...
         window.onkeydown = function(e) {
-            if(e.keyCode == 32 && e.target == document.body) {
+            if(e.keyCode === 32 && e.target === document.body) {
                 e.preventDefault();
                 return false;
             }
@@ -61,7 +61,7 @@
         // This will make 'shouldPause' = true in the event that spacebar is pushed...
         var shouldPause = false;
         document.body.onkeyup = function(e){
-            if(e.keyCode == 32){
+            if(e.keyCode === 32){
                 shouldPause = !shouldPause;
             }
             return false;
@@ -117,11 +117,13 @@
                         };
                         var easingParameterAdjustments = {};
                         for (var change in startKeyframe.easeAdjust) {
-                            var newEase = startKeyframe.easeAdjust[change];
-                            if (change in easingFunctions) {
-                                easingFunctions[change] = newEase;
-                            } else {
-                                easingParameterAdjustments[change] = newEase; 
+                            if (startKeyframe.easeAdjust.hasOwnProperty(change)) {
+                                var newEase = startKeyframe.easeAdjust[change];
+                                if (change in easingFunctions) {
+                                    easingFunctions[change] = newEase;
+                                } else {
+                                    easingParameterAdjustments[change] = newEase; 
+                                }
                             }
                         }
 
@@ -167,10 +169,13 @@
                         //var startingOrEndingParameters = [...new Set(startingParameters.concat(endingParameters))];
                         var startingOrEndingParameters = startingParameters;
                         for (var param in endingParameters) {
-                            if (! contains(startingOrEndingParameters, endingParameters[param])) {
-                                startingOrEndingParameters[startingOrEndingParameters.length] = endingParameters[param]
+                            if (endingParameters.hasOwnProperty(param)) {
+                                if (! contains(startingOrEndingParameters, endingParameters[param])) {
+                                    startingOrEndingParameters[startingOrEndingParameters.length] =
+                                        endingParameters[param];
+                                }
                             }
-                        };
+                        }
 
                         // By Looping over the union of the two, I can obtain defaults by simply grabbing,
                         // the starting or ending parameter if the other is missing... 
@@ -190,7 +195,7 @@
                             } else if (!endKeyframe.parameters) {
                                 endKeyframe.parameters = {};
                             }
-                             var start_property = (startKeyframe.parameters[property] === 0) ? 
+                            var start_property = (startKeyframe.parameters[property] === 0) ? 
                                  startKeyframe.parameters[property] : startKeyframe.parameters[property] ||
                                  sprites[i].defaulter[property];
                                              

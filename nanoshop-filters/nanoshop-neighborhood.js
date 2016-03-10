@@ -53,7 +53,8 @@ var NanoshopNeighborhood = {
         var neighborTotal = neighborTotals(false, rgbaNeighborhood);
 
         var myAverage = (rgbaNeighborhood[4].r + rgbaNeighborhood[4].g + rgbaNeighborhood[4].b) / 3;
-        var neighborAverage = (neighborTotal.r + neighborTotal.g + neighborTotal.b) / 3 / 8; // Three components, eight neighbors.
+        // Three components, eight neighbors.
+        var neighborAverage = (neighborTotal.r + neighborTotal.g + neighborTotal.b) / 3 / 8;
 
         return myAverage < neighborAverage ? [ 0, 0, 0, rgbaNeighborhood[4].a ] :
                 [ 255, 255, 255, rgbaNeighborhood[4].a ];
@@ -96,9 +97,11 @@ var NanoshopNeighborhood = {
 
         var result = {};
         for (var colorPart in neighborAverage) {
-            result[colorPart] = (rgbaNeighborhood[4][colorPart] > neighborAverage[colorPart]) ? 
-                rgbaNeighborhood[4][colorPart] + (255 - rgbaNeighborhood[4][colorPart]) / 2 :
-                rgbaNeighborhood[4][colorPart] / 2;
+            if (neighborAverage.hasOwnProperty(colorPart)) {
+                result[colorPart] = (rgbaNeighborhood[4][colorPart] > neighborAverage[colorPart]) ? 
+                    rgbaNeighborhood[4][colorPart] + (255 - rgbaNeighborhood[4][colorPart]) / 2 :
+                    rgbaNeighborhood[4][colorPart] / 2;
+            }
         }
         return [result.r, result.g, result.b, rgbaNeighborhood[4].a];
     },
