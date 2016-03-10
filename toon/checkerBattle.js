@@ -9,7 +9,8 @@
     var canvas = document.getElementById("canvas");
     var renderingContext = canvas.getContext("2d");
 
-    var smallestScreenLength = (window.innerWidth < window.innerHeight) ? window.innerWidth * 0.95: window.innerHeight * 0.95;
+    var smallestScreenLength = (window.innerWidth < window.innerHeight) ?
+        window.innerWidth * 0.95 : window.innerHeight * 0.95;
     renderingContext.save();
     renderingContext.scale(smallestScreenLength / 1000, smallestScreenLength / 1000);
 
@@ -30,7 +31,7 @@
             border: specs.border,
             degradation: specs.degradation,
             waveFrequency: specs.waveFrequency
-        }); 
+        });
     };
 
     var piece = function(color) {
@@ -45,7 +46,7 @@
                 elbowAngle: specs.elbowAngle,
                 facialExpression: specs.facialExpression,
                 opacity: specs.opacity
-            }); 
+            });
             renderingContext.restore();
         };
     };
@@ -53,10 +54,10 @@
     var pieceDefaulters = {
         limbAngle: 90,
         elbowAngle: 90,
-        facialExpression: 1, 
+        facialExpression: 1,
         opacity: 255
     };
-    
+
     var sprites = [
     // The CheckerBoard...
         {
@@ -156,7 +157,7 @@
                     ease: KeyframeTweener.inOutCirc,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.quadEaseOut,
-                        elbowAngle: KeyframeTweener.quadEaseOut,
+                        elbowAngle: KeyframeTweener.quadEaseOut
                     }
                 },
                 {
@@ -1045,7 +1046,7 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
                     }
                 },
                 {
@@ -1061,7 +1062,7 @@
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth,
-                        elbowAngle: KeyframeTweener.backAndForth,
+                        elbowAngle: KeyframeTweener.backAndForth
                     }
                 },
                 {
@@ -1138,7 +1139,8 @@
     var holdSpritePositions = function(frame) {
         for (var sprite = 1; sprite < sprites.length; sprite++) {
             var previousKeyframeLength = sprites[sprite].keyframes.length;
-            sprites[sprite].keyframes[previousKeyframeLength] = Object.create(sprites[sprite].keyframes[previousKeyframeLength - 1]);
+            sprites[sprite].keyframes[previousKeyframeLength] =
+                Object.create(sprites[sprite].keyframes[previousKeyframeLength - 1]);
             sprites[sprite].keyframes[previousKeyframeLength].frame = frame;
         }
     };
