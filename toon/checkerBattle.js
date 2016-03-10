@@ -21,7 +21,7 @@
         return {
             tx: tileOne + (tileSize * tileXLocation),
             ty: tileOne + (tileSize * tileYLocation)
-        }
+        };
     };
 
     var board = function(specs) {
@@ -47,7 +47,7 @@
                 opacity: specs.opacity
             }); 
             renderingContext.restore();
-        }
+        };
     };
 
     var pieceDefaulters = {
@@ -86,8 +86,8 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(2)["tx"],
-                    ty: getTileLocations(2)["ty"],
+                    tx: getTileLocations(2).tx,
+                    ty: getTileLocations(2).ty,
                     parameters: {
                         limbAngle: 120,
                         elbowAngle: 90,
@@ -101,8 +101,8 @@
                 },
                 {
                     frame: 101,
-                    tx: getTileLocations(11)["tx"],
-                    ty: getTileLocations(11)["ty"],
+                    tx: getTileLocations(11).tx,
+                    ty: getTileLocations(11).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 0
@@ -116,8 +116,8 @@
                 },
                 {
                     frame: 150,
-                    tx: getTileLocations(10)["tx"],
-                    ty: getTileLocations(10)["ty"],
+                    tx: getTileLocations(10).tx,
+                    ty: getTileLocations(10).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -132,8 +132,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(10)["tx"],
-                    ty: getTileLocations(10)["ty"],
+                    tx: getTileLocations(10).tx,
+                    ty: getTileLocations(10).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -147,8 +147,8 @@
                 },
                 {
                     frame: 225,
-                    tx: getTileLocations(19)["tx"],
-                    ty: getTileLocations(19)["ty"],
+                    tx: getTileLocations(19).tx,
+                    ty: getTileLocations(19).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -161,8 +161,8 @@
                 },
                 {
                     frame: 300,
-                    tx: getTileLocations(28)["tx"],
-                    ty: getTileLocations(28)["ty"],
+                    tx: getTileLocations(28).tx,
+                    ty: getTileLocations(28).ty,
                     parameters: {
                         limbAngle: 50,
                         elbowAngle: -120
@@ -170,8 +170,8 @@
                 },
                 {
                     frame: 695,
-                    tx: getTileLocations(28)["tx"],
-                    ty: getTileLocations(28)["ty"],
+                    tx: getTileLocations(28).tx,
+                    ty: getTileLocations(28).ty,
                     rotate: -360,
                     parameters: {
                         limbAngle: 50,
@@ -180,8 +180,8 @@
                 },
                 {
                     frame: 715,
-                    tx: getTileLocations(27.5)["tx"],
-                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    tx: getTileLocations(27.5).tx,
+                    ty: getTileLocations(28).ty - tileSize / 2,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -190,8 +190,8 @@
                 },
                 {
                     frame: 750,
-                    tx: getTileLocations(27.5)["tx"],
-                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    tx: getTileLocations(27.5).tx,
+                    ty: getTileLocations(28).ty - tileSize / 2,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -208,8 +208,8 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(4)["tx"],
-                    ty: getTileLocations(4)["ty"],
+                    tx: getTileLocations(4).tx,
+                    ty: getTileLocations(4).ty,
                     parameters: {
                         limbAngle: 120,
                         elbowAngle: 90
@@ -222,8 +222,8 @@
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(12)["tx"],
-                    ty: getTileLocations(12)["ty"],
+                    tx: getTileLocations(12).tx,
+                    ty: getTileLocations(12).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 0
@@ -237,8 +237,8 @@
                 },
                 {
                     frame: 150,
-                    tx: getTileLocations(11)["tx"],
-                    ty: getTileLocations(11)["ty"],
+                    tx: getTileLocations(11).tx,
+                    ty: getTileLocations(11).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -253,8 +253,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(10)["tx"],
-                    ty: getTileLocations(10)["ty"],
+                    tx: getTileLocations(10).tx,
+                    ty: getTileLocations(10).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -268,8 +268,8 @@
                 },
                 {
                     frame: 225,
-                    tx: getTileLocations(20)["tx"],
-                    ty: getTileLocations(20)["ty"],
+                    tx: getTileLocations(20).tx,
+                    ty: getTileLocations(20).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -283,8 +283,8 @@
                 },
                 {
                     frame: 300,
-                    tx: getTileLocations(20)["tx"],
-                    ty: getTileLocations(20)["ty"],
+                    tx: getTileLocations(20).tx,
+                    ty: getTileLocations(20).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -299,8 +299,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(19)["tx"],
-                    ty: getTileLocations(19)["ty"],
+                    tx: getTileLocations(19).tx,
+                    ty: getTileLocations(19).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -313,8 +313,8 @@
                 },
                 {
                     frame: 650,
-                    tx: getTileLocations(19)["tx"],
-                    ty: getTileLocations(19)["ty"],
+                    tx: getTileLocations(19).tx,
+                    ty: getTileLocations(19).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -331,8 +331,8 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(6)["tx"],
-                    ty: getTileLocations(6)["ty"],
+                    tx: getTileLocations(6).tx,
+                    ty: getTileLocations(6).ty,
                     parameters: {
                         limbAngle: 120,
                         elbowAngle: 90,
@@ -346,8 +346,8 @@
                 },
                 {
                     frame: 101,
-                    tx: getTileLocations(14)["tx"],
-                    ty: getTileLocations(14)["ty"],
+                    tx: getTileLocations(14).tx,
+                    ty: getTileLocations(14).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 0
@@ -361,8 +361,8 @@
                 },
                 {
                     frame: 150,
-                    tx: getTileLocations(13)["tx"],
-                    ty: getTileLocations(13)["ty"],
+                    tx: getTileLocations(13).tx,
+                    ty: getTileLocations(13).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -377,8 +377,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(10)["tx"],
-                    ty: getTileLocations(10)["ty"],
+                    tx: getTileLocations(10).tx,
+                    ty: getTileLocations(10).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -392,8 +392,8 @@
                 },
                 {
                     frame: 225,
-                    tx: getTileLocations(22)["tx"],
-                    ty: getTileLocations(22)["ty"],
+                    tx: getTileLocations(22).tx,
+                    ty: getTileLocations(22).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -406,8 +406,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(21)["tx"],
-                    ty: getTileLocations(21)["ty"],
+                    tx: getTileLocations(21).tx,
+                    ty: getTileLocations(21).ty,
                     parameters: {
                         limbAngle: 50,
                         elbowAngle: -120
@@ -421,8 +421,8 @@
                 },
                 {
                     frame: 300,
-                    tx: getTileLocations(21)["tx"],
-                    ty: getTileLocations(21)["ty"],
+                    tx: getTileLocations(21).tx,
+                    ty: getTileLocations(21).ty,
                     parameters: {
                         limbAngle: 50,
                         elbowAngle: -120,
@@ -438,8 +438,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(22)["tx"],
-                    ty: getTileLocations(22)["ty"],
+                    tx: getTileLocations(22).tx,
+                    ty: getTileLocations(22).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -452,8 +452,8 @@
                 },
                 {
                     frame: 650,
-                    tx: getTileLocations(22)["tx"],
-                    ty: getTileLocations(22)["ty"],
+                    tx: getTileLocations(22).tx,
+                    ty: getTileLocations(22).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -471,8 +471,8 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(8)["tx"],
-                    ty: getTileLocations(8)["ty"],
+                    tx: getTileLocations(8).tx,
+                    ty: getTileLocations(8).ty,
                     parameters: {
                         limbAngle: 120,
                         elbowAngle: 90,
@@ -486,8 +486,8 @@
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(15)["tx"],
-                    ty: getTileLocations(15)["ty"],
+                    tx: getTileLocations(15).tx,
+                    ty: getTileLocations(15).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 0
@@ -501,8 +501,8 @@
                 },
                 {
                     frame: 150,
-                    tx: getTileLocations(14)["tx"],
-                    ty: getTileLocations(14)["ty"],
+                    tx: getTileLocations(14).tx,
+                    ty: getTileLocations(14).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -517,8 +517,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(10)["tx"],
-                    ty: getTileLocations(10)["ty"],
+                    tx: getTileLocations(10).tx,
+                    ty: getTileLocations(10).ty,
                     parameters: {
                         limbAngle: 90,
                         elbowAngle: -270
@@ -532,8 +532,8 @@
                 },
                 {
                     frame: 225,
-                    tx: getTileLocations(23)["tx"],
-                    ty: getTileLocations(23)["ty"],
+                    tx: getTileLocations(23).tx,
+                    ty: getTileLocations(23).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -546,8 +546,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(22)["tx"],
-                    ty: getTileLocations(22)["ty"],
+                    tx: getTileLocations(22).tx,
+                    ty: getTileLocations(22).ty,
                     parameters: {
                         limbAngle: 50,
                         elbowAngle: -120
@@ -560,8 +560,8 @@
                 },
                 {
                     frame: 300,
-                    tx: getTileLocations(29)["tx"],
-                    ty: getTileLocations(29)["ty"],
+                    tx: getTileLocations(29).tx,
+                    ty: getTileLocations(29).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 120
@@ -569,8 +569,8 @@
                 },
                 {
                     frame: 695,
-                    tx: getTileLocations(29)["tx"],
-                    ty: getTileLocations(29)["ty"],
+                    tx: getTileLocations(29).tx,
+                    ty: getTileLocations(29).ty,
                     rotate: 360,
                     parameters: {
                         limbAngle: 135,
@@ -579,8 +579,8 @@
                 },
                 {
                     frame: 715,
-                    tx: getTileLocations(29.5)["tx"],
-                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    tx: getTileLocations(29.5).tx,
+                    ty: getTileLocations(28).ty - tileSize / 2,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -589,8 +589,8 @@
                 },
                 {
                     frame: 750,
-                    tx: getTileLocations(29.5)["tx"],
-                    ty: getTileLocations(28)["ty"] - tileSize / 2,
+                    tx: getTileLocations(29.5).tx,
+                    ty: getTileLocations(28).ty - tileSize / 2,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -607,20 +607,20 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(57)["tx"],
-                    ty: getTileLocations(57)["ty"],
+                    tx: getTileLocations(57).tx,
+                    ty: getTileLocations(57).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 101,
-                    tx: getTileLocations(50)["tx"],
-                    ty: getTileLocations(50)["ty"],
+                    tx: getTileLocations(50).tx,
+                    ty: getTileLocations(50).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(50)["tx"],
-                    ty: getTileLocations(50)["ty"],
+                    tx: getTileLocations(50).tx,
+                    ty: getTileLocations(50).ty,
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth
@@ -628,8 +628,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(51)["tx"],
-                    ty: getTileLocations(51)["ty"],
+                    tx: getTileLocations(51).tx,
+                    ty: getTileLocations(51).ty,
                     parameters: {
                         limbAngle: 190
                     },
@@ -643,8 +643,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(43)["tx"],
-                    ty: getTileLocations(43)["ty"],
+                    tx: getTileLocations(43).tx,
+                    ty: getTileLocations(43).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 135
@@ -661,8 +661,8 @@
                 },
                 {
                     frame: 325,
-                    tx: getTileLocations(44)["tx"],
-                    ty: getTileLocations(44)["ty"],
+                    tx: getTileLocations(44).tx,
+                    ty: getTileLocations(44).ty,
                     rotate: -360,
                     parameters: {
                         limbAngle: 1,
@@ -677,8 +677,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(44.5)["ty"],
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(44.5).ty,
                     rotate: -360,
                     parameters: {
                         limbAngle: 90,
@@ -693,8 +693,8 @@
                 },
                 {
                   frame: 650,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(40.5)["ty"],
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(40.5).ty,
                     rotate: -270,
                     parameters: {
                         limbAngle: 120,
@@ -708,8 +708,8 @@
                 },
                 {
                     frame: 725,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: -450,
                     parameters: {
                         limbAngle: 60,
@@ -723,8 +723,8 @@
                 },
                 {
                     frame: 950,
-                    tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(28.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: -360,
                     parameters: {
                         limbAngle: 90,
@@ -738,8 +738,8 @@
                 },
                 {
                     frame: 1050,
-                    tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(28.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: -360,
                     sx: 3,
                     sy: 3,
@@ -762,14 +762,14 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(59)["tx"],
-                    ty: getTileLocations(59)["ty"],
+                    tx: getTileLocations(59).tx,
+                    ty: getTileLocations(59).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(51)["tx"],
-                    ty: getTileLocations(51)["ty"],
+                    tx: getTileLocations(51).tx,
+                    ty: getTileLocations(51).ty,
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth
@@ -777,8 +777,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(52)["tx"],
-                    ty: getTileLocations(52)["ty"],
+                    tx: getTileLocations(52).tx,
+                    ty: getTileLocations(52).ty,
                     parameters: {
                         limbAngle: 190
                     },
@@ -790,8 +790,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(44)["tx"],
-                    ty: getTileLocations(44)["ty"],
+                    tx: getTileLocations(44).tx,
+                    ty: getTileLocations(44).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 135
@@ -804,8 +804,8 @@
                 },
                 {
                     frame: 325,
-                    tx: getTileLocations(36)["tx"],
-                    ty: getTileLocations(36)["ty"],
+                    tx: getTileLocations(36).tx,
+                    ty: getTileLocations(36).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -819,8 +819,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(35.5)["tx"],
-                    ty: getTileLocations(36)["ty"],
+                    tx: getTileLocations(35.5).tx,
+                    ty: getTileLocations(36).ty,
                     rotate: 450,
                     parameters: {
                         limbAngle: 190,
@@ -835,8 +835,8 @@
                 },
                 {
                     frame: 675,
-                    tx: getTileLocations(35.5)["tx"],
-                    ty: getTileLocations(36)["ty"],
+                    tx: getTileLocations(35.5).tx,
+                    ty: getTileLocations(36).ty,
                     rotate: -450,
                     parameters: {
                         limbAngle: 90,
@@ -852,8 +852,8 @@
                 },
                 {
                     frame: 800,
-                    tx: getTileLocations(35.5)["tx"],
-                    ty: getTileLocations(36)["ty"],
+                    tx: getTileLocations(35.5).tx,
+                    ty: getTileLocations(36).ty,
                     rotate: -450,
                     parameters: {
                         limbAngle: 90,
@@ -871,14 +871,14 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(tileSize / 2)["tx"],
-                    ty: getTileLocations(tileSize / 2)["ty"],
+                    tx: getTileLocations(tileSize / 2).tx,
+                    ty: getTileLocations(tileSize / 2).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(53)["tx"],
-                    ty: getTileLocations(53)["ty"],
+                    tx: getTileLocations(53).tx,
+                    ty: getTileLocations(53).ty,
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth
@@ -886,8 +886,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(54)["tx"],
-                    ty: getTileLocations(54)["ty"],                 
+                    tx: getTileLocations(54).tx,
+                    ty: getTileLocations(54).ty,                 
                     parameters: {
                         limbAngle: 190
                     },
@@ -899,8 +899,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(46)["tx"],
-                    ty: getTileLocations(46)["ty"],
+                    tx: getTileLocations(46).tx,
+                    ty: getTileLocations(46).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 135
@@ -913,8 +913,8 @@
                 },
                 {
                     frame: 325,
-                    tx: getTileLocations(37)["tx"],
-                    ty: getTileLocations(37)["ty"],
+                    tx: getTileLocations(37).tx,
+                    ty: getTileLocations(37).ty,
                     parameters: {
                         limbAngle: 190,
                         elbowAngle: 225,
@@ -928,8 +928,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(37.5)["tx"],
-                    ty: getTileLocations(37.5)["ty"],
+                    tx: getTileLocations(37.5).tx,
+                    ty: getTileLocations(37.5).ty,
                     rotate: -450,
                     parameters: {
                         limbAngle: 190,
@@ -944,8 +944,8 @@
                 },
                 {
                     frame: 675,
-                    tx: getTileLocations(37.5)["tx"],
-                    ty: getTileLocations(37.5)["ty"],
+                    tx: getTileLocations(37.5).tx,
+                    ty: getTileLocations(37.5).ty,
                     rotate: 450,
                     parameters: {
                         limbAngle: 90,
@@ -961,8 +961,8 @@
                 },
                 {
                     frame: 800,
-                    tx: getTileLocations(37.5)["tx"],
-                    ty: getTileLocations(37.5)["ty"],
+                    tx: getTileLocations(37.5).tx,
+                    ty: getTileLocations(37.5).ty,
                     rotate: 450,
                     parameters: {
                         limbAngle: 90,
@@ -980,20 +980,20 @@
             keyframes: [
                 {
                     frame: 0,
-                    tx: getTileLocations(63)["tx"],
-                    ty: getTileLocations(63)["ty"],
+                    tx: getTileLocations(63).tx,
+                    ty: getTileLocations(63).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 101,
-                    tx: getTileLocations(54)["tx"],
-                    ty: getTileLocations(54)["ty"],
+                    tx: getTileLocations(54).tx,
+                    ty: getTileLocations(54).ty,
                     ease: KeyframeTweener.backwardsAndPast
                 },
                 {
                     frame: 125,
-                    tx: getTileLocations(54)["tx"],
-                    ty: getTileLocations(54)["ty"],
+                    tx: getTileLocations(54).tx,
+                    ty: getTileLocations(54).ty,
                     ease: KeyframeTweener.backwardsAndPast,
                     easeAdjust: {
                         limbAngle: KeyframeTweener.backAndForth
@@ -1001,8 +1001,8 @@
                 },
                 {
                     frame: 200,
-                    tx: getTileLocations(55)["tx"],
-                    ty: getTileLocations(55)["ty"],
+                    tx: getTileLocations(55).tx,
+                    ty: getTileLocations(55).ty,
                     parameters: {
                         limbAngle: 190
                     },
@@ -1016,8 +1016,8 @@
                 },
                 {
                     frame: 250,
-                    tx: getTileLocations(47)["tx"],
-                    ty: getTileLocations(47)["ty"],
+                    tx: getTileLocations(47).tx,
+                    ty: getTileLocations(47).ty,
                     parameters: {
                         limbAngle: 135,
                         elbowAngle: 135
@@ -1034,8 +1034,8 @@
                 },
                 {
                     frame: 325,
-                    tx: getTileLocations(45)["tx"],
-                    ty: getTileLocations(45)["ty"],
+                    tx: getTileLocations(45).tx,
+                    ty: getTileLocations(45).ty,
                     rotate: 360,
                     parameters: {
                         limbAngle: 1,
@@ -1050,8 +1050,8 @@
                 },
                 {
                     frame: 500,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(44.5)["ty"],
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(44.5).ty,
                     rotate: 360,
                     parameters: {
                         limbAngle: 90,
@@ -1066,8 +1066,8 @@
                 },
                 {
                   frame: 650,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(40.5)["ty"],
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(40.5).ty,
                     rotate: 450,
                     parameters: {
                         limbAngle: 120,
@@ -1082,8 +1082,8 @@
                 },
                 {
                     frame: 725,
-                    tx: getTileLocations(44.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(44.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: 270,
                     parameters: {
                         limbAngle: 60,
@@ -1098,8 +1098,8 @@
                 },
                 {
                     frame: 950,
-                    tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(28.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: 360,
                     parameters: {
                         limbAngle: 90,
@@ -1115,8 +1115,8 @@
                 },
                 {
                     frame: 1050,
-                    tx: getTileLocations(28.5)["tx"],
-                    ty: getTileLocations(28)["ty"] + tileSize / 2,
+                    tx: getTileLocations(28.5).tx,
+                    ty: getTileLocations(28).ty + tileSize / 2,
                     rotate: 360,
                     sx: 3,
                     sy: 3,
