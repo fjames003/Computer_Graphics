@@ -19,7 +19,8 @@ var neighborTotals = function (includeMiddle, rgbaNeighborhood) {
         }
     }
     return neighborTotal;
-}
+};
+
 var NanoshopNeighborhood = {
     /*
      * A basic "darkener"---this one does not even use the entire pixel neighborhood;
