@@ -273,8 +273,8 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, r, c1, c2, c3, c4) {
-        var x = Math.round(x);
-        var y = Math.round(y);
+        x = Math.round(x);
+        y = Math.round(y);
         var module = this;
         var leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
         var rightColor = c2 ? [c2[0], c2[1], c2[2]] : c2;
@@ -282,6 +282,7 @@ var Primitives = {
         var rightVDelta;
         var hDelta;
         var currentColor;
+        var i;
 
         var diameter = 2 * r;
         var top = yc - r;
@@ -290,27 +291,27 @@ var Primitives = {
         var right = xc + r;
 
         var fillCircNoColor = function () {
-            for (var i = yc - y; i <= yc + y; i += 1) {
+            for (i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i);
                 module.setPixel(context, xc - x, i);
             }
-            for (var i = yc - x; i <= yc + x; i += 1) {
+            for (i = yc - x; i <= yc + x; i += 1) {
                 module.setPixel(context, xc + y, i);
                 module.setPixel(context, xc - y, i);
             }
-        }
+        };
         var fillCircOneColor = function () {
-            for (var i = yc - y; i <= yc + y; i += 1) {
+            for (i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
             }
-            for (var i = yc - x; i <= yc + x; i += 1) {
+            for (i = yc - x; i <= yc + x; i += 1) {
                 module.setPixel(context, xc + y, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - y, i, leftColor[0], leftColor[1], leftColor[2]);
             }
-        }
+        };
         var fillCircTwoColors = function () {
-            for (var i = yc - y; i <= yc + y; i += 1) {
+            for (i = yc - y; i <= yc + y; i += 1) {
                 module.setPixel(context, xc + x, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - x, i, leftColor[0], leftColor[1], leftColor[2]);
 
@@ -319,7 +320,7 @@ var Primitives = {
                 leftColor[2] += leftVDelta[2];
             }
             leftColor = c1 ? [c1[0], c1[1], c1[2]] : c1;
-            for (var i = yc - x; i <= yc + x; i += 1) {
+            for (i = yc - x; i <= yc + x; i += 1) {
                 module.setPixel(context, xc + y, i, leftColor[0], leftColor[1], leftColor[2]);
                 module.setPixel(context, xc - y, i, leftColor[0], leftColor[1], leftColor[2]);
 
@@ -327,7 +328,7 @@ var Primitives = {
                 leftColor[1] += leftVDelta[1];
                 leftColor[2] += leftVDelta[2];
             }
-        }
+        };
         var fillCircFourColors = function () {
             var amountFromTop;
             var amountFromLeft;
@@ -351,23 +352,23 @@ var Primitives = {
                                 currentColor[1] + hDelta[1] * amountFromLeft, 
                                 currentColor[2] + hDelta[2] * amountFromLeft];
                 return currentColor;
-            }
+            };
             
-            for (var i = xc - y; i <= xc + y; i += 1) {
+            for (i = xc - y; i <= xc + y; i += 1) {
                 calculateColors(i, x);
                 module.setPixel(context, i, yc + x, currentColor[0], currentColor[1], currentColor[2]);
 
                 calculateColors(i, -x);               
                 module.setPixel(context, i, yc - x, currentColor[0], currentColor[1], currentColor[2]);
             }
-            for (var i = xc - x; i <= xc + x; i += 1) {
+            for (i = xc - x; i <= xc + x; i += 1) {
                 calculateColors(i, y);                
                 module.setPixel(context, i, yc + y, currentColor[0], currentColor[1], currentColor[2]);
 
                 calculateColors(i, -y);
                 module.setPixel(context, i, yc - y, currentColor[0], currentColor[1], currentColor[2]);
             }
-        }
+        };
 
         if (!c1) {
             fillCircNoColor();
