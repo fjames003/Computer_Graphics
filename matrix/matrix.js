@@ -17,6 +17,7 @@ var Matrix = (function () {
             for (var i = 0; i < 4; i +=1) {
                 this.elements[i] = [].slice.call(arguments[0][i]);
             }
+            checkDimensions(this, new Matrix());
         } else {
             this.elements = identityMatrix();
         }
@@ -29,9 +30,15 @@ var Matrix = (function () {
 
     // A private method for checking dimensions,
     // throwing an exception when different.
-    var checkDimensions = function (v1, v2) {
-        if (v1.dimensions() !== v2.dimensions()) {
-            throw "Vectors have different dimensions";
+    var checkDimensions = function (m1, m2) {
+        if (m1.rowDimensions() !== m2.rowDimensions()) {
+            throw "Matrix does not have four rows";
+        } else {
+            for (var i = 0; i < 4; i += 1) {
+                if (m1.elements[i].length !== m2.elements[i].length) {
+                    throw "Matrix does not have four columns";
+                }
+            }
         }
     };
 

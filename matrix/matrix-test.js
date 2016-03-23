@@ -36,5 +36,25 @@ $(function () {
             }
         };
 
+        // One row is short a column...
+        throws(
+            function () {
+                var mat = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15]])
+            },
+            "Check for same size columns"
+        );
+        throws(
+            function () {
+                var mat = new Matrix([[1,2,3], [5,6,7], [9,10,11]])
+            },
+            "Check for four rows"
+        );
+        throws(
+            function () {
+                var mat = new Matrix([[1,2,3], [5,6,7], [9,10,11], [13,14,15]])
+            },
+            "Check for four columns"
+        );
+
     });
 });
