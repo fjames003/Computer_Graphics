@@ -12,7 +12,7 @@ $(function () {
         equal(mat.colDimensions(), 4, "Matrix column size");
         equal(mat.size(), [4,4], "Matrix size");
         for (var i = 0; i < 16; i += 1) {
-            equal(mat.elements(i), i + 1, "Element " + (i + 1) + " by index");
+            equal(mat.elements[i], i + 1, "Element " + (i + 1) + " by index");
         };
 
         // By default the matrix object should intialize to the identity matrix
@@ -28,5 +28,5 @@ $(function () {
                 equal(mat.elements(i), 0, "Non-diagonal elements of identity matrix");
             }
         };
-
+    });
 });
