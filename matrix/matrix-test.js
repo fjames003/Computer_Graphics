@@ -95,6 +95,7 @@ $(function () {
                                                                          [0, 0, 2, 1],
                                                                          [0, 0, 0, 1]]), "Creating a 3D orthographic projection matrix");
     });
+
     test("Perspective projection matrices", function () {
         var mat1 = new Matrix();
         deepEqual(mat1.perspective(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 2, 0],
@@ -102,4 +103,9 @@ $(function () {
                                                                          [0, 0, 1, 0],
                                                                          [0, 0, -1, 0]]), "Creating a 3D orthographic projection matrix");
     });
+
+    test("Conversion to WebGL and GLSL format", function () {
+        var mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
+        deepEqual(mat1.toWebGL(), [1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16], "Converting a matrix to WebGL format");
+    })
 });
