@@ -71,4 +71,12 @@ $(function () {
                                                    [400,358,316,274],
                                                    [560,502,444,386]]), "Multiply two 4 x 4 matrix with all positive integers");
     });
+
+    test("3D Translation Matrix", function () {
+        mat1 = new Matrix();
+        deepEqual(mat1.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
+                                                          [0, 1, 0, -3],
+                                                          [0, 0, 1, 1.2],
+                                                          [0, 0, 0, 0, 1]]), "Creating a 3D translation matrix");
+    })
 });
