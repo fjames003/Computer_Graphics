@@ -140,5 +140,17 @@ var Matrix = (function () {
         return result;
     };
 
+    matrix.prototype.forEach = function(func) {
+        var row;
+        var col;
+        var rowMax = this.rowDimensions();
+        var colMax = this.colDimensions();
+        for(var row = 0; row < rowMax; row += 1) {
+            for (var col = 0; col < colMax; col += 1) {
+                func(this.elements[row][col], [row, col], this);
+            }
+        }
+    }
+
     return matrix;
 })();
