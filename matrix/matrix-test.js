@@ -79,4 +79,12 @@ $(function () {
                                                           [0, 0, 1, 1.2],
                                                           [0, 0, 0, 1]]), "Creating a 3D translation matrix");
     });
+
+    test("3D Scale Matrix", function () {
+        var mat1 = new Matrix();
+        deepEqual(mat1.scale(5.2, 2, -4), new Matrix([[5.2, 0, 0, 0],
+                                                      [0, 2, 0, 0],
+                                                      [0, 0, -4, 0],
+                                                      [0, 0, 0, 1 ]]), "Creating a 3D scale matrix");
+    })
 });
