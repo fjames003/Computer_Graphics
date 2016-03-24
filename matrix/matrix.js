@@ -54,6 +54,26 @@ var Matrix = (function () {
         return [this.rowDimensions(), this.colDimensions()];
     };
 
+    matrix.prototype.multiply = function (s) {
+        // A check in case arbitrary matrices are added...
+        if (this.colDimensions() !== s.rowDimensions()) {
+            throw "Cannot multiply matrix (m x n) if the second matrix is not (n x k)"
+        }
+        var result = new Matrix();
+
+        var rowMax = this.rowDimensions();
+        var colMax = this.colDimensions();
+        var identityCounter = 0
+        for (var i = 0; i < rowMax; i += 1) {
+            result.elements[i][identityCounter] = 0;
+            identityCounter += 1;
+            for (var j = 0; j < colMax; j += 1) {
+                result.elements[i][j] += this.elements[i][j] * s.elements[j][i]
+            }
+        }
+        return result;
+    };
+
     // vector.prototype.add = function (v) {
     //     var result = new Vector();
 
@@ -73,16 +93,6 @@ var Matrix = (function () {
 
     //     for (var i = 0, max = this.dimensions(); i < max; i += 1) {
     //         result.elements[i] = this.elements[i] - v.elements[i];
-    //     }
-
-    //     return result;
-    // };
-
-    // vector.prototype.multiply = function (s) {
-    //     var result = new Vector();
-
-    //     for (var i = 0, max = this.dimensions(); i < max; i += 1) {
-    //         result.elements[i] = this.elements[i] * s;
     //     }
 
     //     return result;
