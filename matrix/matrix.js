@@ -65,15 +65,22 @@ var Matrix = (function () {
         var thisColMax = this.colDimensions();
         var sColMax = s.colDimensions();
         var identityCounter = 0
-        for (var i = 0; i < thisRowMax; i += 1) {
-            result.elements[i][identityCounter] = 0;
-            identityCounter += 1;
-            for (var j = 0; j < sColMax; j +=1) {
-                for (var k = 0; k < thisColMax; k += 1) {
-                    result.elements[i][j] += this.elements[i][k] * s.elements[k][j];
-                }
+        // for (var i = 0; i < thisRowMax; i += 1) {
+        //     result.elements[i][identityCounter] = 0;
+        //     identityCounter += 1;
+        //     for (var j = 0; j < sColMax; j +=1) {
+        //         for (var k = 0; k < thisColMax; k += 1) {
+        //             result.elements[i][j] += this.elements[i][k] * s.elements[k][j];
+        //         }
+        //     }
+        // }
+        // Not sure if this code will work for arbitrary matrices, will leave code above here for now...
+        this.forEach(function(value, index, matrix) {
+            result.elements[index[0]][index[1]] = 0;
+            for (var i = 0; i < matrix.colDimensions(); i += 1) {
+                result.elements[index[0]][index[1]] += matrix.elements[index[0]][i] * s.elements[i][index[1]];
             }
-        }
+        });
         return result;
     };
 
@@ -130,13 +137,9 @@ var Matrix = (function () {
     matrix.prototype.toWebGL = function () {
         var result = [];
 
-        var counter = 0;
-        for (var i = 0; i < this.rowDimensions(); i += 1) {
-            for (var j = 0; j < this.colDimensions(); j += 1) {
-                result[counter] = this.elements[j][i];
-                counter += 1;
-            }
-        }
+        this.forEach(function(value, index, matrix) {
+            result.push(matrix.elements[index[1]][index[0]]);
+        });
         return result;
     };
 
