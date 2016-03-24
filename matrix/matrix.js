@@ -67,8 +67,10 @@ var Matrix = (function () {
         for (var i = 0; i < rowMax; i += 1) {
             result.elements[i][identityCounter] = 0;
             identityCounter += 1;
-            for (var j = 0; j < colMax; j += 1) {
-                result.elements[i][j] += this.elements[i][j] * s.elements[j][i]
+            for (var j = 0; j < colMax; j +=1) {
+                for (var k = 0; k < colMax; k += 1) {
+                    result.elements[i][j] += this.elements[i][k] * s.elements[k][j];
+                }
             }
         }
         return result;
