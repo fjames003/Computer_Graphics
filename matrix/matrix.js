@@ -36,7 +36,6 @@ var Matrix = (function () {
         } else {
             for (var i = 0; i < 4; i += 1) {
                 if (m1.elements[i].length !== m2.elements[i].length) {
-                    console.log(m1, m2)
                     throw "Matrix does not have four columns";
                 }
             }
@@ -126,17 +125,18 @@ var Matrix = (function () {
         return result;
     };
 
-    // vector.prototype.dot = function (v) {
-    //     var result = 0;
+    matrix.prototype.toWebGL = function () {
+        var result = [];
 
-    //     checkDimensions(this, v);
-
-    //     for (var i = 0, max = this.dimensions(); i < max; i += 1) {
-    //         result += this.elements[i] * v.elements[i];
-    //     }
-
-    //     return result;
-    // };
+        var counter = 0;
+        for (var i = 0; i < this.rowDimensions(); i += 1) {
+            for (var j = 0; j < this.colDimensions(); j += 1) {
+                result[counter] = this.elements[j][i];
+                counter += 1;
+            }
+        }
+        return result;
+    };
 
     // vector.prototype.cross = function (v) {
     //     if (this.dimensions() !== 3 || v.dimensions() !== 3) {
