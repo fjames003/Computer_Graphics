@@ -61,14 +61,15 @@ var Matrix = (function () {
         }
         var result = new Matrix();
 
-        var rowMax = this.rowDimensions();
-        var colMax = this.colDimensions();
+        var thisRowMax = this.rowDimensions();
+        var thisColMax = this.colDimensions();
+        var sColMax = s.colDimensions();
         var identityCounter = 0
-        for (var i = 0; i < rowMax; i += 1) {
+        for (var i = 0; i < thisRowMax; i += 1) {
             result.elements[i][identityCounter] = 0;
             identityCounter += 1;
-            for (var j = 0; j < colMax; j +=1) {
-                for (var k = 0; k < colMax; k += 1) {
+            for (var j = 0; j < sColMax; j +=1) {
+                for (var k = 0; k < thisColMax; k += 1) {
                     result.elements[i][j] += this.elements[i][k] * s.elements[k][j];
                 }
             }
