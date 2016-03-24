@@ -150,7 +150,7 @@ var Matrix = (function () {
                 func(this.elements[row][col], [row, col], this);
             }
         }
-    }
+    };
 
     return matrix;
 })();
