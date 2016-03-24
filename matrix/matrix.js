@@ -98,15 +98,18 @@ var Matrix = (function () {
         return result;
     };
 
-    // vector.prototype.divide = function (s) {
-    //     var result = new Vector();
+    matrix.prototype.orthographic = function (left, right, bottom, top, near, far) {
+        var result = new Matrix();
 
-    //     for (var i = 0, max = this.dimensions(); i < max; i += 1) {
-    //         result.elements[i] = this.elements[i] / s;
-    //     }
+        result.elements[0][0] = 2.0 / (right - left);
+        result.elements[1][1] = 2.0 / (top - bottom);
+        result.elements[2][2] = -2.0 / (far - near);
+        result.elements[0][3] = -(right + left) / (right - left);
+        result.elements[1][3] = -(top + bottom) / (top - bottom);
+        result.elements[2][3] = -(far + near) / (far - near);
 
-    //     return result;
-    // };
+        return result;
+    };
 
     // vector.prototype.dot = function (v) {
     //     var result = 0;
