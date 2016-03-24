@@ -95,4 +95,11 @@ $(function () {
                                                                          [0, 0, 2, 1],
                                                                          [0, 0, 0, 1]]), "Creating a 3D orthographic projection matrix");
     });
+    test("Perspective projection matrices", function () {
+        var mat1 = new Matrix();
+        deepEqual(mat1.orthographic(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 2, 0],
+                                                                         [0, 4, 9, 0],
+                                                                         [0, 0, 1, 0],
+                                                                         [0, 0, -1, 0]]), "Creating a 3D orthographic projection matrix");
+    });
 });
