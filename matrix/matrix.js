@@ -111,6 +111,21 @@ var Matrix = (function () {
         return result;
     };
 
+    matrix.prototype.perspective = function (left, right, bottom, top, near, far) {
+        var result = new Matrix();
+
+        result.elements[0][0] = (2.0 * near) / (right - left);
+        result.elements[1][1] = (2.0 * near) / (top - bottom);
+        result.elements[2][2] = -(far + near) / (far - near);
+        result.elements[0][2] = (right + left) / (right - left);
+        result.elements[1][2] = (top + bottom) / (top - bottom);
+        result.elements[2][3] = -(2.0 * near * far) / (far - near);
+        result.elements[3][2] = -1;
+        result.elements[3][3] = 0;
+
+        return result;
+    };
+
     // vector.prototype.dot = function (v) {
     //     var result = 0;
 
