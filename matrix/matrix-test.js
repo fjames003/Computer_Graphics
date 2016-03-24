@@ -62,5 +62,13 @@ $(function () {
         mat1 = new Matrix();
         mat2 = new Matrix();
         deepEqual(mat1.multiply(mat2), new Matrix(), "Multiply two identity matrices should produce a new identity matrix");
+
+        mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
+        mat2 = new Matrix([[16,15,14,13], [12,11,10,9], [8,7,6,5], [4,3,2,1]]);
+
+        deepEqual(mat1.multiply(mat2), new Matrix([[80 ,70 ,60 ,60 ],
+                                                   [240,214,188,162],
+                                                   [400,358,316,274],
+                                                   [560,502,444,386]]), "Multiply two 4 x 4 matrix with all positive integers");
     });
 });
