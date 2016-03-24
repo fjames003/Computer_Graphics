@@ -116,9 +116,11 @@ var Matrix = (function () {
         result.elements[0][0] = (2.0 * near) / (right - left);
         result.elements[1][1] = (2.0 * near) / (top - bottom);
         result.elements[2][2] = -(far + near) / (far - near);
+
         result.elements[0][2] = (right + left) / (right - left);
         result.elements[1][2] = (top + bottom) / (top - bottom);
         result.elements[2][3] = -(2.0 * near * far) / (far - near);
+
         result.elements[3][2] = -1;
         result.elements[3][3] = 0;
 
@@ -137,38 +139,6 @@ var Matrix = (function () {
         }
         return result;
     };
-
-    // vector.prototype.cross = function (v) {
-    //     if (this.dimensions() !== 3 || v.dimensions() !== 3) {
-    //         throw "Cross product is for 3D vectors only.";
-    //     }
-
-    //     // With 3D vectors, we can just return the result directly.
-    //     return new Vector(
-    //         (this.y() * v.z()) - (this.z() * v.y()),
-    //         (this.z() * v.x()) - (this.x() * v.z()),
-    //         (this.x() * v.y()) - (this.y() * v.x())
-    //     );
-    // };
-
-    // vector.prototype.magnitude = function () {
-    //     return Math.sqrt(this.dot(this));
-    // };
-
-    // vector.prototype.unit = function () {
-    //     // At this point, we can leverage our more "primitive" methods.
-    //     return this.divide(this.magnitude());
-    // };
-
-    // vector.prototype.projection = function (v) {
-    //     checkDimensions(this, v);
-
-    //     // Plug and chug :)
-    //     // The projection of u onto v is u dot the unit vector of v
-    //     // times the unit vector of v.
-    //     var unitv = v.unit();
-    //     return unitv.multiply(this.dot(unitv));
-    // };
 
     return matrix;
 })();
