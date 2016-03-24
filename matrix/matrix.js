@@ -104,6 +104,43 @@ var Matrix = (function () {
         return result;
     };
 
+    matrix.prototype.rotation = function (theta, x, y, z) {
+        var result = new Matrix();
+
+        var axisLength = Math.sqrt(x * x + y * y + z * z);
+        var sine   = Math.sin(angle * Math.PI / 180.0);
+        var cosine = Math.cos(angle * Math.PI / 180.0);
+        var oneMinusCosine = 1.0 - cosine;
+
+        x /= axisLength;
+        y /= axisLength;
+        z /= axisLength;
+
+        var x2 = x * x;
+        var y2 = y * y;
+        var z2 = z * z;
+        var xy = x * y;
+        var yz = y * z;
+        var xz = x * z;
+        var xs = x * sine;
+        var ys = y * sine;
+        var zs = z * sine;
+
+        result.elements[0][0] = x2 * oneMinusCosine + cosine;
+        result.elements[0][1] = xy * oneMinusCosine - zs;
+        result.elements[0][2] = xz * oneMinusCosine + ys;
+
+        result.elements[1][0] = xy * oneMinusCosine + zs;
+        result.elements[1][1] = y2 * oneMinusCosine + cosine;
+        result.elements[1][2] = yz * oneMinusCosine - xs
+
+        result.elements[2][0] = xz * oneMinusCosine - ys;
+        result.elements[2][1] = yz * oneMinusCosine + xs;
+        result.elements[2][2] = z2 * oneMinusCosine + cosine;
+        
+        return result;
+    };
+
     matrix.prototype.orthographic = function (left, right, bottom, top, near, far) {
         var result = new Matrix();
 
