@@ -88,17 +88,15 @@ var Matrix = (function () {
         return result;
     };
 
-    // vector.prototype.subtract = function (v) {
-    //     var result = new Vector();
+    matrix.prototype.scale = function (sx, sy, sz) {
+        var result = new Matrix();
 
-    //     checkDimensions(this, v);
+        result.elements[0][0] = sx;
+        result.elements[1][1] = sy;
+        result.elements[2][2] = sz;
 
-    //     for (var i = 0, max = this.dimensions(); i < max; i += 1) {
-    //         result.elements[i] = this.elements[i] - v.elements[i];
-    //     }
-
-    //     return result;
-    // };
+        return result;
+    };
 
     // vector.prototype.divide = function (s) {
     //     var result = new Vector();
