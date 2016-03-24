@@ -43,18 +43,24 @@ $(function () {
             },
             "Check for same size columns"
         );
+        // Only a 3 x 3 matrix
         throws(
             function () {
                 var mat = new Matrix([[1,2,3], [5,6,7], [9,10,11]])
             },
-            "Check for four rows"
+            "Check for four rows without four columns"
         );
+        // One column short...
         throws(
             function () {
                 var mat = new Matrix([[1,2,3], [5,6,7], [9,10,11], [13,14,15]])
             },
-            "Check for four columns"
+            "Check for four columns with four rows"
         );
-
+    });
+    test("Multiplication", function () {
+        mat1 = new Matrix();
+        mat2 = new Matrix();
+        deepEqual(mat1.multiply(mat2), new Matrix(), "Multiply two identity matrices should produce a new identity matrix");
     });
 });
