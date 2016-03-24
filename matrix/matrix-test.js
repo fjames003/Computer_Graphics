@@ -59,12 +59,12 @@ $(function () {
         );
     });
     test("Multiplication", function () {
-        mat1 = new Matrix();
-        mat2 = new Matrix();
+        var mat1 = new Matrix();
+        var mat2 = new Matrix();
         deepEqual(mat1.multiply(mat2), new Matrix(), "Multiply two identity matrices should produce a new identity matrix");
 
-        mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
-        mat2 = new Matrix([[16,15,14,13], [12,11,10,9], [8,7,6,5], [4,3,2,1]]);
+        var mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
+        var mat2 = new Matrix([[16,15,14,13], [12,11,10,9], [8,7,6,5], [4,3,2,1]]);
 
         deepEqual(mat1.multiply(mat2), new Matrix([[80 ,70 ,60 ,50 ],
                                                    [240,214,188,162],
@@ -73,10 +73,10 @@ $(function () {
     });
 
     test("3D Translation Matrix", function () {
-        mat1 = new Matrix();
+        var mat1 = new Matrix();
         deepEqual(mat1.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
                                                           [0, 1, 0, -3],
                                                           [0, 0, 1, 1.2],
-                                                          [0, 0, 0, 0, 1]]), "Creating a 3D translation matrix");
-    })
+                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix");
+    });
 });
