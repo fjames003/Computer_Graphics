@@ -49,6 +49,28 @@ var Shape = (function () {
                 gl.STATIC_DRAW);
 
         return buffer;
-    }
+    };
     return shape;
+})();
+
+var ShapeLibrary = (function () {
+    var sphereColors = {r: 0.0, g: 0.0, b: 0.0};
+    var vertices = [];
+    var sphereMode;
+    var sphere = function (n, colors, mode) {
+        sphereColors = colors;
+        sphereMode = mode;
+        vertices = [];
+        for (var i = 0; i < n; i += 1) {
+            for (var j = 0; j < n - 1; j += 1) {
+                vertices = vertices.concat(
+                    Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
+                    Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n), 
+                    Math.cos(Math.PI * i/n)
+                );
+            }
+        }
+    };
+    return new Shape(sphereColors, vertices, sphereMode);
+
 })();

@@ -57,7 +57,8 @@
                 [ -0.1, -0.1, -1.0 ],
                 [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
-        new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES)
+        new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
+        // new ShapeLibrary(100, { r: 0.0, g: 0.5, b: 0.0 }, gl.LINES)
 
     ];
 
@@ -127,7 +128,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Matrix().rotation(currentRotation, 0, 1, 0).toWebGL());
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Matrix().rotation(currentRotation, 0.5, 1, -0.5).toWebGL());
 
         // Display the objects.
         for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
