@@ -1,100 +1,45 @@
-/*
- * This module defines/generates vertex arrays for certain predefined shapes.
- * The "shapes" are returned as indexed vertices, with utility functions for
- * converting these into "raw" coordinate arrays.
- */
-var Shapes = {
-    /*
-     * Returns the vertices for a small icosahedron.
-     */
-    icosahedron: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
-        var X = 0.525731112119133606;
-        var Z = 0.850650808352039932;
-
-        return {
-            vertices: [
-                [ -X, 0.0, Z ],
-                [ X, 0.0, Z ],
-                [ -X, 0.0, -Z ],
-                [ X, 0.0, -Z ],
-                [ 0.0, Z, X ],
-                [ 0.0, Z, -X ],
-                [ 0.0, -Z, X ],
-                [ 0.0, -Z, -X ],
-                [ Z, X, 0.0 ],
-                [ -Z, X, 0.0 ],
-                [ Z, -X, 0.0 ],
-                [ -Z, -X, 0.0 ]
-            ],
-
-            indices: [
-                [ 1, 4, 0 ],
-                [ 4, 9, 0 ],
-                [ 4, 5, 9 ],
-                [ 8, 5, 4 ],
-                [ 1, 8, 4 ],
-                [ 1, 10, 8 ],
-                [ 10, 3, 8 ],
-                [ 8, 3, 5 ],
-                [ 3, 2, 5 ],
-                [ 3, 7, 2 ],
-                [ 3, 10, 7 ],
-                [ 10, 6, 7 ],
-                [ 6, 11, 7 ],
-                [ 6, 0, 11 ],
-                [ 6, 1, 0 ],
-                [ 10, 1, 6 ],
-                [ 11, 0, 9 ],
-                [ 2, 11, 9 ],
-                [ 5, 2, 9 ],
-                [ 11, 2, 7 ]
-            ]
-        };
-    },
-
-    /*
-     * Utility function for turning indexed vertices into a "raw" coordinate array
-     * arranged as triangles.
-     */
-    toRawTriangleArray: function (indexedVertices) {
-        var result = [];
-
-        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
-            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
-                result = result.concat(
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][j]
-                    ]
-                );
+var Shape = (function () {
+    // Constructor
+    var shape = function (colors, vertices, mode) {
+        this.vertices = vertices;
+        this.mode = mode;
+        if (colors.r || colors.g || colors.b) {
+            colors = colors || {r: 0.0, g: 0.0, b: 0.0};
+            this.colors = [];
+            fillColors(vertices.length / 3, colors.r, colors.g, colors.b);
+        } else {
+            colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
+            this.colors = colors;
+            if (colors.length !== vertices.length) {
+                fillColors(vertices.length / 3 - colors.length / 3, this.colors[0], this.colors[1], this.colors[2]);
             }
         }
-
-        return result;
-    },
-
-    /*
-     * Utility function for turning indexed vertices into a "raw" coordinate array
-     * arranged as line segments.
-     */
-    toRawLineArray: function (indexedVertices) {
-        var result = [];
-
-        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
-            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
-                result = result.concat(
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][j]
-                    ],
-
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][(j + 1) % maxj]
-                    ]
-                );
-            }
+    };
+    var fillColors = function (number, r, g, b) {
+        for (var i = 0; i < number; i += 1) {
+            this.colors = this.colors.concat(
+                r,
+                g,
+                b
+            );
         }
+    };
 
-        return result;
+    shape.prototype.initVertexBuffer = function (gl) {
+        this.buffer = initBuffer(gl, this.vertices);
+    };
+
+    shape.prototype.initColorBuffer = function (gl) {
+        this.colorBuffer = initBuffer(gl, this.colors);
     }
 
-};
+    var initBuffer = function (gl, sequence) {
+        var buffer = = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
+                gl.STATIC_DRAW);
+
+        return buffer;
+    }
+
+})();
