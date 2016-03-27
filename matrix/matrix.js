@@ -177,7 +177,7 @@ var Matrix = (function () {
         this.forEach(function(value, index, matrix) {
             result.push(matrix.elements[index[1]][index[0]]);
         });
-        return result;
+        return new Float32Array(result);
     };
 
     matrix.prototype.forEach = function(func) {

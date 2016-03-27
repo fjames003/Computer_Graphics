@@ -106,7 +106,7 @@ $(function () {
 
     test("Conversion to WebGL and GLSL format", function () {
         var mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
-        deepEqual(mat1.toWebGL(), [1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16], "Converting a matrix to WebGL format");
+        deepEqual(mat1.toWebGL(), new Float32Array([1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16]), "Converting a matrix to WebGL format");
     });
 
     test("ForEach function", function () {
