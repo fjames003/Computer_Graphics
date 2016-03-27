@@ -12,54 +12,6 @@
      * Based on the original glRotate reference:
      *     http://www.opengl.org/sdk/docs/man/xhtml/glRotate.xml
      */
-    var getRotationMatrix = function (angle, x, y, z) {
-        // In production code, this function should be associated
-        // with a matrix object with associated functions.
-        var axisLength = Math.sqrt((x * x) + (y * y) + (z * z));
-        var s = Math.sin(angle * Math.PI / 180.0);
-        var c = Math.cos(angle * Math.PI / 180.0);
-        var oneMinusC = 1.0 - c;
-
-        // Normalize the axis vector of rotation.
-        x /= axisLength;
-        y /= axisLength;
-        z /= axisLength;
-
-        // Now we can calculate the other terms.
-        // "2" for "squared."
-        var x2 = x * x;
-        var y2 = y * y;
-        var z2 = z * z;
-        var xy = x * y;
-        var yz = y * z;
-        var xz = x * z;
-        var xs = x * s;
-        var ys = y * s;
-        var zs = z * s;
-
-        // GL expects its matrices in column major order.
-        return [
-            (x2 * oneMinusC) + c,
-            (xy * oneMinusC) + zs,
-            (xz * oneMinusC) - ys,
-            0.0,
-
-            (xy * oneMinusC) - zs,
-            (y2 * oneMinusC) + c,
-            (yz * oneMinusC) + xs,
-            0.0,
-
-            (xz * oneMinusC) + ys,
-            (yz * oneMinusC) - xs,
-            (z2 * oneMinusC) + c,
-            0.0,
-
-            0.0,
-            0.0,
-            0.0,
-            1.0
-        ];
-    };
 
     // Grab the WebGL rendering context.
     var gl = GLSLUtilities.getGL(canvas);
@@ -212,7 +164,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)));
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Matrix().rotation(currentRotation, 0, 1, 0).toWebGL());
 
         // Display the objects.
         for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
