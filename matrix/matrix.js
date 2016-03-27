@@ -108,8 +108,8 @@ var Matrix = (function () {
         var result = new Matrix();
 
         var axisLength = Math.sqrt(x * x + y * y + z * z);
-        var sine   = Math.sin(angle * Math.PI / 180.0);
-        var cosine = Math.cos(angle * Math.PI / 180.0);
+        var sine   = Math.sin(theta * Math.PI / 180.0);
+        var cosine = Math.cos(theta * Math.PI / 180.0);
         var oneMinusCosine = 1.0 - cosine;
 
         x /= axisLength;
