@@ -1,6 +1,8 @@
 var Shape = (function () {
     // Constructor
     var shape = function (colors, vertices, mode) {
+        this.parent = null;
+        this.children = [];
         this.vertices = vertices;
         this.mode = mode;
         if (colors.r || colors.g || colors.b) {
@@ -32,7 +34,13 @@ var Shape = (function () {
 
     shape.prototype.initColorBuffer = function (gl) {
         this.colorBuffer = initBuffer(gl, this.colors);
-    }
+    };
+
+    shape.prototype.createChild = function() {
+        var newChild = new Shape(this.colors, this.vertices, this.mode);
+        newChild.parent = this;
+        this.children.push(newChild);
+    };
 
     var initBuffer = function (gl, sequence) {
         var buffer = gl.createBuffer();
