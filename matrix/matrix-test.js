@@ -112,8 +112,17 @@ $(function () {
                                [-1, 0, 0, 0],
                                [0, 0, 0, 1]]);
         tester.forEach(function(value, index, matrix) {
-            QUnit.close(value, yRot.elements[index[0]][index[1]], 0.00001, "Creating a 3D rotation matrix about the y axis");
-        })
+            QUnit.close(value, yRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the y axis");
+        });
+
+        tester = mat1.rotation(270, 1.0, 0.0, 0.0);
+        var xRot = new Matrix([[1, 0, 0, 0],
+                               [0, 0, 1, 0],
+                               [0, -1, 0, 0],
+                               [0, 0, 0, 1]]);
+        tester.forEach(function(value, index, marix) {
+            QUnit.close(value, xRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the x axis");
+        });
     });
 
     test("Conversion to WebGL and GLSL format", function () {
