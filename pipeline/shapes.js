@@ -5,24 +5,25 @@ var Shape = (function () {
         this.mode = mode;
         if (colors.r || colors.g || colors.b) {
             colors = colors || {r: 0.0, g: 0.0, b: 0.0};
-            this.colors = [];
-            fillColors(vertices.length / 3, colors.r, colors.g, colors.b);
+            this.colors = [].concat(fillColors(vertices.length / 3, colors.r, colors.g, colors.b));
         } else {
             colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
             this.colors = colors;
             if (colors.length !== vertices.length) {
-                fillColors(vertices.length / 3 - colors.length / 3, this.colors[0], this.colors[1], this.colors[2]);
+                this.colors = this.colors.concat(fillColors(vertices.length / 3 - colors.length / 3, this.colors[0], this.colors[1], this.colors[2]));
             }
         }
     };
     var fillColors = function (number, r, g, b) {
+        var result = [];
         for (var i = 0; i < number; i += 1) {
-            this.colors = this.colors.concat(
+            result = result.concat(
                 r,
                 g,
                 b
             );
         }
+        return result;
     };
 
     shape.prototype.initVertexBuffer = function (gl) {
@@ -34,12 +35,12 @@ var Shape = (function () {
     }
 
     var initBuffer = function (gl, sequence) {
-        var buffer = = gl.createBuffer();
+        var buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
                 gl.STATIC_DRAW);
 
         return buffer;
     }
-
+    return shape;
 })();

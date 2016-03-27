@@ -31,78 +31,41 @@
 
     // Build the objects to display.
     var objectsToDraw = [
-        {
-            vertices: [].concat(
-                [ 0.0, 0.0, 0.0 ],
-                [ 0.5, 0.0, -0.75 ],
-                [ 0.0, 0.5, 0.0 ]
-            ),
-            colors: [].concat(
+        new Shape([].concat(
                 [ 1.0, 0.0, 0.0 ],
                 [ 0.0, 1.0, 0.0 ],
                 [ 0.0, 0.0, 1.0 ]
-            ),
-            mode: gl.TRIANGLES
-        },
+            ), [].concat(
+                [ 0.0, 0.0, 0.0 ],
+                [ 0.5, 0.0, -0.75 ],
+                [ 0.0, 0.5, 0.0 ]
+            ), gl.TRIANGLES),
 
-        {
-            color: { r: 0.0, g: 1.0, b: 0 },
-            vertices: [].concat(
+        new Shape({ r: 0.0, g: 1.0, b: 0 }, [].concat(
                 [ 0.25, 0.0, -0.5 ],
                 [ 0.75, 0.0, -0.5 ],
-                [ 0.25, 0.5, -0.5 ]
-            ),
-            mode: gl.TRIANGLES
-        },
+                [ 0.25, 0.5, -0.5 ]), gl.TRIANGLES),
 
-        {
-            color: { r: 0.0, g: 0.0, b: 1.0 },
-            vertices: [].concat(
+        new Shape({ r: 0.0, g: 0.0, b: 1.0 }, [].concat(
                 [ -0.25, 0.0, 0.5 ],
                 [ 0.5, 0.0, 0.5 ],
-                [ -0.25, 0.5, 0.5 ]
-            ),
-            mode: gl.TRIANGLES
-        },
+                [ -0.25, 0.5, 0.5 ]), gl.TRIANGLES),
 
-        {
-            color: { r: 0.0, g: 0.0, b: 1.0 },
-            vertices: [].concat(
+        new Shape({ r: 0.0, g: 0.0, b: 1.0 }, [].concat(
                 [ -1.0, -1.0, 0.75 ],
                 [ -1.0, -0.1, -1.0 ],
                 [ -0.1, -0.1, -1.0 ],
-                [ -0.1, -1.0, 0.75 ]
-            ),
-            mode: gl.LINE_LOOP
-        },
+                [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
-        {
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
-            mode: gl.LINES
-        }
+        new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES)
+
     ];
 
     // Pass the vertices to WebGL.
     for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-        objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].vertices);
+        objectsToDraw[i].initVertexBuffer(gl);
 
-        if (!objectsToDraw[i].colors) {
-            // If we have a single color, we expand that into an array
-            // of the same color over and over.
-            objectsToDraw[i].colors = [];
-            for (var j = 0, maxj = objectsToDraw[i].vertices.length / 3;
-                    j < maxj; j += 1) {
-                objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
-                    objectsToDraw[i].color.r,
-                    objectsToDraw[i].color.g,
-                    objectsToDraw[i].color.b
-                );
-            }
-        }
-        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].colors);
+        objectsToDraw[i].initColorBuffer(gl);
     }
 
     // Initialize the shaders.
