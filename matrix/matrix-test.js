@@ -104,6 +104,7 @@ $(function () {
                                                                          [0, 0, -1, 0]]), "Creating a 3D orthographic projection matrix");
     });
 
+    // All tested to within 1 * 10 ^ -6 (one millionth)
     test("3D Rotation matrix", function () {
         var mat1 = new Matrix();
         var tester = mat1.rotation(90, 0.0, 1.0, 0.0);
@@ -122,6 +123,31 @@ $(function () {
                                [0, 0, 0, 1]]);
         tester.forEach(function(value, index, marix) {
             QUnit.close(value, xRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the x axis");
+        });
+
+        tester = mat1.rotation(180, 0.0, 0.0, 1.0);
+        var zRot = new Matrix([[-1, 0, 0, 0],
+                               [0, -1, 0, 0],
+                               [0, 0, 1, 0],
+                               [0, 0, 0, 1]]);
+        tester.forEach(function(value, index, marix) {
+            QUnit.close(value, zRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the z axis");
+        });
+
+        tester = mat1.rotation(30, 0.75, -0.5, 0.3);
+        var axisLength = Math.sqrt(0.75 * 0.75 + -0.5 * -0.5 + 0.3 * 0.3);
+        var cosine = Math.sqrt(3) / 2;
+        var oneMinusC = 1 - cosine;
+        var sine = 0.5;
+        var x = 0.75 / axisLength;
+        var y = -0.5 / axisLength;
+        var z = 0.30 / axisLength;
+        var xyzRot = new Matrix([[(x * x) * oneMinusC + cosine, (x * y) * oneMinusC - (z * sine), (x * z) * oneMinusC + (y * sine), 0],
+                                 [(x * y) * oneMinusC + (z * sine), (y * y) * oneMinusC + cosine, (y * z) * oneMinusC - (x * sine), 0],
+                                 [(x * z) * oneMinusC - (y * sine), (y * z) * oneMinusC + (x * sine), (z * z) * oneMinusC + cosine, 0],
+                                 [0, 0, 0, 1]]); 
+        tester.forEach(function(value, index, marix) {
+            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis, index: " + index);
         });
     });
 
