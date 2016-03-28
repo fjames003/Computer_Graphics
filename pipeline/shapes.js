@@ -45,14 +45,17 @@ var Shape = (function () {
 
     shape.prototype.scale = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
+        return this;
     };
 
     shape.prototype.rotate = function(theta, x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+        return this;
     };
 
     shape.prototype.translate = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
+        return this;
     };
 
     shape.prototype.saveState = function() {

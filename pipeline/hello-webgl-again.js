@@ -58,12 +58,13 @@
                 [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
         new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
-        new ShapeLibrary.sphere(50, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES)
+        new ShapeLibrary.sphere(50, { r: 1.0, g: 0.5, b: 0.0 }, gl.TRIANGLE_FAN).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5)
 
     ];
 
     // Pass the vertices to WebGL.
     for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+
         objectsToDraw[i].initVertexBuffer(gl);
 
         objectsToDraw[i].initColorBuffer(gl);
