@@ -58,7 +58,7 @@
                 [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
         new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
-        // new ShapeLibrary(100, { r: 0.0, g: 0.5, b: 0.0 }, gl.LINES)
+        new ShapeLibrary(100, { r: 0.0, g: 0.5, b: 0.0 }, gl.LINES)
 
     ];
 
@@ -116,6 +116,7 @@
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
+        console.log(object, object.buffer)
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };

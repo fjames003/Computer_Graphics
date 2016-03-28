@@ -54,15 +54,26 @@ var Shape = (function () {
 })();
 
 var ShapeLibrary = (function () {
+    var fillColors = function (number, r, g, b) {
+        var result = [];
+        for (var i = 0; i < number; i += 1) {
+            result = result.concat(
+                r,
+                g,
+                b
+            );
+        }
+        return result;
+    };
     var sphereColors = {r: 0.0, g: 0.0, b: 0.0};
     var vertices = [];
     var sphereMode;
     var sphere = function (n, colors, mode) {
-        sphereColors = colors;
-        sphereMode = mode;
+        
+        this.mode = mode;
         vertices = [];
-        for (var i = 0; i < n; i += 1) {
-            for (var j = 0; j < n - 1; j += 1) {
+        for (var i = 0.0; i < n; i += 1) {
+            for (var j = 0.0; j < n - 1; j += 1) {
                 vertices = vertices.concat(
                     Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
                     Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n), 
@@ -70,7 +81,25 @@ var ShapeLibrary = (function () {
                 );
             }
         }
+        this.vertices = vertices;
+        if (colors.r || colors.g || colors.b) {
+            colors = colors || {r: 0.0, g: 0.0, b: 0.0};
+            this.colors = [].concat(fillColors(vertices.length / 3, colors.r, colors.g, colors.b));
+        } else {
+            colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
+            this.colors = colors;
+            if (colors.length !== vertices.length) {
+                this.colors = this.colors.concat(fillColors(vertices.length / 3 - colors.length / 3, this.colors[0], this.colors[1], this.colors[2]));
+            }
+        }
     };
-    return new Shape(sphereColors, vertices, sphereMode);
+    
+    function surrogateConstructor() {};
+    surrogateConstructor.prototype = Shape.prototype;
+    var prototypeObject = new surrogateConstructor();
+    prototypeObject.constructor = sphere.constructor;
+    sphere.prototype = prototypeObject;
+    return sphere;
+    // return new Shape(sphereColors, vertices, sphereMode);
 
 })();
