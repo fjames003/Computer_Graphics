@@ -31,40 +31,58 @@ var Shape = (function () {
 
     shape.prototype.initVertexBuffer = function (gl) {
         this.buffer = initBuffer(gl, this.vertices);
+        return this;
     };
 
     shape.prototype.initColorBuffer = function (gl) {
         this.colorBuffer = initBuffer(gl, this.colors);
+        return this;
     };
 
     shape.prototype.createChild = function() {
         var newChild = new Shape(this.colors, this.vertices, this.mode);
         newChild.parent = this;
         this.children.push(newChild);
+        return newChild;
     };
 
     shape.prototype.scale = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
+        this.children = this.children.map(function (child) {
+            child.scale(x, y, z);
+        });
         return this;
     };
 
     shape.prototype.rotate = function(theta, x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+        this.children = this.children.map(function (child) {
+            child.rotation(theta, x, y, z);
+        });
         return this;
     };
 
     shape.prototype.translate = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
+        this.children = this.children.map(function (child) {
+            child.translate(x, y, z);
+        });
         return this;
     };
 
     shape.prototype.saveState = function() {
         this.savedMatrix = this.matrix.copy();
+        this.children = this.children.map(function (child) {
+            child.saveState();
+        });
     };
 
     shape.prototype.restoreState = function() {
         this.matrix = this.savedMatrix.copy();
         this.savedMatrix = null;
+        this.children = this.children.map(function (child) {
+            child.restoreState();
+        });
     }
 
     shape.prototype.draw = function (gl, vertexColor, vertexPosition) {
