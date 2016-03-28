@@ -192,5 +192,9 @@ var Matrix = (function () {
         }
     };
 
+    matrix.prototype.copy = function() {
+        return new Matrix(this.elements);
+    };
+
     return matrix;
 })();
