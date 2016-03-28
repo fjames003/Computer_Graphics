@@ -58,7 +58,7 @@
                 [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
         new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
-        new ShapeLibrary.sphere(100, { r: 1.0, g: 0.5, b: 0.0 }, gl.POINTS)
+        new ShapeLibrary.sphere(50, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES)
 
     ];
 
@@ -106,19 +106,6 @@
     gl.enableVertexAttribArray(vertexColor);
     var rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
 
-    /*
-     * Displays an individual object.
-     */
-    var drawObject = function (object) {
-        // Set the varying colors.
-        gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
-        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
-
-        // Set the varying vertex coordinates.
-        gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
-        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(object.mode, 0, object.vertices.length / 3);
-    };
 
     /*
      * Displays the scene.
@@ -126,13 +113,20 @@
     var drawScene = function () {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Matrix().rotation(currentRotation, 0.5, 1, -0.5).toWebGL());
-
+        
         // Display the objects.
         for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            drawObject(objectsToDraw[i]);
+
+            objectsToDraw[i].rotate(rotationStep, 0.5, 1.0, -0.5);
+
+            objectsToDraw[i].saveState();
+            objectsToDraw[i].scale(0.9, 0.9, 0.9);
+
+            gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
+
+            objectsToDraw[i].draw(gl, vertexColor, vertexPosition);
+
+            objectsToDraw[i].restoreState();
         }
 
         // All done.
@@ -143,7 +137,7 @@
      * Animates the scene.
      */
     var animationActive = false;
-    var currentRotation = 0.0;
+    var rotationStep = 2;
     var previousTimestamp = null;
 
     var advanceScene = function (timestamp) {
@@ -168,11 +162,7 @@
         }
 
         // All clear.
-        currentRotation += 0.033 * progress;
         drawScene();
-        if (currentRotation >= 360.0) {
-            currentRotation -= 360.0;
-        }
 
         // Request the next frame.
         previousTimestamp = timestamp;

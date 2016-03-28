@@ -5,6 +5,7 @@ var Shape = (function () {
         this.children = [];
         this.vertices = vertices;
         this.mode = mode;
+        this.matrix = new Matrix();
         if (colors.r || colors.g || colors.b) {
             colors = colors || {r: 0.0, g: 0.0, b: 0.0};
             this.colors = [].concat(fillColors(vertices.length / 3, colors.r, colors.g, colors.b));
@@ -40,6 +41,37 @@ var Shape = (function () {
         var newChild = new Shape(this.colors, this.vertices, this.mode);
         newChild.parent = this;
         this.children.push(newChild);
+    };
+
+    shape.prototype.scale = function(x, y, z) {
+        this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
+    };
+
+    shape.prototype.rotate = function(theta, x, y, z) {
+        this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+    };
+
+    shape.prototype.translate = function(x, y, z) {
+        this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
+    };
+
+    shape.prototype.saveState = function() {
+        this.savedMatrix = this.matrix.copy();
+    };
+
+    shape.prototype.restoreState = function() {
+        this.matrix = this.savedMatrix.copy();
+        this.savedMatrix = null;
+    }
+
+    shape.prototype.draw = function (gl, vertexColor, vertexPosition) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
+
+        // Set the varying vertex coordinates.
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+        gl.drawArrays(this.mode, 0, this.vertices.length / 3);
     };
 
     var initBuffer = function (gl, sequence) {
