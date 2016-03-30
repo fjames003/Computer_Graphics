@@ -12,4 +12,29 @@ $(function () {
                                                        ), gl.TRIANGLES);
         equal(tri.colors.length, tri.vertices.length, "Make sure there is a color for every vertices");
     });
+
+    test("Child creation and Data Access", function () {
+        var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
+                                                        [ 0.0, 0.0, 0.0 ],
+                                                        [ 0.5, 0.0, -0.75 ],
+                                                        [ 0.0, 0.5, 0.0 ]
+                                                       ), gl.TRIANGLES);
+        var triChild = tri.createChild();
+        equal(tri.children[0], triChild, "Make sure the child shape was added to children");
+
+        // Translate child...
+
+        triChild.translate(0.5, 0.5, 0.5);
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix, "Make sure that child updates matrix on own");
+
+        var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
+                                                        [ 0.0, 0.0, 0.0 ],
+                                                        [ 0.5, 0.0, -0.75 ],
+                                                        [ 0.0, 0.5, 0.0 ]
+                                                       ), gl.TRIANGLES);
+        var triChild = tri.createChild();
+
+        tri.translate(0.5, 0.5, 0.5);
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix, "Make sure that parent updates childs matrix");
+    });
 });

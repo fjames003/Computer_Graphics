@@ -42,13 +42,16 @@ var Shape = (function () {
     shape.prototype.createChild = function() {
         var newChild = new Shape(this.colors, this.vertices, this.mode);
         newChild.parent = this;
+        newChild.matrix = this.matrix;
+        console.log(newChild)
         this.children.push(newChild);
+        console.log(this.children)
         return newChild;
     };
 
     shape.prototype.scale = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
-        this.children = this.children.map(function (child) {
+        this.children.map(function (child) {
             child.scale(x, y, z);
         });
         return this;
@@ -56,15 +59,15 @@ var Shape = (function () {
 
     shape.prototype.rotate = function(theta, x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
-        this.children = this.children.map(function (child) {
-            child.rotation(theta, x, y, z);
+        this.children.map(function (child) {
+            child.rotate(theta, x, y, z);
         });
         return this;
     };
 
     shape.prototype.translate = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
-        this.children = this.children.map(function (child) {
+        this.children.map(function (child) {
             child.translate(x, y, z);
         });
         return this;
@@ -72,7 +75,8 @@ var Shape = (function () {
 
     shape.prototype.saveState = function() {
         this.savedMatrix = this.matrix.copy();
-        this.children = this.children.map(function (child) {
+        //console.log(this, this.children)
+        this.children.map(function (child) {
             child.saveState();
         });
     };
@@ -80,7 +84,7 @@ var Shape = (function () {
     shape.prototype.restoreState = function() {
         this.matrix = this.savedMatrix.copy();
         this.savedMatrix = null;
-        this.children = this.children.map(function (child) {
+        this.children.map(function (child) {
             child.restoreState();
         });
     }
@@ -115,9 +119,10 @@ var ShapeLibrary = {
                 for (var i = 0.0; i < n; i += 1) {
                     for (var j = 0.0; j < n - 1; j += 1) {
                         vertices = vertices.concat(
+                            Math.cos(Math.PI * i/n),
                             Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
-                            Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n), 
-                            Math.cos(Math.PI * i/n)
+                            Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n) 
+                            
                         );
                     }
                 }
