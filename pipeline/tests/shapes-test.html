@@ -1,16 +1,18 @@
 <!doctype html>
-<!-- This web page is a QUnit test harness for our Matrix object. -->
+<!-- This web page is a QUnit test harness for our Shape object. -->
 <html>
   <head>
-    <title>Matrix Test</title>
+    <title>Shape Test</title>
     <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" />
   </head>
   <body>
-    <h1>Matrix Test Suite</h1>
+    <h1>Shape Test Suite</h1>
 
     <!-- IDs are predefined by QUnit. -->
     <h2 id="qunit-banner"></h2>
     <div id="qunit-testrunner-toolbar"></div>
+
+
 
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
@@ -18,12 +20,18 @@
     <!-- jQuery and QUnit. -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="http://code.jquery.com/qunit/qunit-1.22.0.js"></script>
-    <script src="qunit-close-enough.js"></script>
+    <script src="../../matrix/tests/qunit-close-enough.js"></script>
 
+     <canvas id="hello-webgl" width="512" height="512">
+      Sorry, your web browser does not appear to support
+      the <code>canvas</code> element, either.
+    </canvas>
     <!-- The module being tested. -->
-    <script src="matrix.js"></script>
+    <script src="../glsl-utilities.js"></script>
+    <script src="../../matrix/matrix.js"></script>
+    <script src="../shapes.js"></script>
 
     <!-- The tests themselves. -->
-    <script src="matrix-test.js"></script>
+    <script src="shapes-test.js"></script>
   </body>
 </html>
