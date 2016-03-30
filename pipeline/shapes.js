@@ -43,9 +43,7 @@ var Shape = (function () {
         var newChild = new Shape(this.colors, this.vertices, this.mode);
         newChild.parent = this;
         newChild.matrix = this.matrix;
-        console.log(newChild)
         this.children.push(newChild);
-        console.log(this.children)
         return newChild;
     };
 
@@ -117,7 +115,7 @@ var ShapeLibrary = {
             var sphere = function (n, colors, mode) {
                 var vertices = [];
                 for (var i = 0.0; i < n; i += 1) {
-                    for (var j = 0.0; j < n - 1; j += 1) {
+                    for (var j = 0.0; j < n; j += 1) {
                         vertices = vertices.concat(
                             Math.cos(Math.PI * i/n),
                             Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
@@ -126,6 +124,7 @@ var ShapeLibrary = {
                         );
                     }
                 }
+
                 Shape.call(this, colors, vertices, mode);
             };
 
