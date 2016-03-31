@@ -65,16 +65,7 @@ var Matrix = (function () {
         var thisColMax = this.colDimensions();
         var sColMax = s.colDimensions();
         var identityCounter = 0
-        // for (var i = 0; i < thisRowMax; i += 1) {
-        //     result.elements[i][identityCounter] = 0;
-        //     identityCounter += 1;
-        //     for (var j = 0; j < sColMax; j +=1) {
-        //         for (var k = 0; k < thisColMax; k += 1) {
-        //             result.elements[i][j] += this.elements[i][k] * s.elements[k][j];
-        //         }
-        //     }
-        // }
-        // Not sure if this code will work for arbitrary matrices, will leave code above here for now...
+
         this.forEach(function(value, index, matrix) {
             result.elements[index[0]][index[1]] = 0;
             for (var i = 0; i < matrix.colDimensions(); i += 1) {
@@ -87,9 +78,11 @@ var Matrix = (function () {
     matrix.prototype.translate = function (dx, dy, dz) {
         var result = new Matrix();
 
-        result.elements[0][3] = dx;
-        result.elements[1][3] = dy;
-        result.elements[2][3] = dz;
+        var checkedValues = checkXYZ(dx, dy, dz, 0.0);
+
+        result.elements[0][3] = checkedValues.x;
+        result.elements[1][3] = checkedValues.y;
+        result.elements[2][3] = checkedValues.z;
 
         return result;
     };
@@ -97,34 +90,44 @@ var Matrix = (function () {
     matrix.prototype.scale = function (sx, sy, sz) {
         var result = new Matrix();
 
-        result.elements[0][0] = sx;
-        result.elements[1][1] = sy;
-        result.elements[2][2] = sz;
+        var checkedValues = checkXYZ(sx, sy, sz, 1.0);
+
+        result.elements[0][0] = checkedValues.x;
+        result.elements[1][1] = checkedValues.y;
+        result.elements[2][2] = checkedValues.z;
 
         return result;
     };
 
-    matrix.prototype.rotation = function (theta, x, y, z) {
+    matrix.prototype.rotation = function (thetaVal, rx, ry, rz) {
         var result = new Matrix();
 
-        var axisLength = Math.sqrt(x * x + y * y + z * z);
-        var sine   = Math.sin(theta * Math.PI / 180.0);
-        var cosine = Math.cos(theta * Math.PI / 180.0);
+        var checkedValues = checkXYZ(rx, ry, rz, 0.0);
+        checkedValues.theta = thetaVal || 0.0;
+
+        rx = checkedValues.x;
+        ry = checkedValues.y;
+        rz = checkedValues.z;
+        thetaVal = checkedValues.theta;
+
+        var axisLength = Math.sqrt(rx * rx + ry * ry + rz * rz);
+        var sine   = Math.sin(thetaVal * Math.PI / 180.0);
+        var cosine = Math.cos(thetaVal * Math.PI / 180.0);
         var oneMinusCosine = 1.0 - cosine;
 
-        x /= axisLength;
-        y /= axisLength;
-        z /= axisLength;
+        rx /= axisLength;
+        ry /= axisLength;
+        rz /= axisLength;
 
-        var x2 = x * x;
-        var y2 = y * y;
-        var z2 = z * z;
-        var xy = x * y;
-        var yz = y * z;
-        var xz = x * z;
-        var xs = x * sine;
-        var ys = y * sine;
-        var zs = z * sine;
+        var x2 = rx * rx;
+        var y2 = ry * ry;
+        var z2 = rz * rz;
+        var xy = rx * ry;
+        var yz = ry * rz;
+        var xz = rx * rz;
+        var xs = rx * sine;
+        var ys = ry * sine;
+        var zs = rz * sine;
 
         result.elements[0][0] = x2 * oneMinusCosine + cosine;
         result.elements[0][1] = xy * oneMinusCosine - zs;
@@ -196,5 +199,33 @@ var Matrix = (function () {
         return new Matrix(this.elements);
     };
 
+    var checkXYZ = function(xVal, yVal, zVal, defaultValue) {
+        var result = {};
+
+        result.x = xVal || defaultValue;
+        result.y = yVal || defaultValue;
+        result.z = zVal || defaultValue;
+
+        return result;
+    };
+
     return matrix;
 })();
+
+// Added constant like functions so that a translation matrix doesn't need to be done with 'new Matrix().'
+// Instead one can just invoke 'Matrix.translate'
+Matrix.translate = function (x, y, z) {
+    return new Matrix().translate(x, y, z);
+};
+Matrix.scale = function (x, y, z) {
+    return new Matrix().scale(x, y, z);
+};
+Matrix.rotation = function (theta, x, y, z) {
+    return new Matrix().rotation(theta, x, y, z);
+};
+Matrix.orthographic = function (left, right, bottom, top, near, far) {
+    return new Matrix().orthographic(left, right, bottom, top, near, far);
+};
+Matrix.perspective = function (left, right, bottom, top, near, far) {
+    return new Matrix().perspective(left, right, bottom, top, near, far);
+};

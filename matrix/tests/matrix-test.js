@@ -77,7 +77,12 @@ $(function () {
         deepEqual(mat1.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
                                                           [0, 1, 0, -3],
                                                           [0, 0, 1, 1.2],
-                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix");
+                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix from existing matrix");
+
+        deepEqual(Matrix.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
+                                                          [0, 1, 0, -3],
+                                                          [0, 0, 1, 1.2],
+                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix from class");
     });
 
     test("3D Scale Matrix", function () {
@@ -85,7 +90,14 @@ $(function () {
         deepEqual(mat1.scale(5.2, 2, -4), new Matrix([[5.2, 0, 0, 0],
                                                       [0, 2, 0, 0],
                                                       [0, 0, -4, 0],
-                                                      [0, 0, 0, 1 ]]), "Creating a 3D scale matrix");
+                                                      [0, 0, 0, 1 ]]), "Creating a 3D scale matrix from existing matrix");
+
+        deepEqual(Matrix.scale(-4, 5.2, 2), new Matrix([[-4, 0, 0, 0],
+                                                      [0, 5.2, 0, 0],
+                                                      [0, 0, 2, 0],
+                                                      [0, 0, 0, 1 ]]), "Creating a 3D scale matrix from class");
+
+
     });
 
     test("Orthographic projection matrices", function () {
@@ -93,7 +105,16 @@ $(function () {
         deepEqual(mat1.orthographic(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 0, -2],
                                                                          [0, 4, 0, -9],
                                                                          [0, 0, 2, 1],
-                                                                         [0, 0, 0, 1]]), "Creating a 3D orthographic projection matrix");
+                                                                         [0, 0, 0, 1]]), "Creating a 3D orthographic projection matrix from existing matrix");
+
+        var mat1 = Matrix.orthographic(-0.4, 0.6, -0.75, 0.9, -0.5, 1);
+        var tester = new Matrix([[2 / 1.0, 0, 0, -0.2 / 1.0],
+                                 [0, 2 / 1.65, 0, -0.15 / 1.65],
+                                 [0, 0, -2 / 1.5, -0.5 / 1.5],
+                                 [0, 0, 0, 1]]);
+        mat1.forEach(function(value, index, matrix) {
+            QUnit.close(value, tester.elements[index[0]][index[1]], 0.000001, "Creating a 3D orthographic projection matrix from class");
+        });
     });
 
     test("Perspective projection matrices", function () {
@@ -101,7 +122,12 @@ $(function () {
         deepEqual(mat1.perspective(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 2, 0],
                                                                          [0, 4, 9, 0],
                                                                          [0, 0, 1, 0],
-                                                                         [0, 0, -1, 0]]), "Creating a 3D orthographic projection matrix");
+                                                                         [0, 0, -1, 0]]), "Creating a 3D perspective matrix from existing matrix");
+
+        deepEqual(Matrix.perspective(2, 2.5, 0.5, 1.5, 1, 0), new Matrix([[4, 0, 9, 0],
+                                                                          [0, 2, 2, 0],
+                                                                          [0, 0, 1, 0],
+                                                                          [0, 0, -1, 0]]), "Creating a 3D perspective matrix from class");
     });
 
     // All tested to within 1 * 10 ^ -6 (one millionth)
