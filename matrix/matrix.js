@@ -76,39 +76,30 @@ var Matrix = (function () {
     };
 
     matrix.prototype.translate = function (dx, dy, dz) {
+        checkArgs(3, arguments.length);
         var result = new Matrix();
 
-        var checkedValues = checkXYZ(dx, dy, dz, 0.0);
-
-        result.elements[0][3] = checkedValues.x;
-        result.elements[1][3] = checkedValues.y;
-        result.elements[2][3] = checkedValues.z;
+        result.elements[0][3] = dx;
+        result.elements[1][3] = dy;
+        result.elements[2][3] = dz;
 
         return result;
     };
 
     matrix.prototype.scale = function (sx, sy, sz) {
+        checkArgs(3, arguments.length);
         var result = new Matrix();
 
-        var checkedValues = checkXYZ(sx, sy, sz, 1.0);
-
-        result.elements[0][0] = checkedValues.x;
-        result.elements[1][1] = checkedValues.y;
-        result.elements[2][2] = checkedValues.z;
+        result.elements[0][0] = sx;
+        result.elements[1][1] = sy;
+        result.elements[2][2] = sz;
 
         return result;
     };
 
     matrix.prototype.rotation = function (thetaVal, rx, ry, rz) {
+        checkArgs(4, arguments.length);
         var result = new Matrix();
-
-        var checkedValues = checkXYZ(rx, ry, rz, 0.0);
-        checkedValues.theta = thetaVal || 0.0;
-
-        rx = checkedValues.x;
-        ry = checkedValues.y;
-        rz = checkedValues.z;
-        thetaVal = checkedValues.theta;
 
         var axisLength = Math.sqrt(rx * rx + ry * ry + rz * rz);
         var sine   = Math.sin(thetaVal * Math.PI / 180.0);
@@ -145,6 +136,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.orthographic = function (left, right, bottom, top, near, far) {
+        checkArgs(6, arguments.length);
         var result = new Matrix();
 
         result.elements[0][0] = 2.0 / (right - left);
@@ -158,6 +150,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.perspective = function (left, right, bottom, top, near, far) {
+        checkArgs(6, arguments.length);
         var result = new Matrix();
 
         result.elements[0][0] = (2.0 * near) / (right - left);
@@ -199,14 +192,10 @@ var Matrix = (function () {
         return new Matrix(this.elements);
     };
 
-    var checkXYZ = function(xVal, yVal, zVal, defaultValue) {
-        var result = {};
-
-        result.x = xVal || defaultValue;
-        result.y = yVal || defaultValue;
-        result.z = zVal || defaultValue;
-
-        return result;
+    var checkArgs = function(expectedNum, givenNum) {
+        if (expectedNum !== givenNum) {
+            throw "Not enough arguments provided. \n\tExpected: " + expectedNum + "\n\tGiven: " + givenNum;
+        }
     };
 
     return matrix;
