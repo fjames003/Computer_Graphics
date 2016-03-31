@@ -76,7 +76,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.translate = function (dx, dy, dz) {
-        checkArgs(3, arguments.length);
+        checkArgs(3, arguments);
         var result = new Matrix();
 
         result.elements[0][3] = dx;
@@ -87,7 +87,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.scale = function (sx, sy, sz) {
-        checkArgs(3, arguments.length);
+        checkArgs(3, arguments);
         var result = new Matrix();
 
         result.elements[0][0] = sx;
@@ -98,7 +98,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.rotation = function (thetaVal, rx, ry, rz) {
-        checkArgs(4, arguments.length);
+        checkArgs(4, arguments);
         var result = new Matrix();
 
         var axisLength = Math.sqrt(rx * rx + ry * ry + rz * rz);
@@ -136,7 +136,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.orthographic = function (left, right, bottom, top, near, far) {
-        checkArgs(6, arguments.length);
+        checkArgs(6, arguments);
         var result = new Matrix();
 
         result.elements[0][0] = 2.0 / (right - left);
@@ -150,7 +150,7 @@ var Matrix = (function () {
     };
 
     matrix.prototype.perspective = function (left, right, bottom, top, near, far) {
-        checkArgs(6, arguments.length);
+        checkArgs(6, arguments);
         var result = new Matrix();
 
         result.elements[0][0] = (2.0 * near) / (right - left);
@@ -192,9 +192,15 @@ var Matrix = (function () {
         return new Matrix(this.elements);
     };
 
-    var checkArgs = function(expectedNum, givenNum) {
-        if (expectedNum !== givenNum) {
-            throw "Not enough arguments provided. \n\tExpected: " + expectedNum + "\n\tGiven: " + givenNum;
+    var checkArgs = function(expectedNum, args) {
+        var givenArgs = [].slice.call(args);
+        if (givenArgs.length > expectedNum) {
+            throw "Too many arguments provided to matrix function"
+        }
+        for (var i = 0; i < expectedNum; i += 1) {
+            if (i >= givenArgs.length || (givenArgs[i] === 0) ? false : !givenArgs[i]) {
+                throw "Not enough arguments provided to matrix function"
+            }
         }
     };
 

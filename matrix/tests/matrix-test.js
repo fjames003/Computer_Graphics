@@ -83,6 +83,19 @@ $(function () {
                                                           [0, 1, 0, -3],
                                                           [0, 0, 1, 1.2],
                                                           [0, 0, 0, 1]]), "Creating a 3D translation matrix from class");
+
+        throws(
+            function () {
+                var mat = new Matrix(1, -1);
+            },
+            "Check translate function missing one arg"
+        );
+        throws(
+            function () {
+                Matrix.translate();
+            },
+            "Check translate function with no args"
+        );
     });
 
     test("3D Scale Matrix", function () {
@@ -97,7 +110,18 @@ $(function () {
                                                       [0, 0, 2, 0],
                                                       [0, 0, 0, 1 ]]), "Creating a 3D scale matrix from class");
 
-
+        throws(
+            function () {
+                Matrix.scale(-0.5, 0.5);
+            },
+            "Check scale function missing one arg"
+        );
+        throws(
+            function () {
+                Matrix.scale();
+            },
+            "Check scale function with no args"
+        );
     });
 
     test("Orthographic projection matrices", function () {
@@ -115,6 +139,19 @@ $(function () {
         mat1.forEach(function(value, index, matrix) {
             QUnit.close(value, tester.elements[index[0]][index[1]], 0.000001, "Creating a 3D orthographic projection matrix from class");
         });
+
+        throws(
+            function () {
+                Matrix.orthographic(2, 2.5, 0.5, 1.5, 1);
+            },
+            "Check orthographic function missing one arg"
+        );
+        throws(
+            function () {
+                Matrix.orthographic();
+            },
+            "Check orthographic function with no args"
+        );
     });
 
     test("Perspective projection matrices", function () {
@@ -128,6 +165,18 @@ $(function () {
                                                                           [0, 2, 2, 0],
                                                                           [0, 0, 1, 0],
                                                                           [0, 0, -1, 0]]), "Creating a 3D perspective matrix from class");
+        throws(
+            function () {
+                Matrix.perspective(-0.4, 0.6, -0.75, 0.9, -0.5);
+            },
+            "Check perspective function missing one arg"
+        );
+        throws(
+            function () {
+                Matrix.perspective();
+            },
+            "Check perspective function with no args"
+        );
     });
 
     // All tested to within 1 * 10 ^ -6 (one millionth)
@@ -173,8 +222,26 @@ $(function () {
                                  [(x * z) * oneMinusC - (y * sine), (y * z) * oneMinusC + (x * sine), (z * z) * oneMinusC + cosine, 0],
                                  [0, 0, 0, 1]]); 
         tester.forEach(function(value, index, marix) {
-            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis, index: " + index);
+            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis from existing matrix, index: " + index);
         });
+
+        tester = Matrix.rotation(30, 0.75, -0.5, 0.3);
+        tester.forEach(function(value, index, marix) {
+            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis from class, index: " + index);
+        });
+
+        throws(
+            function () {
+                Matrix.rotation(-0.4, 0.6, -0.75);
+            },
+            "Check rotation function missing one arg"
+        );
+        throws(
+            function () {
+                Matrix.rotation();
+            },
+            "Check rotation function with no args"
+        );
     });
 
     test("Conversion to WebGL and GLSL format", function () {
