@@ -115,18 +115,18 @@
      * Displays the scene.
      */
 
-
+     var random = {
+        x: Math.random() * 2 - 1,
+        y: Math.random() * 2 - 1,
+        z: Math.random() * 2 - 1
+     };
     var drawScene = function () {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         
         // Display the objects.
         for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-                 var random = {
-                    x: Math.random() * 2 - 1,
-                    y: Math.random() * 2 - 1,
-                    z: Math.random() * 2 - 1
-                 };
+
             objectsToDraw[i].rotate(rotationStep, random.x, random.y, random.z);
 
             objectsToDraw[i].saveState();
