@@ -108,7 +108,7 @@
     gl.enableVertexAttribArray(vertexPosition);
     var vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
-    var rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
+    var transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
 
 
     /*
@@ -126,7 +126,7 @@
             objectsToDraw[i].saveState();
             objectsToDraw[i].scale(0.9, 0.9, 0.9);
 
-            gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
+            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
 
             objectsToDraw[i].draw(gl, vertexColor, vertexPosition);
 
@@ -185,4 +185,4 @@
         }
     });
 
-}(document.getElementById("hello-webgl")));
+}(document.getElementById("canvas")));
