@@ -34,7 +34,8 @@ $(function () {
         var triChild = tri.createChild();
 
         triChild.translate(0.5, 0.5, 0.5);
-        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix, "Make sure that child updates matrix on own");
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix,
+                 "Make sure that child updates matrix on own");
 
         var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
                                                         [ 0.0, 0.0, 0.0 ],
@@ -44,7 +45,8 @@ $(function () {
         var triChild = tri.createChild();
 
         tri.translate(0.5, 0.5, 0.5);
-        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix, "Make sure that parent updates childs matrix");
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix,
+                 "Make sure that parent updates childs matrix");
 
         var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
                                                         [ 0.0, 0.0, 0.0 ],
@@ -54,14 +56,13 @@ $(function () {
         var triChild = tri.createChild();
         var triGrand = triChild.createChild();
         tri.translate(0.5, 0.5, 0.5);
-        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix, "Make sure that parent updates children's children matrix");
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix,
+                 "Make sure that parent updates children's children matrix");
 
         triChild.removeChild();
 
         tri.translate(0,0,0);
-        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix, "Make sure that parent stops updating once removed");
-
-        // State...
-        
+        deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix,
+                 "Make sure that parent stops updating once removed");        
     });
 });

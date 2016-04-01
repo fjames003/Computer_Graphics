@@ -61,7 +61,8 @@ $(function () {
     test("Multiplication", function () {
         var mat1 = new Matrix();
         var mat2 = new Matrix();
-        deepEqual(mat1.multiply(mat2), new Matrix(), "Multiply two identity matrices should produce a new identity matrix");
+        deepEqual(mat1.multiply(mat2), new Matrix(),
+                 "Multiply two identity matrices should produce a new identity matrix");
 
         var mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
         var mat2 = new Matrix([[16,15,14,13], [12,11,10,9], [8,7,6,5], [4,3,2,1]]);
@@ -69,7 +70,8 @@ $(function () {
         deepEqual(mat1.multiply(mat2), new Matrix([[80 ,70 ,60 ,50 ],
                                                    [240,214,188,162],
                                                    [400,358,316,274],
-                                                   [560,502,444,386]]), "Multiply two 4 x 4 matrix with all positive integers");
+                                                   [560,502,444,386]]),
+                                                   "Multiply two 4 x 4 matrix with all positive integers");
     });
 
     test("3D Translation Matrix", function () {
@@ -77,12 +79,14 @@ $(function () {
         deepEqual(mat1.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
                                                           [0, 1, 0, -3],
                                                           [0, 0, 1, 1.2],
-                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix from existing matrix");
+                                                          [0, 0, 0, 1]]),
+                                                          "Creating a 3D translation matrix from existing matrix");
 
         deepEqual(Matrix.translate(5, -3, 1.2), new Matrix([[1, 0, 0, 5],
                                                           [0, 1, 0, -3],
                                                           [0, 0, 1, 1.2],
-                                                          [0, 0, 0, 1]]), "Creating a 3D translation matrix from class");
+                                                          [0, 0, 0, 1]]),
+                                                          "Creating a 3D translation matrix from class");
 
         throws(
             function () {
@@ -103,7 +107,8 @@ $(function () {
         deepEqual(mat1.scale(5.2, 2, -4), new Matrix([[5.2, 0, 0, 0],
                                                       [0, 2, 0, 0],
                                                       [0, 0, -4, 0],
-                                                      [0, 0, 0, 1 ]]), "Creating a 3D scale matrix from existing matrix");
+                                                      [0, 0, 0, 1 ]]),
+                                                      "Creating a 3D scale matrix from existing matrix");
 
         deepEqual(Matrix.scale(-4, 5.2, 2), new Matrix([[-4, 0, 0, 0],
                                                       [0, 5.2, 0, 0],
@@ -126,10 +131,13 @@ $(function () {
 
     test("Orthographic projection matrices", function () {
         var mat1 = new Matrix();
+
+        // Weird looking line because of length...
         deepEqual(mat1.orthographic(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 0, -2],
                                                                          [0, 4, 0, -9],
                                                                          [0, 0, 2, 1],
-                                                                         [0, 0, 0, 1]]), "Creating a 3D orthographic projection matrix from existing matrix");
+                                                                         [0, 0, 0, 1]]), 
+            "Creating a 3D orthographic projection matrix from existing matrix");
 
         var mat1 = Matrix.orthographic(-0.4, 0.6, -0.75, 0.9, -0.5, 1);
         var tester = new Matrix([[2 / 1.0, 0, 0, -0.2 / 1.0],
@@ -137,7 +145,8 @@ $(function () {
                                  [0, 0, -2 / 1.5, -0.5 / 1.5],
                                  [0, 0, 0, 1]]);
         mat1.forEach(function(value, index, matrix) {
-            QUnit.close(value, tester.elements[index[0]][index[1]], 0.000001, "Creating a 3D orthographic projection matrix from class");
+            QUnit.close(value, tester.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D orthographic projection matrix from class");
         });
 
         throws(
@@ -159,12 +168,14 @@ $(function () {
         deepEqual(mat1.perspective(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 2, 0],
                                                                          [0, 4, 9, 0],
                                                                          [0, 0, 1, 0],
-                                                                         [0, 0, -1, 0]]), "Creating a 3D perspective matrix from existing matrix");
+                                                                         [0, 0, -1, 0]]),
+            "Creating a 3D perspective matrix from existing matrix");
 
         deepEqual(Matrix.perspective(2, 2.5, 0.5, 1.5, 1, 0), new Matrix([[4, 0, 9, 0],
                                                                           [0, 2, 2, 0],
                                                                           [0, 0, 1, 0],
-                                                                          [0, 0, -1, 0]]), "Creating a 3D perspective matrix from class");
+                                                                          [0, 0, -1, 0]]),
+            "Creating a 3D perspective matrix from class");
         throws(
             function () {
                 Matrix.perspective(-0.4, 0.6, -0.75, 0.9, -0.5);
@@ -188,7 +199,8 @@ $(function () {
                                [-1, 0, 0, 0],
                                [0, 0, 0, 1]]);
         tester.forEach(function(value, index, matrix) {
-            QUnit.close(value, yRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the y axis");
+            QUnit.close(value, yRot.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D rotation matrix about the y axis");
         });
 
         tester = mat1.rotation(270, 1.0, 0.0, 0.0);
@@ -197,7 +209,8 @@ $(function () {
                                [0, -1, 0, 0],
                                [0, 0, 0, 1]]);
         tester.forEach(function(value, index, marix) {
-            QUnit.close(value, xRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the x axis");
+            QUnit.close(value, xRot.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D rotation matrix about the x axis");
         });
 
         tester = mat1.rotation(180, 0.0, 0.0, 1.0);
@@ -206,7 +219,8 @@ $(function () {
                                [0, 0, 1, 0],
                                [0, 0, 0, 1]]);
         tester.forEach(function(value, index, marix) {
-            QUnit.close(value, zRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about the z axis");
+            QUnit.close(value, zRot.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D rotation matrix about the z axis");
         });
 
         tester = mat1.rotation(30, 0.75, -0.5, 0.3);
@@ -217,17 +231,25 @@ $(function () {
         var x = 0.75 / axisLength;
         var y = -0.5 / axisLength;
         var z = 0.30 / axisLength;
-        var xyzRot = new Matrix([[(x * x) * oneMinusC + cosine, (x * y) * oneMinusC - (z * sine), (x * z) * oneMinusC + (y * sine), 0],
-                                 [(x * y) * oneMinusC + (z * sine), (y * y) * oneMinusC + cosine, (y * z) * oneMinusC - (x * sine), 0],
-                                 [(x * z) * oneMinusC - (y * sine), (y * z) * oneMinusC + (x * sine), (z * z) * oneMinusC + cosine, 0],
+        var xyzRot = new Matrix([[(x * x) * oneMinusC + cosine, 
+                                  (x * y) * oneMinusC - (z * sine),
+                                  (x * z) * oneMinusC + (y * sine), 0],
+                                 [(x * y) * oneMinusC + (z * sine),
+                                  (y * y) * oneMinusC + cosine,
+                                  (y * z) * oneMinusC - (x * sine), 0],
+                                 [(x * z) * oneMinusC - (y * sine),
+                                  (y * z) * oneMinusC + (x * sine),
+                                  (z * z) * oneMinusC + cosine, 0],
                                  [0, 0, 0, 1]]); 
         tester.forEach(function(value, index, marix) {
-            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis from existing matrix, index: " + index);
+            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D rotation matrix about an arbitray axis from existing matrix, index: " + index);
         });
 
         tester = Matrix.rotation(30, 0.75, -0.5, 0.3);
         tester.forEach(function(value, index, marix) {
-            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001, "Creating a 3D rotation matrix about an arbitray axis from class, index: " + index);
+            QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001,
+                        "Creating a 3D rotation matrix about an arbitray axis from class, index: " + index);
         });
 
         throws(
@@ -246,7 +268,8 @@ $(function () {
 
     test("Conversion to WebGL and GLSL format", function () {
         var mat1 = new Matrix([[1,2,3,4], [5,6,7,8], [9,10,11,12], [13,14,15,16]]);
-        deepEqual(mat1.toWebGL(), new Float32Array([1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16]), "Converting a matrix to WebGL format");
+        deepEqual(mat1.toWebGL(), new Float32Array([1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16]),
+                  "Converting a matrix to WebGL format");
     });
 
     test("ForEach function", function () {

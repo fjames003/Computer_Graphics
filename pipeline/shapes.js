@@ -13,7 +13,12 @@ var Shape = (function () {
             colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
             this.colors = colors;
             if (colors.length !== vertices.length) {
-                this.colors = this.colors.concat(fillColors(vertices.length / 3 - colors.length / 3, this.colors[0], this.colors[1], this.colors[2]));
+                this.colors = this.colors.concat(
+                                            fillColors(vertices.length / 3 - colors.length / 3,
+                                            this.colors[0],
+                                            this.colors[1],
+                                            this.colors[2])
+                                          );
             }
         }
     };
