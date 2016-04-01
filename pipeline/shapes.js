@@ -39,7 +39,7 @@ var Shape = (function () {
         return this;
     };
 
-    shape.prototype.createChild = function(child) {
+    shape.prototype.createChild = function (child) {
         if (arguments.length === 0) {
             var child = new Shape(this.colors, this.vertices, this.mode);
         }
@@ -49,6 +49,10 @@ var Shape = (function () {
         return child;
 
     };
+
+    shape.prototype.removeChild = function () {
+        this.children.pop();
+    }
 
     shape.prototype.scale = function(x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
@@ -139,7 +143,53 @@ var ShapeLibrary = {
     )(),
     square: (
         function () {
-            // BLah...
+
+            var square = function(colors, mode) {
+                var vertices = [];
+                // X / Z - y
+                vertices = vertices.concat(-1, -1, -1);
+                vertices = vertices.concat(-1, -1, 1);
+                vertices = vertices.concat(1, -1, -1);
+                vertices = vertices.concat(1, -1, 1);
+
+                // X / Z + y
+
+                vertices = vertices.concat(-1, 1, -1);
+                vertices = vertices.concat(-1, 1, 1);
+                vertices = vertices.concat(1, 1, -1);
+                vertices = vertices.concat(1, 1, 1);
+
+                // X / Y - z
+                vertices = vertices.concat(-1, -1, -1);
+                vertices = vertices.concat(-1, 1, -1);
+                vertices = vertices.concat(-1, 1, -1);
+                vertices = vertices.concat(1, 1, -1);
+
+                // X / Y + z
+                vertices = vertices.concat(-1, -1, 1);
+                vertices = vertices.concat(-1, 1, 1);
+                vertices = vertices.concat(-1, 1, 1);
+                vertices = vertices.concat(1, 1, 1);
+
+                // Y / Z + x
+                vertices = vertices.concat(1, -1, -1);
+                vertices = vertices.concat(1, 1, -1);
+                vertices = vertices.concat(1, -1, 1);
+                vertices = vertices.concat(1, 1, 1);
+
+                // Y / Z - x
+                vertices = vertices.concat(-1, -1, -1);
+                vertices = vertices.concat(-1, 1, -1);
+                vertices = vertices.concat(-1, -1, 1);
+                vertices = vertices.concat(-1, 1, 1);
+
+                Shape.call(this, colors, vertices, mode);
+            };
+
+            square.prototype = Object.create(Shape.prototype);
+            square.prototype.constructor = Shape;
+
+            return square;
         }
     )()
 };
