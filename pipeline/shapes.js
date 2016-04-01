@@ -39,12 +39,15 @@ var Shape = (function () {
         return this;
     };
 
-    shape.prototype.createChild = function() {
-        var newChild = new Shape(this.colors, this.vertices, this.mode);
-        newChild.parent = this;
-        newChild.matrix = this.matrix;
-        this.children.push(newChild);
-        return newChild;
+    shape.prototype.createChild = function(child) {
+        if (arguments.length === 0) {
+            var child = new Shape(this.colors, this.vertices, this.mode);
+        }
+        child.parent = this;
+        child.matrix = this.matrix;
+        this.children.push(child);
+        return child;
+
     };
 
     shape.prototype.scale = function(x, y, z) {
