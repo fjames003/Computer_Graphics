@@ -141,10 +141,10 @@ var ShapeLibrary = {
             return sphere;
         }
     )(),
-    square: (
+    cube: (
         function () {
 
-            var square = function(colors, mode) {
+            var cube = function (colors) {
                 var vertices = [];
                 // X / Z - y
                 vertices = vertices.concat(-1, -1, -1);
@@ -162,13 +162,13 @@ var ShapeLibrary = {
                 // X / Y - z
                 vertices = vertices.concat(-1, -1, -1);
                 vertices = vertices.concat(-1, 1, -1);
-                vertices = vertices.concat(-1, 1, -1);
+                vertices = vertices.concat(1, -1, -1);
                 vertices = vertices.concat(1, 1, -1);
 
                 // X / Y + z
                 vertices = vertices.concat(-1, -1, 1);
                 vertices = vertices.concat(-1, 1, 1);
-                vertices = vertices.concat(-1, 1, 1);
+                vertices = vertices.concat(1, -1, 1);
                 vertices = vertices.concat(1, 1, 1);
 
                 // Y / Z + x
@@ -183,13 +183,130 @@ var ShapeLibrary = {
                 vertices = vertices.concat(-1, -1, 1);
                 vertices = vertices.concat(-1, 1, 1);
 
-                Shape.call(this, colors, vertices, mode);
+                Shape.call(this, colors, vertices, 5);
             };
 
-            square.prototype = Object.create(Shape.prototype);
-            square.prototype.constructor = Shape;
+            cube.prototype = Object.create(Shape.prototype);
+            cube.prototype.constructor = Shape;
 
-            return square;
+            return cube;
         }
-    )()
+    )(),
+    pyramid: function () {
+        var pyramid = function (colors) {
+            var vertices = [];
+            // Face 1
+            vertices = vertices.concat(0, 1, 0);
+            vertices = vertices.concat(-1, -1, -1);
+            vertices = vertices.concat(-1, -1, 1);
+            // Face 2
+            vertices = vertices.concat(0, 1, 0);
+            vertices = vertices.concat(-1, -1, 1);
+            vertices = vertices.concat(1, -1, 1);
+            // Face 3
+            vertices = vertices.concat(0, 1, 0);
+            vertices = vertices.concat(1, -1, 1);
+            vertices = vertices.concat(1, -1, -1);  
+            // Face 4
+            vertices = vertices.concat(0, 1, 0);
+            vertices = vertices.concat(1, -1, -1);      
+            vertices = vertices.concat(-1, -1, -1);
+            // Bottom - 1st half
+            vertices = vertices.concat(-1, -1, -1);
+            vertices = vertices.concat(1, -1, -1);
+            vertices = vertices.concat(1, -1, 1);
+            // Bottom - 2nd half
+            vertices = vertices.concat(1, -1, 1);
+            vertices = vertices.concat(-1, -1, 1);
+            vertices = vertices.concat(-1, -1, -1);
+
+            Shape.call(this, colors, vertices, 4);
+
+        };
+
+        pyramid.prototype = Object.create(Shape.prototype);
+        pyramid.prototype.constructor = Shape;
+
+        return pyramid;
+    }(),
+    icosohedron: function () {
+        // Complements of Dondi...
+        var icosohedron = function (colors, fill) {
+            // These variables are actually "constants" for icosahedron coordinates.
+            var X = 0.525731112119133606;
+            var Z = 0.850650808352039932;
+
+            var result =  {
+                vertices: [
+                    [ -X, 0.0, Z ],
+                    [ X, 0.0, Z ],
+                    [ -X, 0.0, -Z ],
+                    [ X, 0.0, -Z ],
+                    [ 0.0, Z, X ],
+                    [ 0.0, Z, -X ],
+                    [ 0.0, -Z, X ],
+                    [ 0.0, -Z, -X ],
+                    [ Z, X, 0.0 ],
+                    [ -Z, X, 0.0 ],
+                    [ Z, -X, 0.0 ],
+                    [ -Z, -X, 0.0 ]
+                ],
+
+                indices: [
+                    [ 1, 4, 0 ],
+                    [ 4, 9, 0 ],
+                    [ 4, 5, 9 ],
+                    [ 8, 5, 4 ],
+                    [ 1, 8, 4 ],
+                    [ 1, 10, 8 ],
+                    [ 10, 3, 8 ],
+                    [ 8, 3, 5 ],
+                    [ 3, 2, 5 ],
+                    [ 3, 7, 2 ],
+                    [ 3, 10, 7 ],
+                    [ 10, 6, 7 ],
+                    [ 6, 11, 7 ],
+                    [ 6, 0, 11 ],
+                    [ 6, 1, 0 ],
+                    [ 10, 1, 6 ],
+                    [ 11, 0, 9 ],
+                    [ 2, 11, 9 ],
+                    [ 5, 2, 9 ],
+                    [ 11, 2, 7 ]
+                ]
+            };
+            var newResult = [];
+            if (fill) {
+
+                for (var i = 0, maxi = result.indices.length; i < maxi; i += 1) {
+                    for (var j = 0, maxj = result.indices[i].length; j < maxj; j += 1) {
+                        newResult = newResult.concat(
+                            result.vertices[
+                                result.indices[i][j]
+                            ]
+                        );
+                    }
+                }
+                Shape.call(this, colors, newResult, 4)
+            } else {
+                for (var i = 0, maxi = result.indices.length; i < maxi; i += 1) {
+                    for (var j = 0, maxj = result.indices[i].length; j < maxj; j += 1) {
+                        newResult = newResult.concat(
+                            result.vertices[
+                                result.indices[i][j]
+                            ],
+
+                            result.vertices[
+                                result.indices[i][(j + 1) % maxj]
+                            ]
+                        );
+                    }
+                }
+                Shape.call(this, colors, newResult, 1)
+            }
+            icosohedron.prototype = Object.create(Shape.prototype);
+            icosohedron.prototype.constructor = Shape;
+            return icosohedron; 
+        }
+    }()
 };
