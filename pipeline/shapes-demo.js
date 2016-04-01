@@ -30,7 +30,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    var aSphere =  new ShapeLibrary.sphere(4, { r: 1.0, g: 0.5, b: 0.0 }, gl.TRIANGLE_FAN).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
+    var aSphere =  new ShapeLibrary.sphere(40, { r: 1.0, g: 0.5, b: 0.0 }, gl.TRIANGLE_FAN).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
     var objectsToDraw = [
         new Shape([].concat(
@@ -61,7 +61,8 @@
 
         new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
         aSphere,
-        aSphereKid.translate(-0.75, 0.75, -0.75)
+        aSphereKid.scale(0.5, 0.5, 0.5).translate(1.0, 3, -0.75),
+        new ShapeLibrary.sphere(4, { r: 0.0, g: 0.5, b: 1.0 }, gl.TRIANGLE_FAN).scale(0.5, 0.5, 0.5).translate(-0.75, 0.75, 0.5)
 
     ];
 
