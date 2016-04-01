@@ -126,18 +126,47 @@ var ShapeLibrary = {
 
             var sphere = function (n, colors, mode) {
                 var vertices = [];
+                var indices = [];
                 for (var i = 0.0; i < n; i += 1) {
                     for (var j = 0.0; j < n; j += 1) {
-                        vertices = vertices.concat(
+                        vertices.push(
+                            [Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
                             Math.cos(Math.PI * i/n),
-                            Math.sin(Math.PI * i/n) * Math.cos(2 * Math.PI * j/n),
-                            Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n) 
-                            
+                            Math.sin(Math.PI * i/n) * Math.sin(2 * Math.PI * j/n)]  
                         );
                     }
                 }
 
-                Shape.call(this, colors, vertices, mode);
+                for (var i = 0.0; i < n - 1; i += 1) {
+                    for (var j = 0.0; j < n - 1; j += 1) {
+                        var minimum = (i * (n + 1)) + j;
+                        var maximum = minimum + n + 1;
+
+                        indices.push(
+                            [minimum,
+                            maximum,
+                            minimum + 1]
+                        );
+                        indices.push(
+                            [maximum,
+                            maximum + 1,
+                            minimum + 1]
+                        );
+                    }
+                }
+
+                var result = [];
+                for (var i = 0, maxi = indices.length; i < maxi; i += 1) {
+                    for (var j = 0, maxj = indices[i].length; j < maxj; j += 1) {
+                        result = result.concat(
+                            vertices[
+                                indices[i][j]
+                            ]
+                        );
+                    }
+                }
+                console.log(result)
+                Shape.call(this, colors, result, mode);
             };
 
             sphere.prototype = Object.create(Shape.prototype);
