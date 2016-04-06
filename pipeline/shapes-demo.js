@@ -2,7 +2,9 @@
  * For maximum modularity, we place everything within a single function that
  * takes the canvas that it will need.
  */
+
 (function (canvas) {
+    // import './shapes_es6.js';
     /*
      * This code does not really belong here: it should live
      * in a separate library of matrix and transformation
@@ -30,11 +32,16 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    var aSphere =  new ShapeLibrary.sphere(
-                                        40,
-                                        { r: 1.0, g: 0.5, b: 0.0 },
-                                        gl.TRIANGLE_FAN
-                                    ).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
+    // var aSphere =  new ShapeLibrary.sphere(
+    //                                     40,
+    //                                     { r: 1.0, g: 0.5, b: 0.0 },
+    //                                     gl.TRIANGLE_FAN
+    //                                 ).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
+    var aSphere =  new Sphere (
+                                    40,
+                                    { r: 1.0, g: 0.5, b: 0.0 },
+                                    gl.TRIANGLE_FAN
+                                ).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
     var objectsToDraw = [
         new Shape([].concat(
@@ -66,13 +73,13 @@
         new Shape({ r: 0.0, g: 0.5, b: 0.0 }, Shapes.toRawLineArray(Shapes.icosahedron()), gl.LINES),
         aSphere,
         aSphereKid.scale(0.5, 0.5, 0.5).translate(1.0, 3, -0.75),
-        new ShapeLibrary.sphere(
+        new Sphere(
                                 4,
                                 { r: 0.0, g: 0.5, b: 1.0 },
                                 gl.TRIANGLE_FAN
                             ).scale(0.5, 0.5, 0.5).translate(-0.75, 0.75, 0.5),
-        new ShapeLibrary.cube({ r: 0.5, g: 0.5, b: 0.5 }).translate(-0.5, -0.5, 0).scale(0.3, 0.3, 0.3),
-        new ShapeLibrary.pyramid({ r: 1, g: 0, b: 0 }).translate(0.8, 0.8, 0).scale(0.3, 0.3, 0.3)
+        new Cube({ r: 0.5, g: 0.5, b: 0.5 }).translate(-0.5, -0.5, 0).scale(0.3, 0.3, 0.3),
+        new Pyramid({ r: 1, g: 0, b: 0 }).translate(0.8, 0.8, 0).scale(0.3, 0.3, 0.3)
 
     ];
 
@@ -134,7 +141,7 @@
     var drawScene = function () {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        
+
         // Display the objects.
         for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
 
