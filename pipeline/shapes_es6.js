@@ -6,7 +6,7 @@ class Shape {
                       gl.STATIC_DRAW);
 
         return buffer;
-    };
+    }
 
     constructor (colors={r: 0, g: 0, b:0}, vertices, mode, indices=[]) {
         this.parent = null;
@@ -55,23 +55,23 @@ class Shape {
     initVertexBuffer (gl) {
         this.buffer = this._initBuffer(gl, this.vertices);
         return this;
-    };
+    }
 
     initColorBuffer (gl) {
         this.colorBuffer = this._initBuffer(gl, this.colors);
         return this;
-    };
+    }
 
     createChild (child) {
         if (arguments.length === 0) {
-            var child = new Shape(this.colors, this.vertices, this.mode);
+            child = new Shape(this.colors, this.vertices, this.mode);
         }
         child.parent = this;
         child.matrix = this.matrix;
         this.children.push(child);
         return child;
 
-    };
+    }
 
     removeChild () {
         this.children.pop();
@@ -81,30 +81,30 @@ class Shape {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
         this.children.map(child => child.scale(x, y, z));
         return this;
-    };
+    }
 
     rotate (theta, x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
         this.children.map(child => child.rotate(theta, x, y, z));
         return this;
-    };
+    }
 
     translate (x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
         this.children.map(child => child.translate(x, y, z));
         return this;
-    };
+    }
 
     saveState () {
         this.savedMatrix = this.matrix.copy();
         this.children.map(child => child.saveState());
-    };
+    }
 
     restoreState () {
         this.matrix = this.savedMatrix.copy();
         this.savedMatrix = null;
         this.children.map(child => child.restoreState());
-    };
+    }
 
     draw (gl, vertexColor, vertexPosition) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
@@ -114,7 +114,7 @@ class Shape {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(this.mode, 0, this.vertices.length / 3);
-    };
+    }
 
     toRawTriangleArray (indexedVertices) {
         var result = [];
@@ -128,7 +128,7 @@ class Shape {
             }
         }
         return result;
-    };
+    }
 
     toRawLineArray (indexedVertices) {
         var result = [];
@@ -153,11 +153,11 @@ class Sphere extends Shape {
     constructor (n, colors, mode) {
         var vertices = [];
         var indices = [];
-        for (var i = 0.0; i < n + 1; i += 1) {
+        for (let i = 0.0; i < n + 1; i += 1) {
             var theta = Math.PI * i/n;
             var sTheta = Math.sin(theta);
             var cTheta = Math.cos(theta);
-            for (var j = 0.0; j < n + 1; j += 1) {
+            for (let j = 0.0; j < n + 1; j += 1) {
                 vertices.push(
                     [
                         sTheta * Math.cos(2 * Math.PI * j/n),
@@ -168,8 +168,8 @@ class Sphere extends Shape {
             }
         }
 
-        for (var i = 0.0; i < n; i += 1) {
-            for (var j = 0.0; j < n; j += 1) {
+        for (let i = 0.0; i < n; i += 1) {
+            for (let j = 0.0; j < n; j += 1) {
                 var minimum = (i * (n + 1)) + j;
                 var maximum = minimum + n + 1;
 
