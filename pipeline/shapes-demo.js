@@ -31,14 +31,9 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    // var aSphere =  new ShapeLibrary.sphere(
-    //                                     40,
-    //                                     { r: 1.0, g: 0.5, b: 0.0 },
-    //                                     gl.TRIANGLE_FAN
-    //                                 ).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
-    var aSphere =  new Sphere (25, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES).scale(0.5, 0.5, 0.5).translate(-0.75, -0.75, 0.5);
+    var aSphere =  new Sphere (25, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES).translate(-0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
-    var cube = aSphere.createChild(new Cube({ r: 0.5, g: 0.5, b: 0.5 }, gl.LINES));
+    var cube = aSphere.createChild(new Cube({ r: 0.5, g: 0.5, b: 0.5 }, gl.TRIANGLES));
     var objectsToDraw = [
         new Shape([].concat(
                 [ 1.0, 0.0, 0.0 ],
@@ -62,9 +57,9 @@
 
         new Icosohedron({ r: 0.0, g: 0.5, b: 0.0 }, gl.LINES),
         aSphere,
-        aSphereKid.scale(0.5, 0.5, 0.5).translate(1.0, 3, -0.75),
-        cube.translate(1, 1, 0).scale(0.5, 0.5, 0.5),
-        new Pyramid({ r: 1, g: 0, b: 0 }, 4).translate(0.8, 0.8, 0).scale(0.3, 0.3, 0.3)
+        aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
+        cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
+        new Pyramid({ r: 1, g: 0, b: 0 }, 4).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
 
     ];
 
@@ -112,6 +107,7 @@
     var vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     var transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
+    var projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
 
 
     /*
@@ -149,6 +145,8 @@
     /*
      * Animates the scene.
      */
+    var aspect = canvas.width / canvas.height;
+    gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, new Matrix().orthographic(-2 * aspect, 2 * aspect, -2, 2, -10, 10).toWebGL());
     var animationActive = false;
     var rotationStep = 2;
     var previousTimestamp = null;

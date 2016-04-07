@@ -79,42 +79,31 @@ class Shape {
 
     scale (x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
-        this.children.map(function (child) {
-            child.scale(x, y, z);
-        });
+        this.children.map(child => child.scale(x, y, z));
         return this;
     };
 
     rotate (theta, x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
-        this.children.map(function (child) {
-            child.rotate(theta, x, y, z);
-        });
+        this.children.map(child => child.rotate(theta, x, y, z));
         return this;
     };
 
     translate (x, y, z) {
         this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
-        this.children.map(function (child) {
-            child.translate(x, y, z);
-        });
+        this.children.map(child => child.translate(x, y, z));
         return this;
     };
 
     saveState () {
         this.savedMatrix = this.matrix.copy();
-        //console.log(this, this.children)
-        this.children.map(function (child) {
-            child.saveState();
-        });
+        this.children.map(child => child.saveState());
     };
 
     restoreState () {
         this.matrix = this.savedMatrix.copy();
         this.savedMatrix = null;
-        this.children.map(function (child) {
-            child.restoreState();
-        });
+        this.children.map(child => child.restoreState());
     };
 
     draw (gl, vertexColor, vertexPosition) {
@@ -158,8 +147,6 @@ class Shape {
         }
         return result;
     }
-
-
 }
 
 class Sphere extends Shape {
@@ -216,7 +203,6 @@ class Cube extends Shape {
         vertices.push([1, -1, 1]);
 
         // X / Z + y
-
         vertices.push([-1, 1, -1]);
         vertices.push([-1, 1, 1]);
         vertices.push([1, 1, -1]);
