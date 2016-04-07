@@ -203,6 +203,7 @@ class Sphere extends Shape {
 }
 
 class Cube extends Shape {
+    // Need to make indices...
     constructor (colors, mode) {
 
         var vertices = [];
@@ -248,6 +249,7 @@ class Cube extends Shape {
 }
 
 class Pyramid extends Shape {
+    // Made of triangles... Thus no need for indices... Just provide the mode...
     constructor (colors, mode) {
         var vertices = [];
         // Face 1
@@ -274,6 +276,9 @@ class Pyramid extends Shape {
         vertices = vertices.concat(1, -1, 1);
         vertices = vertices.concat(-1, -1, 1);
         vertices = vertices.concat(-1, -1, -1);
+
+        // Connect back to beginning
+        vertices = vertices.concat(0, 1, 0);
 
         super(colors, vertices, mode);
     }

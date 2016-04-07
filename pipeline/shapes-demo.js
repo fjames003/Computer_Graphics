@@ -70,7 +70,7 @@
         aSphere,
         aSphereKid.scale(0.5, 0.5, 0.5).translate(1.0, 3, -0.75),
         cube.translate(1, 1, 0).scale(0.5, 0.5, 0.5),
-        new Pyramid({ r: 1, g: 0, b: 0 }, 5).translate(0.8, 0.8, 0).scale(0.3, 0.3, 0.3)
+        new Pyramid({ r: 1, g: 0, b: 0 }, 4).translate(0.8, 0.8, 0).scale(0.3, 0.3, 0.3)
 
     ];
 
