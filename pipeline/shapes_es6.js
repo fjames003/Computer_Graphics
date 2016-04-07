@@ -1,31 +1,31 @@
-(function () {
-    var initBuffer = function (gl, sequence) {
-        var buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
-                gl.STATIC_DRAW);
+    class Shape {
+        _initBuffer (gl, sequence) {
+            var buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
+                          gl.STATIC_DRAW);
 
-        return buffer;
-    };
-    var fillColors = function (number, r, g, b) {
-        var result = [];
-        for (var i = 0; i < number; i += 1) {
-            result = result.concat(
-                r,
-                g,
-                b
-            );
-        }
-        return result;
-    };
+            return buffer;
+        };
 
-    class Person {
         constructor (colors={r: 0, g: 0, b:0}, vertices, mode) {
             this.parent = null;
             this.children = [];
             this.vertices = vertices;
             this.mode = mode;
             this.matrix = new Matrix();
+
+            var fillColors = function (number, r, g, b) {
+                var result = [];
+                for (var i = 0; i < number; i += 1) {
+                    result = result.concat(
+                                           r,
+                                           g,
+                                           b
+                                           );
+                }
+                return result;
+            };
 
             if (colors.r || colors.g || colors.b) {
                 this.colors = [].concat(fillColors(vertices.length / 3, colors.r, colors.g, colors.b));
@@ -44,12 +44,12 @@
         }
 
         initVertexBuffer (gl) {
-            this.buffer = initBuffer(gl, this.vertices);
+            this.buffer = this._initBuffer(gl, this.vertices);
             return this;
         };
 
         initColorBuffer (gl) {
-            this.colorBuffer = initBuffer(gl, this.colors);
+            this.colorBuffer = this._initBuffer(gl, this.colors);
             return this;
         };
 
@@ -120,7 +120,7 @@
     }
 
     class Sphere extends Shape {
-        constructor (colors, mode) {
+        constructor (n, colors, mode) {
             var vertices = [];
             var indices = [];
             for (var i = 0.0; i < n; i += 1) {
@@ -265,6 +265,3 @@
             super (colors, vertices, mode);
         }
     }
-}
-
-})();
