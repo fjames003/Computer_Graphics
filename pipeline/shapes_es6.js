@@ -8,33 +8,41 @@ class Shape {
         return buffer;
     };
 
-    constructor (colors={r: 0, g: 0, b:0}, vertices, mode) {
+    constructor (colors={r: 0, g: 0, b:0}, vertices, mode, indices=[]) {
         this.parent = null;
         this.children = [];
-        this.vertices = vertices;
+        this.indices = indices;
         this.mode = mode;
         this.matrix = new Matrix();
 
         var fillColors = function (number, r, g, b) {
             var result = [];
             for (var i = 0; i < number; i += 1) {
-                result = result.concat(
-                                       r,
-                                       g,
-                                       b
-                                       );
+                result = result.concat(r, g, b);
             }
             return result;
         };
 
+        if (this.indices.length !== 0) {
+            if (this.mode === 5) {
+                this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
+            } else if (this.mode === 1) {
+                this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
+            } else {
+                this.vertices = vertices;
+            }
+        } else {
+            this.vertices = vertices;
+        }
+
         if (colors.r || colors.g || colors.b) {
-            this.colors = [].concat(fillColors(vertices.length / 3, colors.r, colors.g, colors.b));
+            this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
         } else {
             colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
             this.colors = colors;
-            if (colors.length !== vertices.length) {
+            if (colors.length !== this.vertices.length) {
                 this.colors = this.colors.concat(
-                                            fillColors(vertices.length / 3 - colors.length / 3,
+                                            fillColors(this.vertices.length / 3 - this.colors.length / 3,
                                             this.colors[0],
                                             this.colors[1],
                                             this.colors[2])
@@ -106,7 +114,7 @@ class Shape {
         this.children.map(function (child) {
             child.restoreState();
         });
-    }
+    };
 
     draw (gl, vertexColor, vertexPosition) {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
@@ -117,6 +125,40 @@ class Shape {
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(this.mode, 0, this.vertices.length / 3);
     };
+
+    toRawTriangleArray (indexedVertices) {
+        var result = [];
+        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                result = result.concat(
+                    indexedVertices.vertices[
+                        indexedVertices.indices[i][j]
+                    ]
+                );
+            }
+        }
+        return result;
+    };
+
+    toRawLineArray (indexedVertices) {
+        var result = [];
+        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                result = result.concat(
+                    indexedVertices.vertices[
+                        indexedVertices.indices[i][j]
+                    ],
+
+                    indexedVertices.vertices[
+                        indexedVertices.indices[i][(j + 1) % maxj]
+                    ]
+                );
+            }
+        }
+        return result;
+    }
+
+
 }
 
 class Sphere extends Shape {
@@ -143,8 +185,7 @@ class Sphere extends Shape {
 
 class Cube extends Shape {
     constructor (colors, mode) {
-    console.log("Making a cube...")
-        
+
         var vertices = [];
         // X / Z - y
         vertices = vertices.concat(-1, -1, -1);
@@ -264,6 +305,6 @@ class Icosohedron extends Shape {
             ]
         };
 
-        super (colors, vertices, mode);
+        super (colors, result.vertices, mode, result.indices);
     }
 }
