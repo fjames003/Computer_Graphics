@@ -24,7 +24,7 @@ class Shape {
         };
 
         if (this.indices.length !== 0) {
-            if (this.mode === 5) {
+            if (this.mode === 4) {
                 this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
             } else if (this.mode === 1) {
                 this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
