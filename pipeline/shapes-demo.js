@@ -65,7 +65,7 @@
                 [ -0.1, -0.1, -1.0 ],
                 [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
-        new Icosohedron({ r: 0.0, g: 0.5, b: 0.0 }, gl.TRIANGLES),
+        new Icosohedron({ r: 0.0, g: 0.5, b: 0.0 }, gl.LINES),
         aSphere,
         aSphereKid.scale(0.5, 0.5, 0.5).translate(1.0, 3, -0.75),
         new Sphere(4, { r: 0.0, g: 0.5, b: 1.0 }, gl.TRIANGLE_FAN).scale(0.5, 0.5, 0.5).translate(-0.75, 0.75, 0.5),
