@@ -12,7 +12,8 @@ class Shape {
         this.parent = null;
         this.children = [];
         this.indices = indices;
-        this.mode = mode;
+        // Check that point, line, or triangle mode was passed, else default to lines...
+        this.mode = (mode === 0 || mode === 4 || mode === 5) ? mode : 1;
         this.matrix = new Matrix();
 
         var fillColors = function (number, r, g, b) {
@@ -207,44 +208,61 @@ class Cube extends Shape {
     constructor (colors, mode) {
 
         var vertices = [];
+        var indices = [];
         // X / Z - y
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(-1, -1, 1);
-        vertices = vertices.concat(1, -1, -1);
-        vertices = vertices.concat(1, -1, 1);
+        vertices.push([-1, -1, -1]);
+        vertices.push([-1, -1, 1]);
+        vertices.push([1, -1, -1]);
+        vertices.push([1, -1, 1]);
 
         // X / Z + y
 
-        vertices = vertices.concat(-1, 1, -1);
-        vertices = vertices.concat(-1, 1, 1);
-        vertices = vertices.concat(1, 1, -1);
-        vertices = vertices.concat(1, 1, 1);
+        vertices.push([-1, 1, -1]);
+        vertices.push([-1, 1, 1]);
+        vertices.push([1, 1, -1]);
+        vertices.push([1, 1, 1]);
 
         // X / Y - z
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(-1, 1, -1);
-        vertices = vertices.concat(1, -1, -1);
-        vertices = vertices.concat(1, 1, -1);
+        vertices.push([-1, -1, -1]);
+        vertices.push([-1, 1, -1]);
+        vertices.push([1, -1, -1]);
+        vertices.push([1, 1, -1]);
 
         // X / Y + z
-        vertices = vertices.concat(-1, -1, 1);
-        vertices = vertices.concat(-1, 1, 1);
-        vertices = vertices.concat(1, -1, 1);
-        vertices = vertices.concat(1, 1, 1);
+        vertices.push([-1, -1, 1]);
+        vertices.push([-1, 1, 1]);
+        vertices.push([1, -1, 1]);
+        vertices.push([1, 1, 1]);
 
         // Y / Z + x
-        vertices = vertices.concat(1, -1, -1);
-        vertices = vertices.concat(1, 1, -1);
-        vertices = vertices.concat(1, -1, 1);
-        vertices = vertices.concat(1, 1, 1);
+        vertices.push([1, -1, -1]);
+        vertices.push([1, 1, -1]);
+        vertices.push([1, -1, 1]);
+        vertices.push([1, 1, 1]);
 
         // Y / Z - x
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(-1, 1, -1);
-        vertices = vertices.concat(-1, -1, 1);
-        vertices = vertices.concat(-1, 1, 1);
+        vertices.push([-1, -1, -1]);
+        vertices.push([-1, 1, -1]);
+        vertices.push([-1, -1, 1]);
+        vertices.push([-1, 1, 1]);
 
-        super(colors, vertices, mode);
+        indices = [
+            [0, 1, 2],
+            [3, 1, 2],
+            [4, 5, 6],
+            [7, 5, 6],
+            [8, 9, 10],
+            [11, 9, 10],
+            [12, 13, 14],
+            [15, 13, 14],
+            [16, 17, 18],
+            [19, 17, 18],
+            [20, 21, 22],
+            [23, 21, 22]
+        ];
+
+
+        super(colors, vertices, mode, indices);
     }
 }
 

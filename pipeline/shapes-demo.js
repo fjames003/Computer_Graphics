@@ -38,7 +38,7 @@
     //                                 ).scale(0.5, 0.5, 0.5).translate(0.75, -0.75, 0.5);
     var aSphere =  new Sphere (25, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES).scale(0.5, 0.5, 0.5).translate(-0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
-    var cube = aSphere.createChild(new Cube({ r: 0.5, g: 0.5, b: 0.5 }, 5));
+    var cube = aSphere.createChild(new Cube({ r: 0.5, g: 0.5, b: 0.5 }, gl.LINES));
     var objectsToDraw = [
         new Shape([].concat(
                 [ 1.0, 0.0, 0.0 ],
@@ -59,12 +59,6 @@
                 [ -0.25, 0.0, 0.5 ],
                 [ 0.5, 0.0, 0.5 ],
                 [ -0.25, 0.5, 0.5 ]), gl.TRIANGLES),
-
-        new Shape({ r: 0.0, g: 0.0, b: 1.0 }, [].concat(
-                [ -1.0, -1.0, 0.75 ],
-                [ -1.0, -0.1, -1.0 ],
-                [ -0.1, -0.1, -1.0 ],
-                [ -0.1, -1.0, 0.75 ]), gl.LINE_LOOP),
 
         new Icosohedron({ r: 0.0, g: 0.5, b: 0.0 }, gl.LINES),
         aSphere,
