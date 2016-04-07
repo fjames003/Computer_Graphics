@@ -165,11 +165,11 @@ class Sphere extends Shape {
     constructor (n, colors, mode) {
         var vertices = [];
         var indices = [];
-        for (var i = 0.0; i < n; i += 1) {
+        for (var i = 0.0; i < n + 1; i += 1) {
             var theta = Math.PI * i/n;
             var sTheta = Math.sin(theta);
             var cTheta = Math.cos(theta);
-            for (var j = 0.0; j < n; j += 1) {
+            for (var j = 0.0; j < n + 1; j += 1) {
                 vertices.push(
                     [
                         sTheta * Math.cos(2 * Math.PI * j/n),
@@ -179,7 +179,26 @@ class Sphere extends Shape {
                 );
             }
         }
-        super(colors, vertices, mode);
+
+        for (var i = 0.0; i < n; i += 1) {
+            for (var j = 0.0; j < n; j += 1) {
+                var minimum = (i * (n + 1)) + j;
+                var maximum = minimum + n + 1;
+
+                indices.push(
+                    [minimum,
+                    maximum,
+                    minimum + 1]
+                );
+                indices.push(
+                    [maximum,
+                    maximum + 1,
+                    minimum + 1]
+                );
+            }
+        }
+
+        super(colors, vertices, mode, indices);
     }
 }
 
