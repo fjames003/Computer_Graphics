@@ -1,6 +1,6 @@
 const Shape = ((() => {
     class shape {
-        constructor (vertices, indices, colors={r: 0, g: 0, b:0}, mode=1) {
+        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b:0}) {
             if (arguments.length < 2) {
                 throw "Either the vertex or face array were not provided. Both are required.";
             } else if (vertices.length < 3 || indices.length < vertices.length / 3) {
@@ -59,11 +59,14 @@ const Shape = ((() => {
             if (arguments.length === 0) {
                 child = this.copy();
             }
-            child.parent = this;
-            child.matrix = this.matrix;
-            this.children.push(child);
-            return child;
-
+            if (child instanceof Shape) {
+                child.parent = this;
+                child.matrix = this.matrix;
+                this.children.push(child);
+                return child;
+            } else {
+                throw "Argument provided to createChild was not of type shape";
+            }
         }
 
         copy () {
@@ -109,7 +112,7 @@ const Shape = ((() => {
             if (this.states.length > 0) {
                 this.matrix = this.states.pop();
                 this.children.map(child => child.restoreState());
-            } 
+            }
         }
 
         draw (gl, vertexColor, vertexPosition) {

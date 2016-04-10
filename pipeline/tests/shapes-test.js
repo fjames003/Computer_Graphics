@@ -34,14 +34,14 @@ $(() => {
         );
         equal(triangle.mode, 1, "Make sure the defualt mode is LINES (1)");
 
-        var triangle = new Shape(triangleArray, [[0, 1, 2]], {r: 1.0, g: 0.5, b: 0.0});
+        var triangle = new Shape(triangleArray, [[0, 1, 2]], 1, {r: 1.0, g: 0.5, b: 0.0});
         equal(
             triangle.colors.length,
             triangle.vertices.length,
             "Make sure that colors are expanded from object"
         );
 
-        var triangle = new Shape(triangleArray, [[0, 1, 2]], [1.0, 0.5, 0.0]);
+        var triangle = new Shape(triangleArray, [[0, 1, 2]], 1, [1.0, 0.5, 0.0]);
         equal(
             triangle.colors.length,
             triangle.vertices.length,
@@ -50,7 +50,7 @@ $(() => {
     });
 
     test("Methods: Buffer", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]], [1.0, 0.5, 0.0]);
+        let triangle = new Shape(triangleArray, [[0, 1, 2]], 1, [1.0, 0.5, 0.0]);
         equal(
             triangle.buffer,
             undefined,
@@ -95,6 +95,65 @@ $(() => {
             0,
             "Make sure that the child was properly removed"
         );
+        triangle.scale(0.2, 0.4, 0.5);
+        let hourGlass = triangle.createChild(new Shape([
+            [-1, 1, 0],
+            [1, 1, 0],
+            [1, -1, 0],
+            [-1, -1, 0],
+            [0, 0, 0]
+        ], [[4, 3, 2], [4, 2, 1], [4, 1, 0]]));
+        deepEqual(
+            hourGlass.matrix,
+            triangle.matrix,
+            "Make sure the black sheep shape inherited the matrix of parent"
+        );
+        equal(
+            triangle.children[0],
+            hourGlass,
+            "Make sure the parent is aware of black sheep"
+        );
+        let sqPacMan = triangle.createChild(new Shape([
+            [-1, 1, 0],
+            [1, 1, 0],
+            [1, -1, 0],
+            [-1, -1, 0],
+            [0, 0, 0]
+        ], [[0, 4, 1], [4, 3, 2]]));
+        equal(
+            triangle.children[1],
+            sqPacMan,
+            "Make sure that more than one black sheep (children) are allowed"
+        );
+        triangle.createChild();
+        equal(
+            triangle.children.length,
+            3,
+            "Make sure the parents can count"
+        );
+        let grandKid = hourGlass.createChild();
+        triangle.scale(1, 1, 1);
+        deepEqual(
+            grandKid.matrix,
+            triangle.matrix,
+            "Make sure grandkids listen to grandparents"
+        );
+        sqPacMan.scale(1, 1, 1);
+        deepEqual(
+            grandKid.matrix,
+            triangle.matrix,
+            "Make sure grandkids don't listen to uncles"
+        );
+
+        throws(() => {
+            grandKid.createChild([
+                [-1, 1, 0],
+                [1, 1, 0],
+                [1, -1, 0],
+                [-1, -1, 0],
+                [0, 0, 0]
+            ], [[0, 4, 1], [4, 3, 2]]);
+        }, "Make sure that only a shape can be passed to createChild")
     });
 
     test("Methods: Scale, Rotate, Translate", () => {
@@ -215,5 +274,49 @@ $(() => {
             new Matrix(),
             "Make sure that additional restores don't damage matrix"
         );
+    });
+
+    test("Methods: copy", () => {
+        let triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        triangle.translate(0.5, 0.6, 0.4);
+        let triangle2 = triangle.copy();
+        notDeepEqual(
+            triangle2.parent,
+            triangle,
+            "Make sure a parent relationship wasn;t formed"
+        );
+        notDeepEqual(
+            triangle.matrix,
+            triangle2.matrix,
+            "Make sure that no inheritance happened when copying"
+        );
+    });
+
+    test("Methods: toRawArray", () => {
+        // Should be 3 vertices each with an X,Y,Z... thus 9 values...
+        let triangle = new Shape(triangleArray, [[0, 1, 2]], gl.TRIANGLES);
+        let triangles = triangle.toRawTriangleArray({vertices: triangleArray, indices: [[0, 1, 2]]});
+        equal(
+            triangle.vertices.length,
+            9,
+            "Make sure theres an xyz value for each vertex 3*3 = 9"
+        );
+        deepEqual(
+            triangle.vertices,
+            triangles,
+            "Make sure that the vertices are computed correctly for triangles"
+        );
+        let linAngle = new Shape(triangleArray, [[0, 1, 2]], gl.LINES);
+        let lines = triangle.toRawLineArray({vertices: triangleArray, indices: [[0, 1, 2]]});
+        equal(
+            linAngle.vertices.length,
+            18,
+            "Make sure that every vertex was doubled for lines"
+        );
+        deepEqual(
+            linAngle.vertices,
+            lines,
+            "Make sure that the vertices are computed correctly for lines"
+        )
     });
 });
