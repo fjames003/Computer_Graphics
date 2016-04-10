@@ -3,10 +3,10 @@ const Shape = ((() => {
         constructor (vertices, indices, colors={r: 0, g: 0, b:0}, mode=1) {
             if (arguments.length < 2) {
                 throw "Either the vertex or face array were not provided. Both are required.";
-            } else if (vertices.length < 3 || indices.length >= vertices.length / 3) {
+            } else if (vertices.length < 3 || indices.length < vertices.length / 3) {
                 throw `Vertices and / or faces provided are not sufficient to make a shape.
                 Minimum  3 vertices and a face for every three vertices.`;
-            } else if (vertices[0].length === 3 || indices[0].length === 3) {
+            } else if (vertices[0].length !== 3 || indices[0].length !== 3) {
                 throw `Vertex and / or face array not in correct format.
                 Expected vertices as [[X, Y, Z], [X, Y, Z], [X, Y, Z]...] and
                 expected faces as [[V1, V2, V3]...]`;
