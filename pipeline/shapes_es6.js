@@ -14,32 +14,30 @@ const Shape = ((() => {
                 this.parent = null;
                 this.children = [];
                 this.matrix = new Matrix();
-                this.indices = indices;
                 this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
 
-                if (this.indices.length !== 0) {
-                    if (this.mode === 4) {
-                        this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
-                    } else if (this.mode === 1) {
-                        this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
-                    } else {
-                        this.vertices = vertices;
-                    }
+                // Set the vertices array according to the faces provided and the mode...
+                this.indices indices
+                if (this.mode === 0) {
+                    this.vertices = this.toRawPointArray(vertices);
+                } else if (this.mode === 1) {
+                    this.vertices = this.toRawLineArray({vertices: vertices, indices: this.indices});
                 } else {
-                    this.vertices = vertices;
+                    this.vertices = this.toRawTriangleArray({vertices: vertices, this.indices: indices});
                 }
 
-                if (colors.r || colors.g || colors.b) {
+                // If colors is an object instead of array...
+                if (colors.r && colors.g && colors.b) {
                     this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
                 } else {
+                    // Colors provided as an array... Make sure the array is long enough...
                     colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
-                    this.colors = colors;
                     if (colors.length !== this.vertices.length) {
-                        this.colors = this.colors.concat(
-                                                    fillColors(this.vertices.length / 3 - this.colors.length / 3,
-                                                    this.colors[0],
-                                                    this.colors[1],
-                                                    this.colors[2])
+                        this.colors = colors.concat(
+                                                    fillColors(this.vertices.length / 3 - colors.length / 3,
+                                                    colors[0],
+                                                    colors[1],
+                                                    colors[2])
                                                   );
                     }
                 }
