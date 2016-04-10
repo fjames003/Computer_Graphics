@@ -1,46 +1,52 @@
 // Testing Suite for Shape Library
 
-$(function () {
-    var gl = GLSLUtilities.getGL(document.getElementById("hello-webgl"));
+$(() => {
+    const gl = GLSLUtilities.getGL(document.getElementById("hello-webgl"));
+    const triangleArray = [[ 0.0, 0.0, 0.0 ], [ 0.5, 0.0, -0.75 ], [ 0.0, 0.5, 0.0 ]];
+    
     // This suite checks instantiation basics.
-    test("Creation and Data Access", function () {
+    test("Creation and Data Access", () => {
         // Basic one color triangle...
         // A shape must be passed vertices and indices... the color can be defaulted...
         // Additionally, the mode can default to LINES per say if not provided...
         // Thus the following tests will test our creation and data accessing...
 
-        throws(
-            function () {
-                var fail2 = new Shape();
-            },
-            "Should throw exception for no provided indices or vertices"
-        );
+        throws(() => {
+            const fail2 = new Shape();
+        }, "Should throw exception for no provided indices or vertices");
 
-        throws (
-            function () {
-                var fail1 = new Shape([
-                                    [ 0.0, 0.0, 0.0 ],
-                                    [ 0.5, 0.0, -0.75 ],
-                                    [ 0.0, 0.5, 0.0 ]
-                                    ]
-                                );
-            },
-            "Should throw and exception for no provided indices"
-        );
+        throws(() => {
+            const fail1 = new Shape(triangleArray);
+        }, "Should throw and exception for no provided indices");
 
         // Should default to a mode of LINES and produce a triangle
         // Color should default to black...
-        var triangle = new Shape([
-                                [ 0.0, 0.0, 0.0 ],
-                                [ 0.5, 0.0, -0.75 ],
-                                [ 0.0, 0.5, 0.0 ]
-                                ],
-                                [[0, 1, 2]]
-                            );
-        equal(triangle.colors.length, triangle.vertices.length, "Make sure there is a color for every vertices");
-        deepEqual([triangle.colors[0], triangle.colors[1], triangle.colors[2]], [0, 0, 0],
-            "Make sure that the default color is black");
+        var triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        equal(
+            triangle.colors.length,
+            triangle.vertices.length,
+            "Make sure there is a color for every vertices"
+        );
+        deepEqual(
+            [triangle.colors[0], triangle.colors[1], triangle.colors[2]],
+            [0, 0, 0],
+            "Make sure that the default color is black"
+        );
         equal(triangle.mode, 1, "Make sure the defualt mode is LINES (1)");
+
+        var triangle = new Shape(triangleArray, [[0, 1, 2]], {r: 1.0, g: 0.5, b: 0.0});
+        equal(
+            triangle.colors.length,
+            triangle.vertices.length,
+            "Make sure that colors are expanded from object"
+        );
+
+        var triangle = new Shape(triangleArray, [[0, 1, 2]], [1.0, 0.5, 0.0]);
+        equal(
+            triangle.colors.length,
+            triangle.vertices.length,
+            "Make sure colors array is expanded if necessary."
+        );
     });
 
     // test("Child creation and Data Access", function () {
