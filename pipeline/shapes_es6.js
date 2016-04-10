@@ -13,6 +13,7 @@ const Shape = ((() => {
             } else {
                 this.parent = null;
                 this.children = [];
+                this.states = [];
                 this.matrix = new Matrix();
                 this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
 
@@ -100,14 +101,15 @@ const Shape = ((() => {
         }
 
         saveState () {
-            this.savedMatrix = this.matrix.copy();
+            this.states.push(this.matrix.copy());
             this.children.map(child => child.saveState());
         }
 
         restoreState () {
-            this.matrix = this.savedMatrix.copy();
-            this.savedMatrix = null;
-            this.children.map(child => child.restoreState());
+            if (this.states.length > 0) {
+                this.matrix = this.states.pop();
+                this.children.map(child => child.restoreState());
+            } 
         }
 
         draw (gl, vertexColor, vertexPosition) {

@@ -190,7 +190,6 @@ $(() => {
             Matrix.translate(0.5, 0.6, 0.4),
             "Make sure that matrix continues restoring correctly"
         );
-        triangle.restoreState();
         triangle.saveState();
         triangle.translate(0, 0, 0);
         deepEqual(
