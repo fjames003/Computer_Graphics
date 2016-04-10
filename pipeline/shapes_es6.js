@@ -56,13 +56,25 @@ const Shape = ((() => {
 
         createChild (child) {
             if (arguments.length === 0) {
-                child = new Shape(this.colors, this.vertices, this.mode);
+                child = this.copy();
             }
             child.parent = this;
             child.matrix = this.matrix;
             this.children.push(child);
             return child;
 
+        }
+
+        copy () {
+            let oldVertices = [];
+            for (let i = 0; i <= this.vertices.length / 3; i += 3) {
+                oldVertices.push([
+                            this.vertices[i],
+                            this.vertices[i + 1],
+                            this.vertices[i + 2]
+                        ]);
+            }
+            return new Shape(oldVertices, this.indices, this.colors, this.mode);
         }
 
         removeChild () {
