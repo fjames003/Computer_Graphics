@@ -1,46 +1,47 @@
 const Shape = ((() => {
     class shape {
+        constructor (vertices, indices, colors={r: 0, g: 0, b:0}, mode=1) {
+            if (arguments.length < 2) {
+                throw "Either the vertex or face array were not provided. Both are required.";
+            } else if (vertices.length < 3 || indices.length >= vertices.length / 3) {
+                throw `Vertices and / or faces provided are not sufficient to make a shape.
+                Minimum  3 vertices and a face for every three vertices.`;
+            } else if (vertices[0].length === 3 || indices[0].length === 3) {
+                throw `Vertex and / or face array not in correct format.
+                Expected vertices as [[X, Y, Z], [X, Y, Z], [X, Y, Z]...] and
+                expected faces as [[V1, V2, V3]...]`;
+            } else {
+                this.parent = null;
+                this.children = [];
+                this.matrix = new Matrix();
+                this.indices = indices;
+                this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
 
-        constructor (colors={r: 0, g: 0, b:0}, vertices, mode, indices=[]) {
-            this.parent = null;
-            this.children = [];
-            this.indices = indices;
-            // Check that point, line, or triangle mode was passed, else default to lines...
-            this.mode = (mode === 0 || mode === 4 || mode === 5) ? mode : 1;
-            this.matrix = new Matrix();
-
-            var fillColors = function (number, r, g, b) {
-                var result = [];
-                for (var i = 0; i < number; i += 1) {
-                    result = result.concat(r, g, b);
-                }
-                return result;
-            };
-
-            if (this.indices.length !== 0) {
-                if (this.mode === 4) {
-                    this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
-                } else if (this.mode === 1) {
-                    this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
+                if (this.indices.length !== 0) {
+                    if (this.mode === 4) {
+                        this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
+                    } else if (this.mode === 1) {
+                        this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
+                    } else {
+                        this.vertices = vertices;
+                    }
                 } else {
                     this.vertices = vertices;
                 }
-            } else {
-                this.vertices = vertices;
-            }
 
-            if (colors.r || colors.g || colors.b) {
-                this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
-            } else {
-                colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
-                this.colors = colors;
-                if (colors.length !== this.vertices.length) {
-                    this.colors = this.colors.concat(
-                                                fillColors(this.vertices.length / 3 - this.colors.length / 3,
-                                                this.colors[0],
-                                                this.colors[1],
-                                                this.colors[2])
-                                              );
+                if (colors.r || colors.g || colors.b) {
+                    this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
+                } else {
+                    colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
+                    this.colors = colors;
+                    if (colors.length !== this.vertices.length) {
+                        this.colors = this.colors.concat(
+                                                    fillColors(this.vertices.length / 3 - this.colors.length / 3,
+                                                    this.colors[0],
+                                                    this.colors[1],
+                                                    this.colors[2])
+                                                  );
+                    }
                 }
             }
         }
@@ -149,6 +150,14 @@ const Shape = ((() => {
 
         return buffer;
     };
+    var fillColors = function (number, r, g, b) {
+        var result = [];
+        for (var i = 0; i < number; i += 1) {
+            result = result.concat(r, g, b);
+        }
+        return result;
+    };
+
     return shape;
 }))();
 
