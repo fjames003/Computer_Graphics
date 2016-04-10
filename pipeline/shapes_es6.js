@@ -1,153 +1,158 @@
-class Shape {
-    _initBuffer (gl, sequence) {
+const Shape = ((() => {
+    class shape {
+
+        constructor (colors={r: 0, g: 0, b:0}, vertices, mode, indices=[]) {
+            this.parent = null;
+            this.children = [];
+            this.indices = indices;
+            // Check that point, line, or triangle mode was passed, else default to lines...
+            this.mode = (mode === 0 || mode === 4 || mode === 5) ? mode : 1;
+            this.matrix = new Matrix();
+
+            var fillColors = function (number, r, g, b) {
+                var result = [];
+                for (var i = 0; i < number; i += 1) {
+                    result = result.concat(r, g, b);
+                }
+                return result;
+            };
+
+            if (this.indices.length !== 0) {
+                if (this.mode === 4) {
+                    this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
+                } else if (this.mode === 1) {
+                    this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
+                } else {
+                    this.vertices = vertices;
+                }
+            } else {
+                this.vertices = vertices;
+            }
+
+            if (colors.r || colors.g || colors.b) {
+                this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
+            } else {
+                colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
+                this.colors = colors;
+                if (colors.length !== this.vertices.length) {
+                    this.colors = this.colors.concat(
+                                                fillColors(this.vertices.length / 3 - this.colors.length / 3,
+                                                this.colors[0],
+                                                this.colors[1],
+                                                this.colors[2])
+                                              );
+                }
+            }
+        }
+
+        initVertexBuffer (gl) {
+            this.buffer = initBuffer(gl, this.vertices);
+            return this;
+        }
+
+        initColorBuffer (gl) {
+            this.colorBuffer = initBuffer(gl, this.colors);
+            return this;
+        }
+
+        createChild (child) {
+            if (arguments.length === 0) {
+                child = new Shape(this.colors, this.vertices, this.mode);
+            }
+            child.parent = this;
+            child.matrix = this.matrix;
+            this.children.push(child);
+            return child;
+
+        }
+
+        removeChild () {
+            this.children.pop();
+        }
+
+        scale (x, y, z) {
+            this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
+            this.children.map(child => child.scale(x, y, z));
+            return this;
+        }
+
+        rotate (theta, x, y, z) {
+            this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+            this.children.map(child => child.rotate(theta, x, y, z));
+            return this;
+        }
+
+        translate (x, y, z) {
+            this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
+            this.children.map(child => child.translate(x, y, z));
+            return this;
+        }
+
+        saveState () {
+            this.savedMatrix = this.matrix.copy();
+            this.children.map(child => child.saveState());
+        }
+
+        restoreState () {
+            this.matrix = this.savedMatrix.copy();
+            this.savedMatrix = null;
+            this.children.map(child => child.restoreState());
+        }
+
+        draw (gl, vertexColor, vertexPosition) {
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+            gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
+
+            // Set the varying vertex coordinates.
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+            gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+            gl.drawArrays(this.mode, 0, this.vertices.length / 3);
+        }
+
+        toRawTriangleArray (indexedVertices) {
+            var result = [];
+            for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+                for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                    result = result.concat(
+                        indexedVertices.vertices[
+                            indexedVertices.indices[i][j]
+                        ]
+                    );
+                }
+            }
+            return result;
+        }
+
+        toRawLineArray (indexedVertices) {
+            var result = [];
+            for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+                for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                    result = result.concat(
+                        indexedVertices.vertices[
+                            indexedVertices.indices[i][j]
+                        ],
+
+                        indexedVertices.vertices[
+                            indexedVertices.indices[i][(j + 1) % maxj]
+                        ]
+                    );
+                }
+            }
+            return result;
+        }
+    }
+    var initBuffer = function (gl, sequence) {
         var buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
                       gl.STATIC_DRAW);
 
         return buffer;
-    }
+    };
+    return shape;
+}))();
 
-    constructor (colors={r: 0, g: 0, b:0}, vertices, mode, indices=[]) {
-        this.parent = null;
-        this.children = [];
-        this.indices = indices;
-        // Check that point, line, or triangle mode was passed, else default to lines...
-        this.mode = (mode === 0 || mode === 4 || mode === 5) ? mode : 1;
-        this.matrix = new Matrix();
 
-        var fillColors = function (number, r, g, b) {
-            var result = [];
-            for (var i = 0; i < number; i += 1) {
-                result = result.concat(r, g, b);
-            }
-            return result;
-        };
-
-        if (this.indices.length !== 0) {
-            if (this.mode === 4) {
-                this.vertices = this.toRawTriangleArray({vertices: vertices, indices: indices});
-            } else if (this.mode === 1) {
-                this.vertices = this.toRawLineArray({vertices: vertices, indices: indices});
-            } else {
-                this.vertices = vertices;
-            }
-        } else {
-            this.vertices = vertices;
-        }
-
-        if (colors.r || colors.g || colors.b) {
-            this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
-        } else {
-            colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
-            this.colors = colors;
-            if (colors.length !== this.vertices.length) {
-                this.colors = this.colors.concat(
-                                            fillColors(this.vertices.length / 3 - this.colors.length / 3,
-                                            this.colors[0],
-                                            this.colors[1],
-                                            this.colors[2])
-                                          );
-            }
-        }
-    }
-
-    initVertexBuffer (gl) {
-        this.buffer = this._initBuffer(gl, this.vertices);
-        return this;
-    }
-
-    initColorBuffer (gl) {
-        this.colorBuffer = this._initBuffer(gl, this.colors);
-        return this;
-    }
-
-    createChild (child) {
-        if (arguments.length === 0) {
-            child = new Shape(this.colors, this.vertices, this.mode);
-        }
-        child.parent = this;
-        child.matrix = this.matrix;
-        this.children.push(child);
-        return child;
-
-    }
-
-    removeChild () {
-        this.children.pop();
-    }
-
-    scale (x, y, z) {
-        this.matrix = this.matrix.multiply(new Matrix().scale(x, y, z));
-        this.children.map(child => child.scale(x, y, z));
-        return this;
-    }
-
-    rotate (theta, x, y, z) {
-        this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
-        this.children.map(child => child.rotate(theta, x, y, z));
-        return this;
-    }
-
-    translate (x, y, z) {
-        this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
-        this.children.map(child => child.translate(x, y, z));
-        return this;
-    }
-
-    saveState () {
-        this.savedMatrix = this.matrix.copy();
-        this.children.map(child => child.saveState());
-    }
-
-    restoreState () {
-        this.matrix = this.savedMatrix.copy();
-        this.savedMatrix = null;
-        this.children.map(child => child.restoreState());
-    }
-
-    draw (gl, vertexColor, vertexPosition) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
-
-        // Set the varying vertex coordinates.
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(this.mode, 0, this.vertices.length / 3);
-    }
-
-    toRawTriangleArray (indexedVertices) {
-        var result = [];
-        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
-            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
-                result = result.concat(
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][j]
-                    ]
-                );
-            }
-        }
-        return result;
-    }
-
-    toRawLineArray (indexedVertices) {
-        var result = [];
-        for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
-            for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
-                result = result.concat(
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][j]
-                    ],
-
-                    indexedVertices.vertices[
-                        indexedVertices.indices[i][(j + 1) % maxj]
-                    ]
-                );
-            }
-        }
-        return result;
-    }
-}
 
 class Sphere extends Shape {
     constructor (n, colors, mode) {
