@@ -176,17 +176,18 @@ const Shape = ((() => {
     return shape;
 }))();
 
-
-
 class Sphere extends Shape {
-    constructor (n, colors, mode) {
+    constructor (n, mode, colors) {
         var vertices = [];
         var indices = [];
-        for (let i = 0.0; i < n + 1; i += 1) {
+
+        // Gotta be a way to calculate all thetas and sine / cosine thetas on the first loop interation... Just need
+        // to store them some how... A map would be nice...
+        for (let i = 0; i < n + 1; i += 1) {
             var theta = Math.PI * i/n;
             var sTheta = Math.sin(theta);
             var cTheta = Math.cos(theta);
-            for (let j = 0.0; j < n + 1; j += 1) {
+            for (let j = 0; j < n + 1; j += 1) {
                 vertices.push(
                     [
                         sTheta * Math.cos(2 * Math.PI * j/n),
@@ -215,13 +216,12 @@ class Sphere extends Shape {
             }
         }
 
-        super(colors, vertices, mode, indices);
+        super(vertices, indices, mode, colors);
     }
 }
 
 class Cube extends Shape {
-    // Need to make indices...
-    constructor (colors, mode) {
+    constructor (mode, colors) {
 
         var vertices = [];
         var indices = [];
@@ -237,47 +237,23 @@ class Cube extends Shape {
         vertices.push([1, 1, -1]);
         vertices.push([1, 1, 1]);
 
-        // X / Y - z
-        vertices.push([-1, -1, -1]);
-        vertices.push([-1, 1, -1]);
-        vertices.push([1, -1, -1]);
-        vertices.push([1, 1, -1]);
-
-        // X / Y + z
-        vertices.push([-1, -1, 1]);
-        vertices.push([-1, 1, 1]);
-        vertices.push([1, -1, 1]);
-        vertices.push([1, 1, 1]);
-
-        // Y / Z + x
-        vertices.push([1, -1, -1]);
-        vertices.push([1, 1, -1]);
-        vertices.push([1, -1, 1]);
-        vertices.push([1, 1, 1]);
-
-        // Y / Z - x
-        vertices.push([-1, -1, -1]);
-        vertices.push([-1, 1, -1]);
-        vertices.push([-1, -1, 1]);
-        vertices.push([-1, 1, 1]);
-
         indices = [
             [0, 1, 2],
             [3, 1, 2],
             [4, 5, 6],
             [7, 5, 6],
-            [8, 9, 10],
-            [11, 9, 10],
-            [12, 13, 14],
-            [15, 13, 14],
-            [16, 17, 18],
-            [19, 17, 18],
-            [20, 21, 22],
-            [23, 21, 22]
+            [0, 4, 2],
+            [6, 4, 2],
+            [1, 5, 3],
+            [7, 5, 3],
+            [2, 6, 3],
+            [7, 6, 3],
+            [0, 4, 1],
+            [5, 4, 1]
         ];
 
 
-        super(colors, vertices, mode, indices);
+        super(vertices, indices, mode, colors);
     }
 }
 
@@ -285,35 +261,23 @@ class Pyramid extends Shape {
     // Made of triangles... Thus no need for indices... Just provide the mode...
     constructor (colors, mode) {
         var vertices = [];
-        // Face 1
-        vertices = vertices.concat(0, 1, 0);
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(-1, -1, 1);
-        // Face 2
-        vertices = vertices.concat(0, 1, 0);
-        vertices = vertices.concat(-1, -1, 1);
-        vertices = vertices.concat(1, -1, 1);
-        // Face 3
-        vertices = vertices.concat(0, 1, 0);
-        vertices = vertices.concat(1, -1, 1);
-        vertices = vertices.concat(1, -1, -1);
-        // Face 4
-        vertices = vertices.concat(0, 1, 0);
-        vertices = vertices.concat(1, -1, -1);
-        vertices = vertices.concat(-1, -1, -1);
-        // Bottom - 1st half
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(1, -1, -1);
-        vertices = vertices.concat(1, -1, 1);
-        // Bottom - 2nd half
-        vertices = vertices.concat(1, -1, 1);
-        vertices = vertices.concat(-1, -1, 1);
-        vertices = vertices.concat(-1, -1, -1);
 
-        // Connect back to beginning
-        vertices = vertices.concat(0, 1, 0);
+        vertices = vertices.concat( 0,  1,  0);
+        vertices = vertices.concat(-1, -1, -1);
+        vertices = vertices.concat(-1, -1,  1);
+        vertices = vertices.concat( 1, -1,  1);
+        vertices = vertices.concat( 1, -1, -1);
 
-        super(colors, vertices, mode);
+        var indices = [
+            [0, 1, 2],
+            [0, 2, 3],
+            [0, 3, 4],
+            [0, 4, 1],
+            [1, 4, 3],
+            [3, 2, 1]
+        ]
+
+        super(vertices, indices, mode, colors);
     }
 }
 
@@ -362,6 +326,6 @@ class Icosohedron extends Shape {
             ]
         };
 
-        super (colors, result.vertices, mode, result.indices);
+        super (result.vertices, result.indices, mode, colors);
     }
 }
