@@ -17,13 +17,13 @@ const Shape = ((() => {
                 this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
 
                 // Set the vertices array according to the faces provided and the mode...
-                this.indices indices
+                this.indices = indices
                 if (this.mode === 0) {
                     this.vertices = this.toRawPointArray(vertices);
                 } else if (this.mode === 1) {
                     this.vertices = this.toRawLineArray({vertices: vertices, indices: this.indices});
                 } else {
-                    this.vertices = this.toRawTriangleArray({vertices: vertices, this.indices: indices});
+                    this.vertices = this.toRawTriangleArray({vertices: vertices, indices: this.indices});
                 }
 
                 // If colors is an object instead of array...
