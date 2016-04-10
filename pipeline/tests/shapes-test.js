@@ -3,9 +3,9 @@
 $(() => {
     const gl = GLSLUtilities.getGL(document.getElementById("hello-webgl"));
     const triangleArray = [[ 0.0, 0.0, 0.0 ], [ 0.5, 0.0, -0.75 ], [ 0.0, 0.5, 0.0 ]];
-    
+
     // This suite checks instantiation basics.
-    test("Creation and Data Access", () => {
+    test("Creation and Data Access (Constructor)", () => {
         // Basic one color triangle...
         // A shape must be passed vertices and indices... the color can be defaulted...
         // Additionally, the mode can default to LINES per say if not provided...
@@ -49,56 +49,30 @@ $(() => {
         );
     });
 
-    // test("Child creation and Data Access", function () {
-    //     var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
-    //                                                     [ 0.0, 0.0, 0.0 ],
-    //                                                     [ 0.5, 0.0, -0.75 ],
-    //                                                     [ 0.0, 0.5, 0.0 ]
-    //                                                    ), gl.TRIANGLES);
-    //     var triChild = tri.createChild();
-    //     equal(tri.children[0], triChild, "Make sure the child shape was added to children");
-    //
-    // });
-    //
-    // test("Functions of shapes (and their children)", function () {
-    //     // Translate child...
-    //     var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
-    //                                                     [ 0.0, 0.0, 0.0 ],
-    //                                                     [ 0.5, 0.0, -0.75 ],
-    //                                                     [ 0.0, 0.5, 0.0 ]
-    //                                                    ), gl.TRIANGLES);
-    //     var triChild = tri.createChild();
-    //
-    //     triChild.translate(0.5, 0.5, 0.5);
-    //     deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix,
-    //              "Make sure that child updates matrix on own");
-    //
-    //     var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
-    //                                                     [ 0.0, 0.0, 0.0 ],
-    //                                                     [ 0.5, 0.0, -0.75 ],
-    //                                                     [ 0.0, 0.5, 0.0 ]
-    //                                                    ), gl.TRIANGLES);
-    //     var triChild = tri.createChild();
-    //
-    //     tri.translate(0.5, 0.5, 0.5);
-    //     deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triChild.matrix,
-    //              "Make sure that parent updates childs matrix");
-    //
-    //     var tri = new Shape({r: 1.0, g: 0.3, b: 0.6}, [].concat(
-    //                                                     [ 0.0, 0.0, 0.0 ],
-    //                                                     [ 0.5, 0.0, -0.75 ],
-    //                                                     [ 0.0, 0.5, 0.0 ]
-    //                                                    ), gl.TRIANGLES);
-    //     var triChild = tri.createChild();
-    //     var triGrand = triChild.createChild();
-    //     tri.translate(0.5, 0.5, 0.5);
-    //     deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix,
-    //              "Make sure that parent updates children's children matrix");
-    //
-    //     triChild.removeChild();
-    //
-    //     tri.translate(0,0,0);
-    //     deepEqual(new Matrix().translate(0.5, 0.5, 0.5), triGrand.matrix,
-    //              "Make sure that parent stops updating once removed");
-    // });
+    test("Methods of Shape", () => {
+        var triangle = new Shape(triangleArray, [[0, 1, 2]], [1.0, 0.5, 0.0]);
+        equal(
+            triangle.buffer,
+            undefined,
+            "Make sure that a shape doesn't start with a buffer"
+        );
+        triangle.initVertexBuffer(gl);
+        notEqual (
+            triangle.buffer,
+            undefined,
+            "Make sure that a buffer was created"
+        );
+
+        equal(
+            triangle.colorBuffer,
+            undefined,
+            "Make sure that a shape doesn't start with a color buffer"
+        );
+        triangle.initColorBuffer(gl);
+        notEqual(
+            triangle.colorBuffer,
+            undefined,
+            "Make sure that a color buffer was created"
+        );
+    });
 });
