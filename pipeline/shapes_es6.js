@@ -1,6 +1,6 @@
 const Shape = ((() => {
     class shape {
-        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b:0}) {
+        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b: 0}) {
             if (arguments.length < 2) {
                 throw "Either the vertex or face array were not provided. Both are required.";
             } else if (vertices.length < 3 || indices.length < vertices.length / 3) {
@@ -16,6 +16,7 @@ const Shape = ((() => {
                 this.states = [];
                 this.matrix = new Matrix();
                 this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
+                this.compressedVertices = vertices;
 
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = indices
@@ -28,7 +29,7 @@ const Shape = ((() => {
                 }
 
                 // If colors is an object instead of array...
-                if (colors.r && colors.g && colors.b) {
+                if (colors.r || colors.g || colors.b) {
                     this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
                 } else {
                     // Colors provided as an array... Make sure the array is long enough...
@@ -40,6 +41,8 @@ const Shape = ((() => {
                                                     colors[1],
                                                     colors[2])
                                                   );
+                    } else {
+                        this.colors = colors;
                     }
                 }
             }
@@ -70,15 +73,7 @@ const Shape = ((() => {
         }
 
         copy () {
-            let oldVertices = [];
-            for (let i = 0; i <= this.vertices.length / 3; i += 3) {
-                oldVertices.push([
-                            this.vertices[i],
-                            this.vertices[i + 1],
-                            this.vertices[i + 2]
-                        ]);
-            }
-            return new Shape(oldVertices, this.indices, this.colors, this.mode);
+            return new Shape(this.compressedVertices, this.indices, this.mode, this.colors);
         }
 
         removeChild () {
@@ -259,14 +254,14 @@ class Cube extends Shape {
 
 class Pyramid extends Shape {
     // Made of triangles... Thus no need for indices... Just provide the mode...
-    constructor (colors, mode) {
+    constructor (mode, colors) {
         var vertices = [];
 
-        vertices = vertices.concat( 0,  1,  0);
-        vertices = vertices.concat(-1, -1, -1);
-        vertices = vertices.concat(-1, -1,  1);
-        vertices = vertices.concat( 1, -1,  1);
-        vertices = vertices.concat( 1, -1, -1);
+        vertices.push([ 0,  1,  0]);
+        vertices.push([-1, -1, -1]);
+        vertices.push([-1, -1,  1]);
+        vertices.push([ 1, -1,  1]);
+        vertices.push([ 1, -1, -1]);
 
         var indices = [
             [0, 1, 2],
@@ -282,7 +277,7 @@ class Pyramid extends Shape {
 }
 
 class Icosohedron extends Shape {
-    constructor (colors, mode) {
+    constructor (mode, colors) {
         var X = 0.525731112119133606;
         var Z = 0.850650808352039932;
 

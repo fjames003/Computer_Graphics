@@ -31,35 +31,40 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    var aSphere =  new Sphere (25, { r: 1.0, g: 0.5, b: 0.0 }, gl.LINES).translate(-0.75, -0.75, 0.5);
+    var aSphere =  new Sphere (25, gl.LINES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
-    var cube = aSphere.createChild(new Cube({ r: 0.5, g: 0.5, b: 0.5 }, gl.TRIANGLES));
+    var cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 }));
     var objectsToDraw = [
-        new Shape([].concat(
-                [ 1.0, 0.0, 0.0 ],
-                [ 0.0, 1.0, 0.0 ],
-                [ 0.0, 0.0, 1.0 ]
-            ), [].concat(
-                [ 0.0, 0.0, 0.0 ],
-                [ 0.5, 0.0, -0.75 ],
-                [ 0.0, 0.5, 0.0 ]
-            ), gl.TRIANGLES),
+        new Shape([[ 0.0, 0.0, 0.0 ],
+                   [ 0.5, 0.0, -0.75 ],
+                   [ 0.0, 0.5, 0.0 ]],
+                   [[ 0, 1, 2]],
+                   gl.TRIANGLES,
+                   [].concat(
+                      [ 1.0, 0.0, 0.0 ],
+                      [ 0.0, 1.0, 0.0 ],
+                      [ 0.0, 0.0, 1.0 ]
+                   )),
 
-        new Shape({ r: 0.0, g: 1.0, b: 0 }, [].concat(
-                [ 0.25, 0.0, -0.5 ],
-                [ 0.75, 0.0, -0.5 ],
-                [ 0.25, 0.5, -0.5 ]), gl.TRIANGLES),
+        new Shape([[ 0.25, 0.0, -0.5 ],
+                   [ 0.75, 0.0, -0.5 ],
+                   [ 0.25, 0.5, -0.5 ]],
+                   [[0, 1, 2]],
+                   gl.TRIANGLES,
+                   { r: 0.0, g: 1.0, b: 0 }),
 
-        new Shape({ r: 0.0, g: 0.0, b: 1.0 }, [].concat(
-                [ -0.25, 0.0, 0.5 ],
-                [ 0.5, 0.0, 0.5 ],
-                [ -0.25, 0.5, 0.5 ]), gl.TRIANGLES),
+        new Shape([[ -0.25, 0.0, 0.5 ],
+                   [ 0.5, 0.0, 0.5 ],
+                   [ -0.25, 0.5, 0.5 ]],
+                   [[0, 1, 2]],
+                   gl.TRIANGLES,
+                   { r: 0.0, g: 1.0, b: 0 }),
 
-        new Icosohedron({ r: 0.0, g: 0.5, b: 0.0 }, gl.LINES),
+        new Icosohedron(gl.LINES, { r: 0.0, g: 1.0, b: 0 }),
         aSphere,
         aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
         cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
-        new Pyramid({ r: 1, g: 0, b: 0 }, 4).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
+        new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
 
     ];
 
