@@ -33,6 +33,7 @@
     // Build the objects to display.
     var aSphere =  new Sphere (25, gl.LINES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
     var aSphereKid = aSphere.createChild();
+    aSphereKid.mode = gl.TRIANGLES;
     var cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 }));
     var objectsToDraw = [
         new Shape([[ 0.0, 0.0, 0.0 ],

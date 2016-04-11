@@ -15,18 +15,12 @@ const Shape = ((() => {
                 this.children = [];
                 this.states = [];
                 this.matrix = new Matrix();
-                this.mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
+                this._mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
                 this.compressedVertices = vertices;
 
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = indices
-                if (this.mode === 0) {
-                    this.vertices = this.toRawPointArray(vertices);
-                } else if (this.mode === 1) {
-                    this.vertices = this.toRawLineArray({vertices: vertices, indices: this.indices});
-                } else {
-                    this.vertices = this.toRawTriangleArray({vertices: vertices, indices: this.indices});
-                }
+                this.setVertices();
 
                 // If colors is an object instead of array...
                 if (colors.r || colors.g || colors.b) {
@@ -73,7 +67,7 @@ const Shape = ((() => {
         }
 
         copy () {
-            return new Shape(this.compressedVertices, this.indices, this.mode, this.colors);
+            return new Shape(this.compressedVertices, this.indices, this._mode, this.colors);
         }
 
         removeChild () {
@@ -117,7 +111,7 @@ const Shape = ((() => {
             // Set the varying vertex coordinates.
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
-            gl.drawArrays(this.mode, 0, this.vertices.length / 3);
+            gl.drawArrays(this._mode, 0, this.vertices.length / 3);
         }
 
         toRawTriangleArray (indexedVertices) {
@@ -150,6 +144,23 @@ const Shape = ((() => {
                 }
             }
             return result;
+        }
+        set mode (newMode) {
+            this._mode = newMode;
+            this.setVertices();
+
+        }
+        get mode () {
+            return this._mode;
+        }
+        setVertices () {
+            if (this._mode === 0) {
+                this.vertices = this.toRawPointArray(vertices);
+            } else if (this._mode === 1) {
+                this.vertices = this.toRawLineArray({vertices: this.compressedVertices, indices: this.indices});
+            } else {
+                this.vertices = this.toRawTriangleArray({vertices: this.compressedVertices, indices: this.indices});
+            }
         }
     }
     var initBuffer = function (gl, sequence) {
