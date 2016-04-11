@@ -68,6 +68,10 @@ const Matrix = ((() => {
             return result;
         }
 
+        static translate(dx, dy, dz) {
+            return new Matrix().translate(dx, dy, dz);
+        }
+
         scale(sx, sy, sz) {
             checkArgs(3, arguments);
             const result = new Matrix();
@@ -77,6 +81,10 @@ const Matrix = ((() => {
             result.elements[2][2] = sz;
 
             return result;
+        }
+
+        static scale(sx, sy, sz) {
+            return new Matrix().scale(sx, sy, sz);
         }
 
         rotation(thetaVal, rx, ry, rz) {
@@ -117,6 +125,10 @@ const Matrix = ((() => {
             return result;
         }
 
+        static rotation(thetaVal, rx, ry, rz) {
+            return new Matrix().rotation(thetaVal, rx, ry, rz);
+        }
+
         orthographic(left, right, bottom, top, near, far) {
             checkArgs(6, arguments);
             const result = new Matrix();
@@ -129,6 +141,10 @@ const Matrix = ((() => {
             result.elements[2][3] = -(far + near) / (far - near);
 
             return result;
+        }
+
+        static orthographic(left, right, bottom, top, near, far) {
+            return new Matrix().orthographic(left, right, bottom, top, near, far);
         }
 
         perspective(left, right, bottom, top, near, far) {
@@ -147,6 +163,10 @@ const Matrix = ((() => {
             result.elements[3][3] = 0;
 
             return result;
+        }
+
+        static perspective(left, right, bottom, top, near, far) {
+            return new Matrix().perspective(left, right, bottom, top, near, far);
         }
 
         toWebGL() {
@@ -204,11 +224,3 @@ const Matrix = ((() => {
 
     return matrix;
 }))();
-
-// Added constant like functions so that a translation matrix doesn't need to be done with 'new Matrix().'
-// Instead one can just invoke 'Matrix.translate'
-Matrix.translate = (x, y, z) => new Matrix().translate(x, y, z);
-Matrix.scale = (x, y, z) => new Matrix().scale(x, y, z);
-Matrix.rotation = (theta, x, y, z) => new Matrix().rotation(theta, x, y, z);
-Matrix.orthographic = (left, right, bottom, top, near, far) => new Matrix().orthographic(left, right, bottom, top, near, far);
-Matrix.perspective = (left, right, bottom, top, near, far) => new Matrix().perspective(left, right, bottom, top, near, far);
