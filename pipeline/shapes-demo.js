@@ -3,7 +3,7 @@
  * takes the canvas that it will need.
  */
 
-(function (canvas) {
+((canvas => {
     /*
      * This code does not really belong here: it should live
      * in a separate library of matrix and transformation
@@ -15,7 +15,7 @@
      */
 
     // Grab the WebGL rendering context.
-    var gl = GLSLUtilities.getGL(canvas);
+    const gl = GLSLUtilities.getGL(canvas);
     if (!gl) {
         alert("No WebGL context found...sorry.");
 
@@ -31,73 +31,69 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    var aSphere =  new Sphere (25, gl.LINES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
-    var aSphereKid = aSphere.createChild();
+    const aSphere =  new Sphere (25, gl.LINES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
+    const aSphereKid = aSphere.createChild();
     aSphereKid.mode = gl.TRIANGLES;
-    var cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 }));
-    var objectsToDraw = [
-        new Shape([[ 0.0, 0.0, 0.0 ],
-                   [ 0.5, 0.0, -0.75 ],
-                   [ 0.0, 0.5, 0.0 ]],
-                   [[ 0, 1, 2]],
-                   gl.TRIANGLES,
-                   [].concat(
-                      [ 1.0, 0.0, 0.0 ],
-                      [ 0.0, 1.0, 0.0 ],
-                      [ 0.0, 0.0, 1.0 ]
-                   )),
+    const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 }));
+    const objectsToDraw = [
+       new Shape([[ 0.0, 0.0, 0.0 ],
+                  [ 0.5, 0.0, -0.75 ],
+                  [ 0.0, 0.5, 0.0 ]],
+                  [[ 0, 1, 2]],
+                  gl.TRIANGLES,
+                  [].concat(
+                     [ 1.0, 0.0, 0.0 ],
+                     [ 0.0, 1.0, 0.0 ],
+                     [ 0.0, 0.0, 1.0 ]
+                  )),
 
-        new Shape([[ 0.25, 0.0, -0.5 ],
-                   [ 0.75, 0.0, -0.5 ],
-                   [ 0.25, 0.5, -0.5 ]],
-                   [[0, 1, 2]],
-                   gl.TRIANGLES,
-                   { r: 0.0, g: 1.0, b: 0 }),
+       new Shape([[ 0.25, 0.0, -0.5 ],
+                  [ 0.75, 0.0, -0.5 ],
+                  [ 0.25, 0.5, -0.5 ]],
+                  [[0, 1, 2]],
+                  gl.TRIANGLES,
+                  { r: 0.0, g: 1.0, b: 0 }),
 
-        new Shape([[ -0.25, 0.0, 0.5 ],
-                   [ 0.5, 0.0, 0.5 ],
-                   [ -0.25, 0.5, 0.5 ]],
-                   [[0, 1, 2]],
-                   gl.TRIANGLES,
-                   { r: 0.0, g: 1.0, b: 0 }),
+       new Shape([[ -0.25, 0.0, 0.5 ],
+                  [ 0.5, 0.0, 0.5 ],
+                  [ -0.25, 0.5, 0.5 ]],
+                  [[0, 1, 2]],
+                  gl.TRIANGLES,
+                  { r: 0.0, g: 1.0, b: 0 }),
 
-        new Icosohedron(gl.LINES, { r: 0.0, g: 1.0, b: 0 }),
-        aSphere,
-        aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
-        cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
-        new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
+       new Icosohedron(gl.LINES, { r: 0.0, g: 1.0, b: 0 }),
+       aSphere,
+       aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
+       cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
+       new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
 
-    ];
+   ];
 
     // Pass the vertices to WebGL.
-    for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-
+    for (let i = 0; i < objectsToDraw.length; i += 1) {
         objectsToDraw[i].initVertexBuffer(gl);
 
         objectsToDraw[i].initColorBuffer(gl);
     }
 
     // Initialize the shaders.
-    var abort = false;
-    var shaderProgram = GLSLUtilities.initSimpleShaderProgram(
+    let abort = false;
+
+    const shaderProgram = GLSLUtilities.initSimpleShaderProgram(
         gl,
         $("#vertex-shader").text(),
         $("#fragment-shader").text(),
 
-        // Very cursory error-checking here...
-        function (shader) {
+        shader => {
             abort = true;
-            alert("Shader problem: " + gl.getShaderInfoLog(shader));
+            alert(`Shader problem: ${gl.getShaderInfoLog(shader)}`);
         },
 
-        // Another simplistic error check: we don't even access the faulty
-        // shader program.
-        function (shaderProgram) {
+        shaderProgram => {
             abort = true;
             alert("Could not link shaders...sorry.");
         }
     );
-
     // If the abort variable is true here, we can't continue.
     if (abort) {
         alert("Fatal errors encountered; we cannot continue.");
@@ -108,29 +104,27 @@
     gl.useProgram(shaderProgram);
 
     // Hold on to the important variables within the shaders.
-    var vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
+    const vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
     gl.enableVertexAttribArray(vertexPosition);
-    var vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
+    const vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
-    var transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
-    var projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
-
+    const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
+    const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
 
     /*
      * Displays the scene.
      */
-
-     var random = {
+    const random = {
         x: Math.random() * 2 - 1,
         y: Math.random() * 2 - 1,
         z: Math.random() * 2 - 1
-     };
-    var drawScene = function () {
+    };
+    const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Display the objects.
-        for (var i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+        for (let i = 0; i < objectsToDraw.length; i += 1) {
 
             objectsToDraw[i].rotate(rotationStep, random.x, random.y, random.z);
 
@@ -151,13 +145,17 @@
     /*
      * Animates the scene.
      */
-    var aspect = canvas.width / canvas.height;
-    gl.uniformMatrix4fv(projectionMatrix, gl.FALSE, new Matrix().orthographic(-2 * aspect, 2 * aspect, -2, 2, -10, 10).toWebGL());
-    var animationActive = false;
+    const aspect = canvas.width / canvas.height;
+    gl.uniformMatrix4fv(
+        projectionMatrix,
+        gl.FALSE,
+        new Matrix().orthographic(-2 * aspect, 2 * aspect, -2, 2, -10, 10).toWebGL()
+    );
+    let animationActive = false;
     var rotationStep = 2;
-    var previousTimestamp = null;
+    let previousTimestamp = null;
 
-    var advanceScene = function (timestamp) {
+    const advanceScene = timestamp => {
         // Check if the user has turned things off.
         if (!animationActive) {
             return;
@@ -171,7 +169,7 @@
         }
 
         // Check if it's time to advance.
-        var progress = timestamp - previousTimestamp;
+        const progress = timestamp - previousTimestamp;
         if (progress < 30) {
             // Do nothing if it's too soon.
             window.requestAnimationFrame(advanceScene);
@@ -190,7 +188,7 @@
     drawScene();
 
     // Set up the rotation toggle: clicking on the canvas does it.
-    $(canvas).click(function () {
+    $(canvas).click(() => {
         animationActive = !animationActive;
         if (animationActive) {
             previousTimestamp = null;
@@ -198,4 +196,4 @@
         }
     });
 
-}(document.getElementById("canvas")));
+})(document.getElementById("canvas")));

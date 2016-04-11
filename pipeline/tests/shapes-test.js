@@ -234,7 +234,9 @@ $(() => {
 
         deepEqual(
             triangle.matrix,
-            Matrix.translate(0.5, 0.6, 0.4).multiply(Matrix.scale(0.2, -0.5, 0.6)).multiply(Matrix.rotation(30, 0.3, 0.4, 0.5)),
+            Matrix.translate(0.5, 0.6, 0.4)
+            .multiply(Matrix.scale(0.2, -0.5, 0.6))
+            .multiply(Matrix.rotation(30, 0.3, 0.4, 0.5)),
             "Make sure that matrix is correct inside nested saved state"
         );
         triangle.restoreState();

@@ -258,7 +258,6 @@ class Cube extends Shape {
             [5, 4, 1]
         ];
 
-
         super(vertices, indices, mode, colors);
     }
 }
