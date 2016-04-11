@@ -19,7 +19,7 @@ const Shape = ((() => {
                 this.compressedVertices = vertices;
 
                 // Set the vertices array according to the faces provided and the mode...
-                this.indices = indices
+                this.indices = indices;
                 this.setVertices();
 
                 // If colors is an object instead of array...
@@ -281,7 +281,7 @@ class Pyramid extends Shape {
             [0, 4, 1],
             [1, 4, 3],
             [3, 2, 1]
-        ]
+        ];
 
         super(vertices, indices, mode, colors);
     }
