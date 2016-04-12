@@ -65,7 +65,7 @@
        aSphere,
        aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
        cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
-       new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -0.8, 0).scale(0.3, 0.3, 0.3)
+       new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -1.5, 0).scale(0.3, 0.3, 0.3)
 
    ];
 
@@ -110,28 +110,37 @@
     gl.enableVertexAttribArray(vertexColor);
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
+    const uniRotationMatrix = gl.getUniformLocation(shaderProgram, "uniRotationMatrix");
 
     /*
      * Displays the scene.
      */
-    const random = {
-        x: Math.random() * 2 - 1,
-        y: Math.random() * 2 - 1,
-        z: Math.random() * 2 - 1
-    };
+    const newRandomXYZ = () => {
+      let result = {};
+      result.x = Math.random() * 2 - 1;
+      result.y = Math.random() * 2 - 1;
+      result.z = Math.random() * 2 - 1;
+      return result;
+    }
+    const rands = [];
     const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Display the objects.
         for (let i = 0; i < objectsToDraw.length; i += 1) {
-
-            objectsToDraw[i].rotate(rotationStep, random.x, random.y, random.z);
+            if (rands.length < (i + 1)) {
+              rands[i] = newRandomXYZ();
+            }
+            objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
 
             objectsToDraw[i].saveState();
             objectsToDraw[i].scale(0.9, 0.9, 0.9);
 
             gl.uniformMatrix4fv(transformMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
+
+            let mat = new Matrix().rotation(currentRotation, 1, 1, 1).toWebGL();
+            gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
 
             objectsToDraw[i].draw(gl, vertexColor, vertexPosition);
 
@@ -154,6 +163,7 @@
     let animationActive = false;
     var rotationStep = 2;
     let previousTimestamp = null;
+    let currentRotation = 0;
 
     const advanceScene = timestamp => {
         // Check if the user has turned things off.
@@ -177,6 +187,10 @@
         }
 
         // All clear.
+        currentRotation += 2;
+        if (currentRotation >= 360) {
+          currentRotation = 0;
+        }
         drawScene();
 
         // Request the next frame.

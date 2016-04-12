@@ -58,9 +58,10 @@
       varying vec4 finalVertexColor;
       uniform mat4 transformMatrix;
       uniform mat4 projectionMatrix;
+      uniform mat4 uniRotationMatrix;
 
       void main(void) {
-          gl_Position = projectionMatrix * transformMatrix * vec4(vertexPosition, 1.0);
+          gl_Position = projectionMatrix * uniRotationMatrix * transformMatrix * vec4(vertexPosition, 1.0);
           finalVertexColor = vec4(vertexColor, 1.0);
       }
     </script>
