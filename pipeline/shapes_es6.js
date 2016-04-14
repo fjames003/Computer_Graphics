@@ -44,11 +44,13 @@ const Shape = ((() => {
 
         initVertexBuffer (gl) {
             this.buffer = initBuffer(gl, this.vertices);
+            this.children.map(child => child.initVertexBuffer(gl));
             return this;
         }
 
         initColorBuffer (gl) {
             this.colorBuffer = initBuffer(gl, this.colors);
+            this.children.map(child => child.initColorBuffer(gl));
             return this;
         }
 
@@ -104,14 +106,39 @@ const Shape = ((() => {
             }
         }
 
-        draw (gl, vertexColor, vertexPosition) {
+        draw (gl, vertexColor, vertexPosition, transformMatrix) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
             gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
             // Set the varying vertex coordinates.
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, this.matrix.toWebGL());
             gl.drawArrays(this._mode, 0, this.vertices.length / 3);
+            this.children.map(child => child.draw(gl, vertexColor, vertexPosition, transformMatrix));
+        }
+
+        split (type) {
+            if (type === "EXP") {
+                this.children.map(child =>
+                    {
+                        child.split("EXP");
+                    }
+                );
+                this.split("LIN");
+            } else if (type === "LIN") {
+
+                const newChild = this.createChild();
+                newChild.saveState();
+                this.translate(-1, -1, -1);
+                newChild.restoreState();
+                newChild.translate(1, 1, 1);
+
+                return newChild;
+            } else {
+                // Not an acceptable split type...
+                return this;
+            }
         }
 
         toRawTriangleArray (indexedVertices) {
