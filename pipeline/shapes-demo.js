@@ -123,6 +123,7 @@
       return result;
     }
     const rands = [];
+    const rotationRands = newRandomXYZ();
     const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -139,7 +140,7 @@
 
             gl.uniformMatrix4fv(transformMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
 
-            let mat = new Matrix().rotation(currentRotation, 1, 1, 1).toWebGL();
+            let mat = new Matrix().rotation(currentRotation, rotationRands.x, rotationRands.y, rotationRands.z).toWebGL();
             gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
 
             objectsToDraw[i].draw(gl, vertexColor, vertexPosition);
