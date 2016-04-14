@@ -34,9 +34,9 @@
     const aSphere =  new Sphere (25, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
     const aSphereKid = aSphere.createChild().scale(0.5, 0.5, 0.5).translate(0, 4, -0.75);
     const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(2, 2, 0).scale(0.5, 0.5, 0.5);
-    aSphere.split("EXP");
-    aSphere.split("EXP");
-    aSphere.split("EXP");
+    aSphere.split("LIN", 'rand');
+    aSphere.split("LIN", 'rand');
+    aSphere.split("LIN", 'rand');
 
     const objectsToDraw = [
     //    new Shape([[ 0.0, 0.0, 0.0 ],
