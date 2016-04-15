@@ -31,45 +31,19 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    const aSphere =  new Sphere (25, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(-0.75, -0.75, 0.5);
-    const aSphereKid = aSphere.createChild().scale(0.5, 0.5, 0.5).translate(0, 4, -0.75);
-    const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(2, 2, 0).scale(0.5, 0.5, 0.5);
-    aSphere.split("LIN", 'rand');
-    aSphere.split("LIN", 'rand');
-    aSphere.split("LIN", 'rand');
+    const aSphere =  new Sphere (25, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, 0, -10);
+    // const aSphereKid = aSphere.createChild().translate(0, 1.5, 5).scale(0.5, 0.5, 0.5);
+    // const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(2, 2, 0).scale(0.5, 0.5, 0.5);
+    const splitter = aSphere.split("EXP", 'x');
+    console.log(splitter)
+    // aSphere.split("LIN", 'rand');
+    // aSphere.split("LIN", 'rand');
 
     const objectsToDraw = [
-    //    new Shape([[ 0.0, 0.0, 0.0 ],
-    //               [ 0.5, 0.0, -0.75 ],
-    //               [ 0.0, 0.5, 0.0 ]],
-    //               [[ 0, 1, 2]],
-    //               gl.TRIANGLES,
-    //               [].concat(
-    //                  [ 1.0, 0.0, 0.0 ],
-    //                  [ 0.0, 1.0, 0.0 ],
-    //                  [ 0.0, 0.0, 1.0 ]
-    //               )),
-       //
-    //    new Shape([[ 0.25, 0.0, -0.5 ],
-    //               [ 0.75, 0.0, -0.5 ],
-    //               [ 0.25, 0.5, -0.5 ]],
-    //               [[0, 1, 2]],
-    //               gl.TRIANGLES,
-    //               { r: 0.0, g: 1.0, b: 0 }),
-       //
-    //    new Shape([[ -0.25, 0.0, 0.5 ],
-    //               [ 0.5, 0.0, 0.5 ],
-    //               [ -0.25, 0.5, 0.5 ]],
-    //               [[0, 1, 2]],
-    //               gl.TRIANGLES,
-    //               { r: 0.0, g: 1.0, b: 0 }),
-
-    //    new Icosohedron(gl.LINES, { r: 0.0, g: 1.0, b: 0 }),
        aSphere,
-    //    aSphereKid.scale(0.5, 0.5, 0.5).translate(0, 4, -0.75),
-    //    cube.translate(2, 2, 0).scale(0.5, 0.5, 0.5),
-    //    new Pyramid(gl.TRIANGLES, { r: 1, g: 0, b: 0 }).translate(0.8, -1.5, 0).scale(0.3, 0.3, 0.3),
-    //    splitter
+    //    aSphereKid,
+    //    cube,
+       splitter
    ];
 
     // Pass the vertices to WebGL.
@@ -137,18 +111,12 @@
               rands[i] = newRandomXYZ();
             }
             objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
+            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
 
-            objectsToDraw[i].saveState();
-            objectsToDraw[i].scale(0.9, 0.9, 0.9);
-
-            //gl.uniformMatrix4fv(transformMatrix, gl.FALSE, objectsToDraw[i].matrix.toWebGL());
-
-            let mat = new Matrix().rotation(currentRotation, rotationRands.x, rotationRands.y, rotationRands.z).toWebGL();
+            let mat = new Matrix().rotation(currentRotation, 0,0, 1).toWebGL();
             gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
 
             objectsToDraw[i].draw(gl, vertexColor, vertexPosition, transformMatrix);
-
-            objectsToDraw[i].restoreState();
         }
 
         // All done.
@@ -158,11 +126,13 @@
     /*
      * Animates the scene.
      */
+    const minNear = 5;
+    const maxFar = 100;
     const aspect = canvas.width / canvas.height;
     gl.uniformMatrix4fv(
         projectionMatrix,
         gl.FALSE,
-        new Matrix().orthographic(-2 * aspect, 2 * aspect, -2, 2, -10, 10).toWebGL()
+        new Matrix().perspective(-2 * aspect, 2 * aspect, -2, 2, minNear, maxFar).toWebGL()
     );
     let animationActive = false;
     var rotationStep = 2;
