@@ -34,8 +34,8 @@
     const aSphere =  new Sphere (25, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, 0, -10);
     // const aSphereKid = aSphere.createChild().translate(0, 1.5, 5).scale(0.5, 0.5, 0.5);
     // const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(2, 2, 0).scale(0.5, 0.5, 0.5);
-    const splitter = aSphere.split("EXP", 'x');
-    console.log(splitter)
+    aSphere.split("EXP");
+    // console.log(splitter)
     // aSphere.split("LIN", 'rand');
     // aSphere.split("LIN", 'rand');
 
@@ -43,7 +43,7 @@
        aSphere,
     //    aSphereKid,
     //    cube,
-       splitter
+    //    splitter
    ];
 
     // Pass the vertices to WebGL.

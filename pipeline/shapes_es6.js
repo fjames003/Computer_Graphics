@@ -118,45 +118,20 @@ const Shape = ((() => {
             this.children.map(child => child.draw(gl, vertexColor, vertexPosition, transformMatrix));
         }
 
-        split (type, position) {
-            const getRandomInt = (min, max) => {
-                const binary = (Math.random() < 0.5) ? 0.0 : 1.0;
-                return binary * (max - min) + min;
-            };
-            const ranX = getRandomInt(-1, 0);
-            const ranY = getRandomInt(-1, 0);
-            const ranZ = getRandomInt(-1, 0);
+        split (type) {
             if (type === "EXP") {
                 this.children.map(child =>
                     {
-                        child.split("EXP", position);
+                        child.split("EXP");
                     }
                 );
-                this.split("LIN", position);
+                this.split("LIN");
             } else if (type === "LIN") {
                 const newChild = this.createChild();
                 newChild.saveState();
-
-                if (position === 'x') {
-                    this.translate(-1, 0, 0);
-                    newChild.restoreState();
-                    newChild.translate(1, 0, 0);
-                } else if (position === 'y') {
-                    this.translate(0, -1, 0);
-                    newChild.restoreState();
-                    newChild.translate(0, 1, 0);
-                } else if (position === 'z') {
-                    this.translate(0, 0, -1);
-                    newChild.restoreState();
-                    newChild.translate(0, 0, 1);
-                } else {
-                    console.log(ranX, ranY, ranZ)
-                    this.translate(ranX, ranY, ranZ);
-                    newChild.restoreState();
-                    newChild.translate(1 + ranX, 1 + ranY, 1 + ranZ);
-                }
+                this.translate(-1, -1, -1);
                 newChild.restoreState();
-                this.restoreState();
+                newChild.translate(1, 1, 1);
 
                 return newChild;
             } else {
