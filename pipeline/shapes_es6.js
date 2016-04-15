@@ -118,25 +118,32 @@ const Shape = ((() => {
             this.children.map(child => child.draw(gl, vertexColor, vertexPosition, transformMatrix));
         }
 
-        split (type) {
-            if (type === "EXP") {
-                this.children.map(child =>
-                    {
-                        child.split("EXP");
-                    }
-                );
-                this.split("LIN");
-            } else if (type === "LIN") {
-                const newChild = this.createChild();
-                newChild.saveState();
-                this.translate(-1, -1, -1);
-                newChild.restoreState();
-                newChild.translate(1, 1, 1);
+        split (type=1, direction="x") {
+            const finalDirection = {x: 0, y:0, z:0};
+            finalDirection[direction] = 1;
+            if (type === 1 || this.children.length === 0) {
+                // Create Child...
+                const splitChild = this.createChild();
+                splitChild.saveState();
+                // Move parent and child over by half a shape...
+                this.matrix = Matrix.translate(
+                    finalDirection.x,
+                    finalDirection.y,
+                    finalDirection.z
+                ).multiply(this.matrix);
+                // Return child to original location
+                splitChild.restoreState();
+                // Move child over another half a shape the other direction...
+                splitChild.matrix = Matrix.translate(
+                    -finalDirection.x,
+                    -finalDirection.y,
+                    -finalDirection.z
+                ).multiply(splitChild.matrix);
 
-                return newChild;
+                return splitChild;
             } else {
-                // Not an acceptable split type...
-                return this;
+                this.children.map(child => child.split(2, direction));
+                this.split(1, direction);
             }
         }
 
