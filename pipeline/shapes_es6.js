@@ -17,6 +17,7 @@ const Shape = ((() => {
                 this.matrix = new Matrix();
                 this._mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
                 this.compressedVertices = vertices;
+                this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
 
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = indices;
@@ -127,21 +128,11 @@ const Shape = ((() => {
                 // splitChild.saveState();
                 this.children.map(child => child.saveState());
                 // Move parent and child over by half a shape...
-                // this.matrix = Matrix.translate(
-                //     finalDirection.x,
-                //     finalDirection.y,
-                //     finalDirection.z
-                // ).multiply(this.matrix);
                 this.translate(finalDirection.x, finalDirection.y, finalDirection.z);
                 // Return child to original location
                 // splitChild.restoreState();
                 this.children.map(child => child.restoreState());
                 // Move child over another half a shape the other direction...
-                // splitChild.matrix = Matrix.translate(
-                //     -finalDirection.x,
-                //     -finalDirection.y,
-                //     -finalDirection.z
-                // ).multiply(splitChild.matrix);
                 splitChild.translate(-finalDirection.x, -finalDirection.y, -finalDirection.z);
 
                 return splitChild;
@@ -182,6 +173,35 @@ const Shape = ((() => {
             }
             return result;
         }
+
+        toNormalArray (indexedVertices) {
+            var result = [];
+
+            // For each face...
+            for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+                // We form vectors from the first and second then second and third vertices.
+                var p0 = indexedVertices.vertices[indexedVertices.indices[i][0]];
+                var p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
+                var p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
+
+                // Technically, the first value is not a vector, but v can stand for vertex
+                // anyway, so...
+                var v0 = new Vector(p0[0], p0[1], p0[2]);
+                var v1 = new Vector(p1[0], p1[1], p1[2]).subtract(v0);
+                var v2 = new Vector(p2[0], p2[1], p2[2]).subtract(v0);
+                var normal = v1.cross(v2).unit();
+
+                // We then use this same normal for every vertex in this face.
+                for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                    result = result.concat(
+                        [ normal.x(), normal.y(), normal.z() ]
+                    );
+                }
+            }
+
+            return result;
+        }
+        
         set mode (newMode) {
             this._mode = newMode;
             this.setVertices();
@@ -194,10 +214,11 @@ const Shape = ((() => {
             if (this._mode === 0) {
                 this.vertices = this.toRawPointArray(vertices);
             } else if (this._mode === 1) {
-                this.vertices = this.toRawLineArray({vertices: this.compressedVertices, indices: this.indices});
+                this.vertices = this.toRawLineArray(this.indexedVertices);
             } else {
-                this.vertices = this.toRawTriangleArray({vertices: this.compressedVertices, indices: this.indices});
+                this.vertices = this.toRawTriangleArray(this.indexedVertices);
             }
+            this.normals = this.toNormalArray(this.indexedVertices);
         }
     }
     var initBuffer = function (gl, sequence) {
