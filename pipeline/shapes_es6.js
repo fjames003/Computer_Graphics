@@ -124,21 +124,25 @@ const Shape = ((() => {
             if (type === 1 || this.children.length === 0) {
                 // Create Child...
                 const splitChild = this.createChild();
-                splitChild.saveState();
+                // splitChild.saveState();
+                this.children.map(child => child.saveState());
                 // Move parent and child over by half a shape...
-                this.matrix = Matrix.translate(
-                    finalDirection.x,
-                    finalDirection.y,
-                    finalDirection.z
-                ).multiply(this.matrix);
+                // this.matrix = Matrix.translate(
+                //     finalDirection.x,
+                //     finalDirection.y,
+                //     finalDirection.z
+                // ).multiply(this.matrix);
+                this.translate(finalDirection.x, finalDirection.y, finalDirection.z);
                 // Return child to original location
-                splitChild.restoreState();
+                // splitChild.restoreState();
+                this.children.map(child => child.restoreState());
                 // Move child over another half a shape the other direction...
-                splitChild.matrix = Matrix.translate(
-                    -finalDirection.x,
-                    -finalDirection.y,
-                    -finalDirection.z
-                ).multiply(splitChild.matrix);
+                // splitChild.matrix = Matrix.translate(
+                //     -finalDirection.x,
+                //     -finalDirection.y,
+                //     -finalDirection.z
+                // ).multiply(splitChild.matrix);
+                splitChild.translate(-finalDirection.x, -finalDirection.y, -finalDirection.z);
 
                 return splitChild;
             } else {
