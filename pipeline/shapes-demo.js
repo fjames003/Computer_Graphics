@@ -86,11 +86,21 @@
     // Hold on to the important variables within the shaders.
     const vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
     gl.enableVertexAttribArray(vertexPosition);
-    const vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
-    gl.enableVertexAttribArray(vertexColor);
+    const vertexDiffuseColor = gl.getAttribLocation(shaderProgram, "vertexDiffuseColor");
+    gl.enableVertexAttribArray(vertexDiffuseColor);
+    const vertexSpecularColor = gl.getAttribLocation(shaderProgram, "vertexSpecularColor");
+    gl.enableVertexAttribArray(vertexSpecularColor);
+    const normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
+    gl.enableVertexAttribArray(normalVector);
+
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
     const uniRotationMatrix = gl.getUniformLocation(shaderProgram, "uniRotationMatrix");
+
+    const lightPosition = gl.getUniformLocation(shaderProgram, "lightPosition");
+    const lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
+    const lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
+    const shininess = gl.getUniformLocation(shaderProgram, "shininess");
 
     /*
      * Displays the scene.
@@ -136,6 +146,10 @@
         gl.FALSE,
         new Matrix().perspective(-2 * aspect, 2 * aspect, -2, 2, minNear, maxFar).toWebGL()
     );
+    gl.uniform4fv(lightPosition, [500.0, 1000.0, 100.0, 1.0]);
+    gl.uniform3fv(lightDiffuse, [1.0, 1.0, 1.0]);
+    gl.uniform3fv(lightSpecular, [1.0, 1.0, 1.0]);
+    
     let animationActive = false;
     var rotationStep = 2;
     let previousTimestamp = null;
