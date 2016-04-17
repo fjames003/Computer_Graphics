@@ -17,10 +17,11 @@ const Shape = ((() => {
                 this.matrix = new Matrix();
                 this._mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
                 this.compressedVertices = vertices;
-                this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
 
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = indices;
+                this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
+
                 this.setVertices();
 
                 // If colors is an object instead of array...
@@ -201,7 +202,7 @@ const Shape = ((() => {
 
             return result;
         }
-        
+
         set mode (newMode) {
             this._mode = newMode;
             this.setVertices();
