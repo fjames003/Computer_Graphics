@@ -57,6 +57,34 @@ const Matrix = ((() => {
             return result;
         }
 
+        multiplyVector(v) {
+            let x = 0;
+            let y = 0;
+            let z = 0;
+            let w = 0;
+
+            const thisRowMax = this.rowDimensions();
+            const thisColMax = this.colDimensions();
+            const vecDimen = v.dimensions();
+            if (thisRowMax !== vecDimen) {
+                throw `Cannot multiply a matrix with ${thisRowMax} rows and a vector with size ${vecDimen}`;
+            } else {
+                this.forEach((value, index, matrix) => {
+                    if (index[0] === 0) {
+                        x += value * v.elements[index[1]];
+                    } else if (index[0] === 1) {
+                        y += value * v.elements[index[1]];
+                    } else if (index[0] === 2) {
+                        z += value * v.elements[index[1]];
+                    } else {
+                        w += value * v.elements[index[1]];
+                    }
+                });
+                return new Vector(x, y, z, w);
+            }
+
+        }
+
         translate(dx, dy, dz) {
             checkArgs(3, arguments);
             const result = new Matrix();

@@ -136,7 +136,7 @@ $(function () {
         deepEqual(mat1.orthographic(0.5, 1.5, 2, 2.5, 1, 0), new Matrix([[2, 0, 0, -2],
                                                                          [0, 4, 0, -9],
                                                                          [0, 0, 2, 1],
-                                                                         [0, 0, 0, 1]]), 
+                                                                         [0, 0, 0, 1]]),
             "Creating a 3D orthographic projection matrix from existing matrix");
 
         var mat1 = Matrix.orthographic(-0.4, 0.6, -0.75, 0.9, -0.5, 1);
@@ -231,7 +231,7 @@ $(function () {
         var x = 0.75 / axisLength;
         var y = -0.5 / axisLength;
         var z = 0.30 / axisLength;
-        var xyzRot = new Matrix([[(x * x) * oneMinusC + cosine, 
+        var xyzRot = new Matrix([[(x * x) * oneMinusC + cosine,
                                   (x * y) * oneMinusC - (z * sine),
                                   (x * z) * oneMinusC + (y * sine), 0],
                                  [(x * y) * oneMinusC + (z * sine),
@@ -240,7 +240,7 @@ $(function () {
                                  [(x * z) * oneMinusC - (y * sine),
                                   (y * z) * oneMinusC + (x * sine),
                                   (z * z) * oneMinusC + cosine, 0],
-                                 [0, 0, 0, 1]]); 
+                                 [0, 0, 0, 1]]);
         tester.forEach(function(value, index, marix) {
             QUnit.close(value, xyzRot.elements[index[0]][index[1]], 0.000001,
                         "Creating a 3D rotation matrix about an arbitray axis from existing matrix, index: " + index);
@@ -280,4 +280,10 @@ $(function () {
             count += 1;
         });
     });
+
+    test("Vector Multiplication", function () {
+        var mat1 = new Matrix([[1,0,-3,4], [0,6,7,-8], [3,10,0,12], [0,0,0,1]]);
+        var vec1 = new Vector(0, 0, 0, 1);
+        deepEqual(mat1.multiplyVector(vec1), new Vector(4, -8, 12, 1), "Testing matrix multiplied to a vector");
+    })
 });

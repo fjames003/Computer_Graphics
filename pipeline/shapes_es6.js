@@ -53,7 +53,7 @@ const Shape = ((() => {
             }
             if (child instanceof Shape) {
                 child.parent = this;
-                child.matrix = this.matrix;
+                child.matrix = this.matrix.copy();
                 this.children.push(child);
                 return child;
             } else {
