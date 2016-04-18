@@ -32,13 +32,15 @@
 
     // Build the objects to display.
     const aSphere =  new Sphere (20, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
-    const aSphereKid = aSphere.createChild().translate(0, 2, 5).scale(0.5, 0.5, 0.5);
-    const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(3, 3, 0);
+    console.log(aSphere);
+    aSphere.createChild().translate(0, 2, 5);
+    // const aSphereKid = aSphere.createChild().translate(0, 2, 5).scale(0.5, 0.5, 0.5);
+    // const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(3, 3, 0);
 
     // 2 Spheres...
-    aSphere.split(2, 'x');
+    // aSphere.split(2, 'x');
     // 4 Spheres
-    aSphere.split(2, 'x');
+    // aSphere.split(2, 'x');
     // 8 Spheres
     // aSphere.split(2, 'x');
     // 16 Spheres
@@ -46,8 +48,8 @@
 
     const objectsToDraw = [
        aSphere,
-       aSphereKid,
-       cube
+    //    aSphereKid,
+    //    cube
    ];
 
     // Initialize the shaders.
