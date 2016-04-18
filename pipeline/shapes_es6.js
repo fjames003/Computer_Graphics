@@ -312,7 +312,16 @@ class Sphere extends Shape {
         }
 
         super(vertices, indices, mode, colors);
-        this.speed(0, 0, 0);
+        this.speed = {x: 0, y: 0, z: 0};
+        // Just a default... Can always be set later...
+        this.viewingVolume = {
+            left: -4,
+            right: 4,
+            bottom: -2,
+            top: 2,
+            near: 5,
+            far: 100
+        };
     }
 
     checkCollisionwithSphere (s) {
@@ -320,11 +329,13 @@ class Sphere extends Shape {
         const myCoordVec = this.matrix.multiplyVector(transVec);
         const sCoordVec = s.matrix.multiplyVector(transVec);
 
+        const subtractionVec = myCoordVec.subtract(sCoordVec);
+
         const distance = Math.sqrt(
-            ((myCoordVec.x() - sCoordVec.x()) * (myCoordVec.x() – sCoordVec.x()))
-          + ((myCoordVec.y() - sCoordVec.y()) * (myCoordVec.y() – sCoordVec.y()))
-          + ((myCoordVec.z() - sCoordVec.z()) * (myCoordVec.z() – sCoordVec.z()))
-           );
+            subtractionVec.x() * subtractionVec.x() +
+            subtractionVec.y() * subtractionVec.y() +
+            subtractionVec.z() * subtractionVec.z()
+        );
         return distance < 2;
         /*
             To Do List:
@@ -332,23 +343,70 @@ class Sphere extends Shape {
     Done    -->    Detect collisions between spheres... (don't know what to do with it though)
     Done    -->    Detect collisions witht the wall...
     Done    -->    Give spheres (or maybe shapes) a way to have speed (aka auto translate)
-            Now enable elastic collisions with bouncing back...
-            Now you have balls flying around bouncing off walls, and you can split them...
+    Done    -->    Now enable elastic collisions with bouncing back... (I think... Haha)
+    Maybe...-->    Now you have balls flying around bouncing off walls, and you can split them...
         */
     }
 
-    checkWallCollisions (left, right, bottom, top, near, far) {
+    checkWallCollisions (viewingVolume) {
         const transVec = new Vector(0, 0, 0, 1);
         const myCoordVec = this.matrix.multiplyVector(transVec);
-        const xCol = myCoordVec.x() < left || myCoordVec.x() > right;
-        const yCol = myCoordVec.y() < bottom || myCoordVec.y() > top;
-        const zCol = myCoordVec.z() < near || myCoordVec.z() > far;
+        const xCol = myCoordVec.x() < viewingVolume.left || myCoordVec.x() > viewingVolume.right;
+        const yCol = myCoordVec.y() < viewingVolume.bottom || myCoordVec.y() > viewingVolume.top;
+        const zCol = myCoordVec.z() < viewingVolume.near || myCoordVec.z() > viewingVolume.far;
 
         return {x: xCol, y: yCol, z: zCol};
     }
 
-    set speed (vX, vY, vZ) {
-        this._speed = {x: vX, y: vY, z: vZ};
+    // QUESTION >> If I translate, then I will have translated my children as well... Should I?
+    updateLocation () {
+        const transVec = new Vector(0, 0, 0, 1);
+        const myCoordVec = this.matrix.multiplyVector(transVec);
+        const mySpeed = this.speed;
+        const xDist = myCoordVec.x() + mySpeed.x;
+        const yDist = myCoordVec.y() + mySpeed.y;
+        const zDist = myCoordVec.z() + mySpeed.z;
+        // For now I will avoid updating children... aka no translate
+        this.matrix.multiply(Matrix.translate(xDist, yDist, zDist));
+
+        const wallCollisions = checkWallCollisions(this.viewingVolume);
+        const xMultp = (wallCollisions.x) ? -1 : 1;
+        const yMultp = (wallCollisions.y) ? -1 : 1;
+        const zMultp = (wallCollisions.z) ? -1 : 1;
+        this.speed = {
+            x: mySpeed.x * xMultp,
+            y: mySpeed.y * yMultp,
+            z: mySpeed.z * zMultp
+        };
+
+        for (let i = 0; i < this.children.length; i += 1) {
+            const collided = this.checkCollisionwithSphere(this.children[i]);
+            if (collided) {
+                const colliderSpeed = this.children[i].speed;
+                myNewVelX = colliderSpeed.x;
+                myNewVelY = colliderSpeed.y;
+                myNewVelZ = colliderSpeed.z;
+                colliderNewVelX = mySpeed.x;
+                colliderNewVelY = mySpeed.y;
+                colliderNewVelZ = mySpeed.z;
+                this.speed = {x: myNewVelX, y: myNewVelY, z: myNewVelZ};
+                this.children[i].speed = {x: colliderNewVelX, y: colliderNewVelY, z: colliderNewVelZ};
+
+                const myNewCoordVec = this.matrix.multiplyVector(transVec);
+                const myNewSpeed = this.speed;
+                this.matrix.multiply(Matrix.translate(
+                    myNewCoordVec.x() + myNewSpeed.x,
+                    myNewCoordVec.y() + myNewSpeed.y,
+                    myNewCoordVec.z() + myNewSpeed.z
+                ));
+            } else {
+                // No collision detected, thus updated location was successful...
+            }
+        }
+    }
+
+    set speed (s) {
+        this._speed = {x: s.x, y: s.y, z: s.z};
     }
     get speed () {
         return this._speed;
