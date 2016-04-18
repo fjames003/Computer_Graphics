@@ -208,11 +208,18 @@
     drawScene();
 
     // Set up the rotation toggle: clicking on the canvas does it.
+    let count = 0;
+    let incrementCounter = counter => {return counter += 1}
     $(canvas).click(() => {
+        count = incrementCounter(count);
         animationActive = !animationActive;
         if (animationActive) {
             previousTimestamp = null;
             window.requestAnimationFrame(advanceScene);
+        }
+        if (count !== 0 && count % 2 === 0) {
+            console.log(count)
+            aSphere.split(2, 'x');
         }
     });
 
