@@ -369,7 +369,7 @@ class Sphere extends Shape {
         // For now I will avoid updating children... aka no translate
         this.matrix.multiply(Matrix.translate(xDist, yDist, zDist));
 
-        const wallCollisions = checkWallCollisions(this.viewingVolume);
+        const wallCollisions = this.checkWallCollisions(this.viewingVolume);
         const xMultp = (wallCollisions.x) ? -1 : 1;
         const yMultp = (wallCollisions.y) ? -1 : 1;
         const zMultp = (wallCollisions.z) ? -1 : 1;
@@ -410,6 +410,11 @@ class Sphere extends Shape {
     }
     get speed () {
         return this._speed;
+    }
+
+    draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
+        super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
+        this.updateLocation();
     }
 }
 
