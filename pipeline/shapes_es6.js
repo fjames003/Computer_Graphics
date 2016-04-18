@@ -130,17 +130,14 @@ const Shape = ((() => {
             const finalDirection = {x: 0, y:0, z:0};
             finalDirection[direction] = 1;
             if (type === 1 || this.children.length === 0) {
-                // Create Child...
+
                 const splitChild = this.createChild();
-                // splitChild.saveState();
-                // this.children.map(child => child.saveState());
-                // Move parent and child over by half a shape...
+
                 this.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(this.matrix);
-                // Return child to original location
-                // splitChild.restoreState();
-                // this.children.map(child => child.restoreState());
-                // Move child over another half a shape the other direction...
+                // this.matrix = this.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
+
                 splitChild.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(splitChild.matrix);
+                // splitChild.matrix = splitChild.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
 
                 return splitChild;
             } else {
@@ -362,9 +359,9 @@ class Sphere extends Shape {
     checkWallCollisions (viewingVolume) {
         const transVec = new Vector(0, 0, 0, 1);
         const myCoordVec = this.matrix.multiplyVector(transVec);
-        const xCol = myCoordVec.x() < viewingVolume.left || myCoordVec.x() > viewingVolume.right;
-        const yCol = myCoordVec.y() < viewingVolume.bottom || myCoordVec.y() > viewingVolume.top;
-        const zCol = myCoordVec.z() > -viewingVolume.near || myCoordVec.z() < -viewingVolume.far;
+        const xCol = myCoordVec.x() < (viewingVolume.left + 0.1) || myCoordVec.x() > (viewingVolume.right + 0.1);
+        const yCol = myCoordVec.y() < (viewingVolume.bottom + 0.1) || myCoordVec.y() > (viewingVolume.top + 0.1);
+        const zCol = myCoordVec.z() > (-viewingVolume.near - 0.1) || myCoordVec.z() < (-viewingVolume.far + 0.1);
 
         return {x: xCol, y: yCol, z: zCol};
     }
