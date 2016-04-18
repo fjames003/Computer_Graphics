@@ -1,6 +1,6 @@
 const Shape = ((() => {
     class shape {
-        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b: 0}) {
+        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b: 0}, specularColors={r: 1.0, g: 1.0, b: 1.0}, shininess=16) {
             if (arguments.length < 2) {
                 throw "Either the vertex or face array were not provided. Both are required.";
             } else if (vertices.length < 3 || indices.length < vertices.length / 3) {
@@ -24,34 +24,25 @@ const Shape = ((() => {
 
                 this.setVertices();
 
-                // If colors is an object instead of array...
-                if (colors.r || colors.g || colors.b) {
-                    this.colors = [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
-                } else {
-                    // Colors provided as an array... Make sure the array is long enough...
-                    colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
-                    if (colors.length !== this.vertices.length) {
-                        this.colors = colors.concat(
-                                                    fillColors(this.vertices.length / 3 - colors.length / 3,
-                                                    colors[0],
-                                                    colors[1],
-                                                    colors[2])
-                                                  );
-                    } else {
-                        this.colors = colors;
-                    }
-                }
+                this.colors = this.checkColors(colors);
+                this.specularColors = this.checkColors(specularColors);
+                this.shininess = shininess;
+                this.buffersInitiated = {vertices: false, color: false}
             }
         }
 
         initVertexBuffer (gl) {
             this.buffer = initBuffer(gl, this.vertices);
+            this.normalBuffer = initBuffer(gl, this.normals);
+            this.buffersInitiated.vertices = true;
             this.children.map(child => child.initVertexBuffer(gl));
             return this;
         }
 
         initColorBuffer (gl) {
             this.colorBuffer = initBuffer(gl, this.colors);
+            this.specularBuffer = initBuffer(gl, this.specularColors);
+            this.buffersInitiated.color = true;
             this.children.map(child => child.initColorBuffer(gl));
             return this;
         }
@@ -108,16 +99,31 @@ const Shape = ((() => {
             }
         }
 
-        draw (gl, vertexColor, vertexPosition, transformMatrix) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
+        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
+            if (!this.buffersInitiated.vertices || !this.buffersInitiated.color) {
+                this.initVertexBuffer(gl);
+                this.initColorBuffer(gl);
+            }
 
-            // Set the varying vertex coordinates.
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
+            gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.specularBuffer);
+            gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
+
+            gl.uniform1f(shininess, this.shininess);
+
+            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, this.matrix.toWebGL());
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+            gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
+
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
-            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, this.matrix.toWebGL());
+
             gl.drawArrays(this._mode, 0, this.vertices.length / 3);
-            this.children.map(child => child.draw(gl, vertexColor, vertexPosition, transformMatrix));
+
+            this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix));
         }
 
         split (type=1, direction="x") {
@@ -221,6 +227,24 @@ const Shape = ((() => {
             }
             this.normals = this.toNormalArray(this.indexedVertices);
         }
+        checkColors (colors) {
+            if (colors.r || colors.g || colors.b) {
+                return [].concat(fillColors(this.vertices.length / 3, colors.r, colors.g, colors.b));
+            } else {
+                // Colors provided as an array... Make sure the array is long enough...
+                colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
+                if (colors.length !== this.vertices.length) {
+                    return colors.concat(
+                                                fillColors(this.vertices.length / 3 - colors.length / 3,
+                                                colors[0],
+                                                colors[1],
+                                                colors[2])
+                                              );
+                } else {
+                    return colors;
+                }
+            }
+        }
     }
     var initBuffer = function (gl, sequence) {
         var buffer = gl.createBuffer();
@@ -291,30 +315,30 @@ class Cube extends Shape {
         var vertices = [];
         var indices = [];
         // X / Z - y
-        vertices.push([-1, -1, -1]);
-        vertices.push([-1, -1, 1]);
-        vertices.push([1, -1, -1]);
-        vertices.push([1, -1, 1]);
-
-        // X / Z + y
+        vertices.push([1, 1, 1]);
+        vertices.push([1, 1, -1]);
         vertices.push([-1, 1, -1]);
         vertices.push([-1, 1, 1]);
-        vertices.push([1, 1, -1]);
-        vertices.push([1, 1, 1]);
+        vertices.push([1, -1, 1]);
+        vertices.push([1, -1, -1]);
+        vertices.push([-1, -1, -1]);
+        vertices.push([-1, -1, 1]);
+
+        // X / Z + y
 
         indices = [
-            [0, 1, 2],
-            [3, 1, 2],
-            [4, 5, 6],
-            [7, 5, 6],
-            [0, 4, 2],
-            [6, 4, 2],
-            [1, 5, 3],
-            [7, 5, 3],
-            [2, 6, 3],
-            [7, 6, 3],
-            [0, 4, 1],
-            [5, 4, 1]
+            [ 0, 1, 3 ],
+            [ 2, 3, 1 ],
+            [ 0, 3, 4 ],
+            [ 7, 4, 3 ],
+            [ 0, 4, 1 ],
+            [ 5, 1, 4 ],
+            [ 1, 5, 6 ],
+            [ 2, 1, 6 ],
+            [ 2, 7, 3 ],
+            [ 6, 7, 2 ],
+            [ 4, 7, 6 ],
+            [ 5, 4, 6 ]
         ];
 
         super(vertices, indices, mode, colors);

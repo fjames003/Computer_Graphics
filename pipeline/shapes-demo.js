@@ -31,7 +31,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
-    const aSphere =  new Sphere (25, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
+    const aSphere =  new Sphere (35, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
     // const aSphereKid = aSphere.createChild().translate(0, 2, 5).scale(0.5, 0.5, 0.5);
     const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(3, 3, 0).scale(0.5, 0.5, 0.5);
 
@@ -47,14 +47,8 @@
     const objectsToDraw = [
        aSphere,
     //    aSphereKid
+        cube
    ];
-
-    // Pass the vertices to WebGL.
-    for (let i = 0; i < objectsToDraw.length; i += 1) {
-        objectsToDraw[i].initVertexBuffer(gl);
-
-        objectsToDraw[i].initColorBuffer(gl);
-    }
 
     // Initialize the shaders.
     let abort = false;
@@ -128,7 +122,7 @@
             let mat = new Matrix().rotation(currentRotation, 0,0, 1).toWebGL();
             gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
 
-            objectsToDraw[i].draw(gl, vertexColor, vertexPosition, transformMatrix);
+            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
         }
 
         // All done.
@@ -149,7 +143,7 @@
     gl.uniform4fv(lightPosition, [500.0, 1000.0, 100.0, 1.0]);
     gl.uniform3fv(lightDiffuse, [1.0, 1.0, 1.0]);
     gl.uniform3fv(lightSpecular, [1.0, 1.0, 1.0]);
-    
+
     let animationActive = false;
     var rotationStep = 2;
     let previousTimestamp = null;
