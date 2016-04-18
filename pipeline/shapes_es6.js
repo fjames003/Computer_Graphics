@@ -329,7 +329,10 @@ class Sphere extends Shape {
     }
 
     copy () {
-        return new Sphere(this.slices, this.mode, this.colors, this.compressedVertices, this.indices);
+        const result = new Sphere(this.slices, this.mode, this.colors, this.compressedVertices, this.indices);
+        result.speed = Object.create(this.speed);
+        result.viewingVolume = this.viewingVolume;
+        return result;
     }
 
     checkCollisionwithSphere (s) {

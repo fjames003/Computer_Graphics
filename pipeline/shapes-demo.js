@@ -30,10 +30,25 @@
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.viewport(0, 0, canvas.width, canvas.height);
 
+    const minNear = 5;
+    const maxFar = 100;
+    const aspect = canvas.width / canvas.height;
+    const viewingVolume = {
+        left: -2 * aspect,
+        right: 2 * aspect,
+        bottom: -2,
+        top: 2,
+        near: minNear,
+        far: maxFar
+    };
+
+
     // Build the objects to display.
     const aSphere =  new Sphere (20, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
-    aSphere.createChild().translate(0,2, 5);
     aSphere.speed = {x: 0, y: 0, z: 1};
+    aSphere.createChild().translate(0,2, 5);
+
+    aSphere.viewingVolume = viewingVolume;
     // const aSphereKid = aSphere.createChild().translate(0, 2, 5).scale(0.5, 0.5, 0.5);
     // const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(3, 3, 0);
 
@@ -134,14 +149,19 @@
     /*
      * Animates the scene.
      */
-    const minNear = 5;
-    const maxFar = 100;
-    const aspect = canvas.width / canvas.height;
-    gl.uniformMatrix4fv(
-        projectionMatrix,
-        gl.FALSE,
-        new Matrix().perspective(-2 * aspect, 2 * aspect, -2, 2, minNear, maxFar).toWebGL()
-    );
+     gl.uniformMatrix4fv(
+         projectionMatrix,
+         gl.FALSE,
+         new Matrix().perspective(
+             viewingVolume.left,
+             viewingVolume.right,
+             viewingVolume.bottom,
+             viewingVolume.top,
+             viewingVolume.near,
+             viewingVolume.far
+         ).toWebGL()
+     );
+
     gl.uniform4fv(lightPosition, [0, 0, -500, 1.0]);
     gl.uniform3fv(lightDiffuse, [0.5, 0.5, 0.5]);
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
