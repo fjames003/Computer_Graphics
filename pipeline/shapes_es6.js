@@ -312,6 +312,7 @@ class Sphere extends Shape {
         }
 
         super(vertices, indices, mode, colors);
+        this.speed(0, 0, 0);
     }
 
     checkCollisionwithSphere (s) {
@@ -319,12 +320,18 @@ class Sphere extends Shape {
         const myCoordVec = this.matrix.multiplyVector(transVec);
         const sCoordVec = s.matrix.multiplyVector(transVec);
 
+        const distance = Math.sqrt(
+            ((myCoordVec.x() - sCoordVec.x()) * (myCoordVec.x() – sCoordVec.x()))
+          + ((myCoordVec.y() - sCoordVec.y()) * (myCoordVec.y() – sCoordVec.y()))
+          + ((myCoordVec.z() - sCoordVec.z()) * (myCoordVec.z() – sCoordVec.z()))
+           );
+        return distance < 2;
         /*
             To Do List:
     -------------------
-            Detect collisions between spheres...
+    Done    -->    Detect collisions between spheres... (don't know what to do with it though)
     Done    -->    Detect collisions witht the wall...
-            Give spheres (or maybe shapes) a way to have speed (aka auto translate)
+    Done    -->    Give spheres (or maybe shapes) a way to have speed (aka auto translate)
             Now enable elastic collisions with bouncing back...
             Now you have balls flying around bouncing off walls, and you can split them...
         */
