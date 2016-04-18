@@ -71,8 +71,9 @@
 
       void main(void) {
 
-          fragmentNormal = normalVector;
-          fragmentEye = vertexPosition;
+          fragmentNormal = vec3(uniRotationMatrix * transformMatrix * vec4(normalVector, 1.0));
+          vec4 fragmentFinalPosition = uniRotationMatrix * transformMatrix * vec4(vertexPosition, 1.0);
+          fragmentEye = fragmentFinalPosition.xyz;
           fragmentLight = lightPosition.xyz;
 
           if (lightPosition.w != 0.0) {
@@ -83,7 +84,7 @@
           fragmentDiffuseColor = vertexDiffuseColor;
           fragmentSpecularColor = vertexSpecularColor;
 
-          gl_Position = projectionMatrix * uniRotationMatrix * transformMatrix * vec4(vertexPosition, 1.0);
+          gl_Position = projectionMatrix * fragmentFinalPosition;
       }
     </script>
 

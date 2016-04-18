@@ -140,9 +140,9 @@
         gl.FALSE,
         new Matrix().perspective(-2 * aspect, 2 * aspect, -2, 2, minNear, maxFar).toWebGL()
     );
-    gl.uniform4fv(lightPosition, [500.0, 1000.0, 100.0, 1.0]);
+    gl.uniform4fv(lightPosition, [-500, 0, -500, 1.0]);
     gl.uniform3fv(lightDiffuse, [1.0, 1.0, 1.0]);
-    gl.uniform3fv(lightSpecular, [1.0, 1.0, 1.0]);
+    gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
     let animationActive = false;
     var rotationStep = 2;
