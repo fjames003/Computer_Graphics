@@ -313,6 +313,19 @@ class Sphere extends Shape {
 
         super(vertices, indices, mode, colors);
     }
+
+    checkCollisionwithSphere (s) {
+        const transVec = new Vector(0, 0, 0, 1);
+        const myCoordVec = this.matrix.multiplyVector(transVec);
+        const sCoordVec = s.matrix.multiplyVector(transVec);
+
+        // To Do List:
+        // Detect collisions between spheres...
+        // Detect collisions witht the wall...
+        // Give spheres (or maybe shapes) a way to have speed (aka auto translate)
+        // Now enable elastic collisions with bouncing back...
+        // Now you have balls flying around bouncing off walls, and you can split them...
+    }
 }
 
 class Cube extends Shape {
