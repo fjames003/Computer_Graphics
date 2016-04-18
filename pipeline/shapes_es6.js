@@ -272,56 +272,64 @@ const Shape = ((() => {
 }))();
 
 class Sphere extends Shape {
-    constructor (n, mode, colors) {
-        var vertices = [];
-        var indices = [];
+    constructor (n, mode, colors, vertices=[], indices=[]) {
 
         // Gotta be a way to calculate all thetas and sine / cosine thetas on the first loop interation... Just need
         // to store them some how... A map would be nice...
-        for (let i = 0; i < n + 1; i += 1) {
-            var theta = Math.PI * i/n;
-            var sTheta = Math.sin(theta);
-            var cTheta = Math.cos(theta);
-            for (let j = 0; j < n + 1; j += 1) {
-                vertices.push(
-                    [
-                        sTheta * Math.cos(2 * Math.PI * j/n),
-                        cTheta,
-                        sTheta * Math.sin(2 * Math.PI * j/n)
-                    ]
-                );
+        if (vertices.length === 0 || indices.length === 0) {
+            vertices = [];
+            indices = [];
+
+            for (let i = 0; i < n + 1; i += 1) {
+                var theta = Math.PI * i/n;
+                var sTheta = Math.sin(theta);
+                var cTheta = Math.cos(theta);
+                for (let j = 0; j < n + 1; j += 1) {
+                    vertices.push(
+                        [
+                            sTheta * Math.cos(2 * Math.PI * j/n),
+                            cTheta,
+                            sTheta * Math.sin(2 * Math.PI * j/n)
+                        ]
+                    );
+                }
             }
-        }
 
-        for (let i = 0.0; i < n; i += 1) {
-            for (let j = 0.0; j < n; j += 1) {
-                var minimum = (i * (n + 1)) + j;
-                var maximum = minimum + n + 1;
+            for (let i = 0.0; i < n; i += 1) {
+                for (let j = 0.0; j < n; j += 1) {
+                    var minimum = (i * (n + 1)) + j;
+                    var maximum = minimum + n + 1;
 
-                indices.push(
-                    [minimum,
-                    maximum,
-                    minimum + 1]
-                );
-                indices.push(
-                    [maximum,
-                    maximum + 1,
-                    minimum + 1]
-                );
+                    indices.push(
+                        [minimum,
+                        maximum,
+                        minimum + 1]
+                    );
+                    indices.push(
+                        [maximum,
+                        maximum + 1,
+                        minimum + 1]
+                    );
+                }
             }
         }
 
         super(vertices, indices, mode, colors);
+        this.slices = n;
         this.speed = {x: 0, y: 0, z: 0};
         // Just a default... Can always be set later...
         this.viewingVolume = {
-            left: -4,
-            right: 4,
+            left: -2,
+            right: 2,
             bottom: -2,
             top: 2,
             near: 5,
             far: 100
         };
+    }
+
+    copy () {
+        return new Sphere(this.slices, this.mode, this.colors, this.compressedVertices, this.indices);
     }
 
     checkCollisionwithSphere (s) {
@@ -353,7 +361,7 @@ class Sphere extends Shape {
         const myCoordVec = this.matrix.multiplyVector(transVec);
         const xCol = myCoordVec.x() < viewingVolume.left || myCoordVec.x() > viewingVolume.right;
         const yCol = myCoordVec.y() < viewingVolume.bottom || myCoordVec.y() > viewingVolume.top;
-        const zCol = myCoordVec.z() < -viewingVolume.near || myCoordVec.z() > -viewingVolume.far;
+        const zCol = myCoordVec.z() > -viewingVolume.near || myCoordVec.z() < -viewingVolume.far;
 
         return {x: xCol, y: yCol, z: zCol};
     }
@@ -366,16 +374,14 @@ class Sphere extends Shape {
         const xDist = myCoordVec.x() + mySpeed.x;
         const yDist = myCoordVec.y() + mySpeed.y;
         const zDist = myCoordVec.z() + mySpeed.z;
-        console.log(myCoordVec, xDist, yDist, zDist);
         // For now I will avoid updating children... aka no translate
-        this.matrix = this.matrix.multiply(Matrix.translate(
+        this.matrix = Matrix.translate(
             myCoordVec.x() - xDist,
             myCoordVec.y() - yDist,
             myCoordVec.z() - zDist
-        ));
+        ).multiply(this.matrix);
 
         const wallCollisions = this.checkWallCollisions(this.viewingVolume);
-        console.log(wallCollisions);
         const xMultp = (wallCollisions.x) ? -1 : 1;
         const yMultp = (wallCollisions.y) ? -1 : 1;
         const zMultp = (wallCollisions.z) ? -1 : 1;
@@ -388,14 +394,13 @@ class Sphere extends Shape {
         for (let i = 0; i < this.children.length; i += 1) {
             const collided = this.checkCollisionwithSphere(this.children[i]);
             if (collided) {
-                console.log("Uh oh...");
                 const colliderSpeed = this.children[i].speed;
-                myNewVelX = colliderSpeed.x;
-                myNewVelY = colliderSpeed.y;
-                myNewVelZ = colliderSpeed.z;
-                colliderNewVelX = mySpeed.x;
-                colliderNewVelY = mySpeed.y;
-                colliderNewVelZ = mySpeed.z;
+                const myNewVelX = colliderSpeed.x;
+                const myNewVelY = colliderSpeed.y;
+                const myNewVelZ = colliderSpeed.z;
+                const colliderNewVelX = mySpeed.x;
+                const colliderNewVelY = mySpeed.y;
+                const colliderNewVelZ = mySpeed.z;
                 this.speed = {x: myNewVelX, y: myNewVelY, z: myNewVelZ};
                 this.children[i].speed = {x: colliderNewVelX, y: colliderNewVelY, z: colliderNewVelZ};
 
