@@ -353,7 +353,7 @@ class Sphere extends Shape {
         const myCoordVec = this.matrix.multiplyVector(transVec);
         const xCol = myCoordVec.x() < viewingVolume.left || myCoordVec.x() > viewingVolume.right;
         const yCol = myCoordVec.y() < viewingVolume.bottom || myCoordVec.y() > viewingVolume.top;
-        const zCol = myCoordVec.z() < viewingVolume.near || myCoordVec.z() > viewingVolume.far;
+        const zCol = myCoordVec.z() < -viewingVolume.near || myCoordVec.z() > -viewingVolume.far;
 
         return {x: xCol, y: yCol, z: zCol};
     }
@@ -366,10 +366,16 @@ class Sphere extends Shape {
         const xDist = myCoordVec.x() + mySpeed.x;
         const yDist = myCoordVec.y() + mySpeed.y;
         const zDist = myCoordVec.z() + mySpeed.z;
+        console.log(myCoordVec, xDist, yDist, zDist);
         // For now I will avoid updating children... aka no translate
-        this.matrix.multiply(Matrix.translate(xDist, yDist, zDist));
+        this.matrix = this.matrix.multiply(Matrix.translate(
+            myCoordVec.x() - xDist,
+            myCoordVec.y() - yDist,
+            myCoordVec.z() - zDist
+        ));
 
         const wallCollisions = this.checkWallCollisions(this.viewingVolume);
+        console.log(wallCollisions);
         const xMultp = (wallCollisions.x) ? -1 : 1;
         const yMultp = (wallCollisions.y) ? -1 : 1;
         const zMultp = (wallCollisions.z) ? -1 : 1;
@@ -382,6 +388,7 @@ class Sphere extends Shape {
         for (let i = 0; i < this.children.length; i += 1) {
             const collided = this.checkCollisionwithSphere(this.children[i]);
             if (collided) {
+                console.log("Uh oh...");
                 const colliderSpeed = this.children[i].speed;
                 myNewVelX = colliderSpeed.x;
                 myNewVelY = colliderSpeed.y;
@@ -394,7 +401,7 @@ class Sphere extends Shape {
 
                 const myNewCoordVec = this.matrix.multiplyVector(transVec);
                 const myNewSpeed = this.speed;
-                this.matrix.multiply(Matrix.translate(
+                this.matrix = this.matrix.multiply(Matrix.translate(
                     myNewCoordVec.x() + myNewSpeed.x,
                     myNewCoordVec.y() + myNewSpeed.y,
                     myNewCoordVec.z() + myNewSpeed.z
