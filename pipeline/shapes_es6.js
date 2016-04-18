@@ -149,7 +149,7 @@ const Shape = ((() => {
             }
         }
 
-        toRawTriangleArray (indexedVertices) {
+        toRawArray (indexedVertices, isLines) {
             var result = [];
             for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
                 for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
@@ -158,30 +158,19 @@ const Shape = ((() => {
                             indexedVertices.indices[i][j]
                         ]
                     );
+                    if (isLines) {
+                        result = result.concat(
+                            indexedVertices.vertices[
+                                indexedVertices.indices[i][(j + 1) % maxj]
+                            ]
+                        );
+                    }
                 }
             }
             return result;
         }
 
-        toRawLineArray (indexedVertices) {
-            var result = [];
-            for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
-                for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
-                    result = result.concat(
-                        indexedVertices.vertices[
-                            indexedVertices.indices[i][j]
-                        ],
-
-                        indexedVertices.vertices[
-                            indexedVertices.indices[i][(j + 1) % maxj]
-                        ]
-                    );
-                }
-            }
-            return result;
-        }
-
-        toNormalArray (indexedVertices) {
+        toNormalArray (indexedVertices, isLines) {
             var result = [];
 
             // For each face...
@@ -191,18 +180,34 @@ const Shape = ((() => {
                 var p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
                 var p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
 
-                // Technically, the first value is not a vector, but v can stand for vertex
-                // anyway, so...
                 var v0 = new Vector(p0[0], p0[1], p0[2]);
                 var v1 = new Vector(p1[0], p1[1], p1[2]).subtract(v0);
                 var v2 = new Vector(p2[0], p2[1], p2[2]).subtract(v0);
+
                 var normal = v1.cross(v2).unit();
+
+                if (isLines) {
+                    var p3 = indexedVertices.vertices[indexedVertices.indices[i][1]];
+                    var p4 = indexedVertices.vertices[indexedVertices.indices[i][2]];
+                    var p5 = indexedVertices.vertices[indexedVertices.indices[i][0]];
+
+                    var v3 = new Vector(p3[0], p3[1], p3[2]);
+                    var v4 = new Vector(p4[0], p4[1], p4[2]).subtract(v3);
+                    var v5 = new Vector(p5[0], p5[1], p5[2]).subtract(v3);
+
+                    var normal1 = v4.cross(v5).unit();
+                }
 
                 // We then use this same normal for every vertex in this face.
                 for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
                     result = result.concat(
                         [ normal.x(), normal.y(), normal.z() ]
                     );
+                    if(isLines) {
+                        result = result.concat(
+                            [ normal1.x(), normal1.y(), normal1.z() ]
+                        )
+                    }
                 }
             }
 
@@ -221,11 +226,12 @@ const Shape = ((() => {
             if (this._mode === 0) {
                 this.vertices = this.toRawPointArray(vertices);
             } else if (this._mode === 1) {
-                this.vertices = this.toRawLineArray(this.indexedVertices);
+                this.vertices = this.toRawArray(this.indexedVertices, true);
+                this.normals = this.toNormalArray(this.indexedVertices, true);
             } else {
-                this.vertices = this.toRawTriangleArray(this.indexedVertices);
+                this.vertices = this.toRawArray(this.indexedVertices, false);
+                this.normals = this.toNormalArray(this.indexedVertices, false);
             }
-            this.normals = this.toNormalArray(this.indexedVertices);
         }
         checkColors (colors) {
             if (colors.r || colors.g || colors.b) {
