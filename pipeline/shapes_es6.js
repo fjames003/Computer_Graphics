@@ -326,6 +326,16 @@ class Sphere extends Shape {
         // Now enable elastic collisions with bouncing back...
         // Now you have balls flying around bouncing off walls, and you can split them...
     }
+
+    checkWallCollisions (left, right, bottom, top, near, far) {
+        const transVec = new Vector(0, 0, 0, 1);
+        const myCoordVec = this.matrix.multiplyVector(transVec);
+        const xCol = myCoordVec.x() < left || myCoordVec.x() > right;
+        const yCol = myCoordVec.y() < bottom || myCoordVec.y() > top;
+        const zCol = myCoordVec.z() < near || myCoordVec.z() > far;
+
+        return {x: xCol, y: yCol, z: zCol};
+    }
 }
 
 class Cube extends Shape {
