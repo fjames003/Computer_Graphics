@@ -45,7 +45,7 @@
 
     // Build the objects to display.
     const aSphere =  new Sphere (20, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
-    aSphere.speed = {x: 0, y: 0, z: 1};
+    aSphere.speed = {x: 0, y: 0, z: 0};
     aSphere.createChild().translate(0,2, 5);
 
     aSphere.viewingVolume = viewingVolume;
