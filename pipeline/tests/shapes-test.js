@@ -297,7 +297,7 @@ $(() => {
     test("Methods: toRawArray", () => {
         // Should be 3 vertices each with an X,Y,Z... thus 9 values...
         let triangle = new Shape(triangleArray, [[0, 1, 2]], gl.TRIANGLES);
-        let triangles = triangle.toRawTriangleArray({vertices: triangleArray, indices: [[0, 1, 2]]});
+        let triangles = triangle.toRawArray({vertices: triangleArray, indices: [[0, 1, 2]]}, false);
         equal(
             triangle.vertices.length,
             9,
@@ -309,7 +309,7 @@ $(() => {
             "Make sure that the vertices are computed correctly for triangles"
         );
         let linAngle = new Shape(triangleArray, [[0, 1, 2]], gl.LINES);
-        let lines = triangle.toRawLineArray({vertices: triangleArray, indices: [[0, 1, 2]]});
+        let lines = triangle.toRawArray({vertices: triangleArray, indices: [[0, 1, 2]]}, true);
         equal(
             linAngle.vertices.length,
             18,
