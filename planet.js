@@ -40,7 +40,7 @@ class Planet extends Sphere {
         this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
     }
 
-// QUESTION >> If I translate, then I will have translated my children as well... Should I?
+    // Golden rule of this function should be: Vf = Vo + a*t
     updateLocation () {
         // Update velocity to be current velocity plus acceleration
         // Update location based on velocity
