@@ -12,6 +12,7 @@ const Shape = ((() => {
                 Expected vertices as [[X, Y, Z], [X, Y, Z], [X, Y, Z]...] and
                 expected faces as [[V1, V2, V3]...]`;
             } else {
+                this.specs = specs;
                 this.parent = null;
                 this.children = [];
                 this.states = [];
@@ -39,6 +40,7 @@ const Shape = ((() => {
         initVertexBuffer (gl) {
             this.buffer = initBuffer(gl, this.vertices);
             this.normalBuffer = initBuffer(gl, this.normals);
+            this.textureCoordinateBuffer = initBuffer(gl, this.textureCoord);
             this.buffersInitiated.vertices = true;
             this.children.map(child => child.initVertexBuffer(gl));
             return this;
@@ -67,12 +69,7 @@ const Shape = ((() => {
         }
 
         copy () {
-            return new Shape({
-                vertices: this.compressedVertices,
-                indices: this.indices,
-                mode: this._mode,
-                colors: this.colors
-            });
+            return new Shape(this.specs);
         }
 
         removeChild () {
@@ -109,7 +106,8 @@ const Shape = ((() => {
             }
         }
 
-        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
+        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
+            console.log(this)
             if (!this.buffersInitiated.vertices || !this.buffersInitiated.color) {
                 this.initVertexBuffer(gl);
                 this.initColorBuffer(gl);
@@ -128,12 +126,15 @@ const Shape = ((() => {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
             gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
+            gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
+
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
 
             gl.drawArrays(this._mode, 0, this.vertices.length / 3);
 
-            this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix));
+            this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate));
         }
 
         // split (type=1, direction="x") {

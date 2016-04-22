@@ -32,6 +32,14 @@
 
     const earthTexture = gl.createTexture();
 
+    const earth = new Planet({
+        textureId: gl.TEXTURE0,
+        textureSrc: "earth.jpg",
+        glTexture: earthTexture,
+        mass: 5,
+        radius: 7
+    }).translate(0, 0, 7);
+
     const minNear = 5;
     const maxFar = 100;
     const aspect = canvas.width / canvas.height;
@@ -110,6 +118,8 @@
     gl.enableVertexAttribArray(vertexSpecularColor);
     const normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
     gl.enableVertexAttribArray(normalVector);
+    const textureCoordinate = gl.getAttribLocation(shaderProgram, "textureCoordinate");
+    gl.enableVertexAttribArray(textureCoordinate);
 
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
@@ -119,6 +129,8 @@
     const lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
     const lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
     const shininess = gl.getUniformLocation(shaderProgram, "shininess");
+
+    const alpha = gl.getUniformLocation(shaderProgram, "alpha");
 
     /*
      * Displays the scene.
@@ -146,7 +158,9 @@
             let mat = new Matrix().rotation(currentRotation, 0,0, 1).toWebGL();
             gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
 
-            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
+            gl.uniform1i(gl.getUniformLocation(shaderProgram, "sampler"), 0);
+
+            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate);
         }
 
         // All done.

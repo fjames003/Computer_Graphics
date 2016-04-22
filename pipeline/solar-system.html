@@ -56,7 +56,7 @@
       attribute vec3 vertexDiffuseColor;
       attribute vec3 vertexSpecularColor;
       attribute vec3 normalVector;
-      
+      attribute vec2 textureCoordinate;
 
 
       uniform mat4 transformMatrix;
@@ -71,7 +71,10 @@
 
       uniform vec4 lightPosition;
 
+      varying vec2 fragmentTextureCoordinate;
+
       void main(void) {
+          fragmentTextureCoordinate = textureCoordinate;
 
           fragmentNormal = vec3(uniRotationMatrix * transformMatrix * vec4(normalVector, 1.0));
           vec4 fragmentFinalPosition = uniRotationMatrix * transformMatrix * vec4(vertexPosition, 1.0);
@@ -107,7 +110,14 @@
       // Now with shininess!
       uniform float shininess;
 
+      varying vec2 fragmentTextureCoordinate;
+      uniform sampler2D sampler;
+
+      // And finally, blending!
+      uniform float alpha;
+
       void main(void) {
+          vec3 textureColor = vec3(texture2D(sampler, fragmentTextureCoordinate));
           // Normalize our vectors.
           vec3 n = normalize(fragmentNormal);
           vec3 e = normalize(fragmentEye);
@@ -120,7 +130,7 @@
           float kd = max(dot(l, n), 0.0);
           vec3 finalDiffuse = kd * diffuseProduct;
           // Figure out the color of the specular light that lands on the vertex.
-          vec3 specularProduct = fragmentSpecularColor * lightSpecular;
+          vec3 specularProduct = textureColor * fragmentSpecularColor * lightSpecular;
           // Calculate the amount of specular light that hits the vertex.
           // Use dot(n, h) for the Blinn-Phong approximation.
           float ks = pow(max(dot(r, e), 0.0), shininess);

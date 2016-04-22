@@ -3,13 +3,16 @@ const Planet = ((() => {
     const gravitationalConstant = 6.67408 * Math.pow(10, -11);
     class planet extends Sphere {
         constructor (specs) {
+            super({
+                n: 30,
+                mode: 4
+            });
             // Planets must obey one plane... Thus z will always be 0...
             this.location = specs.location || {x: 0, y: 0, z: 0};
             this.textureId = specs.textureId;
             this.glTexture = specs.glTexture;
             this.textureSrc = specs.textureSrc; //Default to something here...
-            this.prepareTexture();
-            if (!spec.mass || !specs.radius) {
+            if (!specs.mass || !specs.radius) {
                 throw "A planet must have a mass and a radius";
             }
             this.mass = specs.mass;
@@ -28,21 +31,22 @@ const Planet = ((() => {
             //     (this.location.x - this.orbitOf.location.x) * (this.location.x - this.orbitOf.location.x) +
             //     (this.location.y - this.orbitOf.location.y) * (this.location.y - this.orbitOf.location.y)
             // );
-            let distanceToOrbiter = this.orbitOf.location.y - this.location.y;
+            if (specs.orbitOf) {
+                let distanceToOrbiter = this.orbitOf.location.y - this.location.y;
 
-            // Now using these values we can calculate the starting velocity of the planet...
-                // calculate velocity
-                // We set the velocity in the x direction so that it is perpendicular to acceleration later.
-                // v^2 = G*Ms / d
-            let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
-            this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
+                // Now using these values we can calculate the starting velocity of the planet...
+                    // calculate velocity
+                    // We set the velocity in the x direction so that it is perpendicular to acceleration later.
+                    // v^2 = G*Ms / d
+                let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
+                this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
 
-            // Now compute the acceleration
-            // Set acceleration in the y direction... since that is where the orbiter is...
-            // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
-            // a = G*Ms / d^2
-            this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
-            super(30, 4);
+                // Now compute the acceleration
+                // Set acceleration in the y direction... since that is where the orbiter is...
+                // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
+                // a = G*Ms / d^2
+                this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
+            }
         }
 
         setUpTexture (gl) {
