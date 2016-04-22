@@ -18,6 +18,8 @@ const Shape = ((() => {
                 this.matrix = new Matrix();
                 this._mode = (specs.mode === 0 || specs.mode === 1 || specs.mode === 4) ? specs.mode : 1;
                 this.compressedVertices = specs.vertices;
+                this.textureCoord = specs.textureCoord;
+                this.normals = specs.normals || [];
 
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = specs.indices;
@@ -232,10 +234,14 @@ const Shape = ((() => {
                 this.vertices = this.toRawPointArray(vertices);
             } else if (this._mode === 1) {
                 this.vertices = this.toRawArray(this.indexedVertices, true);
-                this.normals = this.toNormalArray(this.indexedVertices, true);
+                if (this.normals.length === 0) {
+                    this.normals = this.toNormalArray(this.indexedVertices, true);
+                }
             } else {
                 this.vertices = this.toRawArray(this.indexedVertices, false);
-                this.normals = this.toNormalArray(this.indexedVertices, false);
+                if (this.normals.length === 0) {
+                    this.normals = this.toNormalArray(this.indexedVertices, false);
+                }
             }
         }
         checkColors (colors) {
@@ -285,6 +291,7 @@ class Sphere extends Shape {
         if (!specs.vertices || !specs.indices || specs.vertices.length === 0 || specs.indices.length === 0) {
             let vertices = [];
             let indices = [];
+            let textureCoord = [];
             // In fact, the easiest way to calculate the vertex position and the normal
             // is just to do the calculations above but not multiply them by the radius,
             // store the results as the normal, and then to multiply the normal values
@@ -301,6 +308,10 @@ class Sphere extends Shape {
                             sTheta * Math.sin(2 * Math.PI * j/specs.n)
                         ]
                     );
+                    let u = 1 - (j / specs.n);
+                    let v = 1 - (i / specs.n);
+                    textureCoord.push(u);
+                    textureCoord.push(v);
                 }
             }
 
@@ -321,20 +332,11 @@ class Sphere extends Shape {
                     );
                 }
             }
-            super({
-                vertices: vertices,
-                indices: indices,
-                mode: specs.mode,
-                colors: specs.colors
-            });
-        } else {
-            super({
-                vertices: specs.vertices,
-                indices: specs.indices,
-                mode: specs.mode,
-                colors: specs.colors
-            });
+            specs.vertices = vertices;
+            specs.indices = indices;
+            specs.textureCoord = textureCoord;
         }
+        super(specs);
         this.slices = specs.n;
     }
 }
@@ -371,12 +373,9 @@ class Cube extends Shape {
             [ 5, 4, 6 ]
         ];
 
-        super({
-            vertices: vertices,
-            indices: indices,
-            mode: specs.mode,
-            colors: specs.colors
-        });
+        specs.vertices = vertices;
+        specs.indices = indices;
+        super(specs);
     }
 }
 
@@ -400,12 +399,9 @@ class Pyramid extends Shape {
             [3, 2, 1]
         ];
 
-        super({
-            vertices: vertices,
-            indices: indices,
-            mode: specs.mode,
-            colors: specs.colors
-        });
+        specs.vertices = vertices;
+        specs.indices = indices;
+        super(specs);
     }
 }
 
@@ -454,11 +450,8 @@ class Icosohedron extends Shape {
             ]
         };
 
-        super ({
-            vertices: result.vertices,
-            indices: result.indices,
-            mode: specs.mode,
-            colors: specs.colors
-        });
+        specs.vertices = result.vertices;
+        specs.indices = result.indices;
+        super (specs);
     }
 }
