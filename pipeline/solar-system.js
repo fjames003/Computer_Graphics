@@ -30,6 +30,8 @@
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.viewport(0, 0, canvas.width, canvas.height);
 
+    const earthTexture = gl.createTexture();
+
     const minNear = 5;
     const maxFar = 100;
     const aspect = canvas.width / canvas.height;
@@ -44,7 +46,12 @@
 
 
     // Build the objects to display.
-    const aSphere =  new Sphere (20, gl.TRIANGLES, { r: 1.0, g: 0.5, b: 0.0 }).translate(0, -1, -10);
+    const aSphere =  new Sphere ({
+        n: 20,
+        mode: gl.TRIANGLES,
+        colors: { r: 1.0, g: 0.5, b: 0.0 },
+        shininess: 16
+    }).translate(0, -1, -10);
     aSphere.speed = {x: 0, y: 0, z: 0};
     aSphere.createChild().translate(0,2, 5);
 

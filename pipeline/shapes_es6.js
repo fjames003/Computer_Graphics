@@ -1,12 +1,13 @@
 const Shape = ((() => {
     class shape {
-        constructor (vertices, indices, mode=1, colors={r: 0, g: 0, b: 0}, specularColors={r: 1.0, g: 1.0, b: 1.0}, shininess=16) {
-            if (arguments.length < 2) {
+        // vertices, indices, mode=1, colors={r: 0, g: 0, b: 0}, specularColors={r: 1.0, g: 1.0, b: 1.0}, shininess=16
+        constructor (specs) {
+            if (!specs.vertices || !specs.indices) {
                 throw "Either the vertex or face array were not provided. Both are required.";
-            } else if (vertices.length < 3 || indices.length < vertices.length / 3) {
+            } else if (specs.vertices.length < 3 || specs.indices.length < specs.vertices.length / 3) {
                 throw `Vertices and / or faces provided are not sufficient to make a shape.
                 Minimum  3 vertices and a face for every three vertices.`;
-            } else if (vertices[0].length !== 3 || indices[0].length !== 3) {
+            } else if (specs.vertices[0].length !== 3 || specs.indices[0].length !== 3) {
                 throw `Vertex and / or face array not in correct format.
                 Expected vertices as [[X, Y, Z], [X, Y, Z], [X, Y, Z]...] and
                 expected faces as [[V1, V2, V3]...]`;
@@ -15,18 +16,20 @@ const Shape = ((() => {
                 this.children = [];
                 this.states = [];
                 this.matrix = new Matrix();
-                this._mode = (mode === 0 || mode === 1 || mode === 4) ? mode : 1;
-                this.compressedVertices = vertices;
+                this._mode = (specs.mode === 0 || specs.mode === 1 || specs.mode === 4) ? specs.mode : 1;
+                this.compressedVertices = specs.vertices;
 
                 // Set the vertices array according to the faces provided and the mode...
-                this.indices = indices;
+                this.indices = specs.indices;
                 this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
 
                 this.setVertices();
 
-                this.colors = this.checkColors(colors);
-                this.specularColors = this.checkColors(specularColors);
-                this.shininess = shininess;
+                this.colors = this.checkColors((specs.colors) ? specs.colors : {r: 0, g: 0, b: 0});
+                this.specularColors = this.checkColors(
+                    (specs.specularColors) ? specs.specularColors : {r: 1.0, g: 1.0, b: 1.0}
+                );
+                this.shininess = specs.shininess || 1.0;
                 this.buffersInitiated = {vertices: false, color: false}
             }
         }
@@ -62,7 +65,12 @@ const Shape = ((() => {
         }
 
         copy () {
-            return new Shape(this.compressedVertices, this.indices, this._mode, this.colors);
+            return new Shape({
+                vertices: this.compressedVertices,
+                indices: this.indices,
+                mode: this._mode,
+                colors: this.colors
+            });
         }
 
         removeChild () {
@@ -126,25 +134,25 @@ const Shape = ((() => {
             this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix));
         }
 
-        split (type=1, direction="x") {
-            const finalDirection = {x: 0, y:0, z:0};
-            finalDirection[direction] = 1;
-            if (type === 1 || this.children.length === 0) {
-
-                const splitChild = this.createChild();
-
-                this.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(this.matrix);
-                // this.matrix = this.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
-
-                splitChild.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(splitChild.matrix);
-                // splitChild.matrix = splitChild.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
-
-                return splitChild;
-            } else {
-                this.children.map(child => child.split(2, direction));
-                this.split(1, direction);
-            }
-        }
+        // split (type=1, direction="x") {
+        //     const finalDirection = {x: 0, y:0, z:0};
+        //     finalDirection[direction] = 1;
+        //     if (type === 1 || this.children.length === 0) {
+        //
+        //         const splitChild = this.createChild();
+        //
+        //         this.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(this.matrix);
+        //         // this.matrix = this.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
+        //
+        //         splitChild.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(splitChild.matrix);
+        //         // splitChild.matrix = splitChild.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
+        //
+        //         return splitChild;
+        //     } else {
+        //         this.children.map(child => child.split(2, direction));
+        //         this.split(1, direction);
+        //     }
+        // }
 
         toRawArray (indexedVertices, isLines) {
             var result = [];
@@ -269,33 +277,37 @@ const Shape = ((() => {
 }))();
 
 class Sphere extends Shape {
-    constructor (n, mode, colors, vertices=[], indices=[]) {
+    // n, mode, colors, vertices=[], indices=[]
+    constructor (specs) {
 
         // Gotta be a way to calculate all thetas and sine / cosine thetas on the first loop interation... Just need
         // to store them some how... A map would be nice...
-        if (vertices.length === 0 || indices.length === 0) {
-            vertices = [];
-            indices = [];
-
-            for (let i = 0; i < n + 1; i += 1) {
-                var theta = Math.PI * i/n;
-                var sTheta = Math.sin(theta);
-                var cTheta = Math.cos(theta);
-                for (let j = 0; j < n + 1; j += 1) {
+        if (!specs.vertices || !specs.indices || specs.vertices.length === 0 || specs.indices.length === 0) {
+            let vertices = [];
+            let indices = [];
+            // In fact, the easiest way to calculate the vertex position and the normal
+            // is just to do the calculations above but not multiply them by the radius,
+            // store the results as the normal, and then to multiply the normal values
+            // by the radius to get the vertex positions.
+            for (let i = 0; i < specs.n + 1; i += 1) {
+                let theta = Math.PI * i/specs.n;
+                let sTheta = Math.sin(theta);
+                let cTheta = Math.cos(theta);
+                for (let j = 0; j < specs.n + 1; j += 1) {
                     vertices.push(
                         [
-                            sTheta * Math.cos(2 * Math.PI * j/n),
+                            sTheta * Math.cos(2 * Math.PI * j/specs.n),
                             cTheta,
-                            sTheta * Math.sin(2 * Math.PI * j/n)
+                            sTheta * Math.sin(2 * Math.PI * j/specs.n)
                         ]
                     );
                 }
             }
 
-            for (let i = 0.0; i < n; i += 1) {
-                for (let j = 0.0; j < n; j += 1) {
-                    var minimum = (i * (n + 1)) + j;
-                    var maximum = minimum + n + 1;
+            for (let i = 0.0; i < specs.n; i += 1) {
+                for (let j = 0.0; j < specs.n; j += 1) {
+                    let minimum = (i * (specs.n + 1)) + j;
+                    let maximum = minimum + specs.n + 1;
 
                     indices.push(
                         [minimum,
@@ -309,18 +321,29 @@ class Sphere extends Shape {
                     );
                 }
             }
+            super({
+                vertices: vertices,
+                indices: indices,
+                mode: specs.mode,
+                colors: specs.colors
+            });
+        } else {
+            super({
+                vertices: specs.vertices,
+                indices: specs.indices,
+                mode: specs.mode,
+                colors: specs.colors
+            });
         }
-
-        super(vertices, indices, mode, colors);
-        this.slices = n;
+        this.slices = specs.n;
     }
 }
 
 class Cube extends Shape {
-    constructor (mode, colors) {
+    constructor (specs) {
 
-        var vertices = [];
-        var indices = [];
+        let vertices = [];
+        let indices = [];
         // X / Z - y
         vertices.push([1, 1, 1]);
         vertices.push([1, 1, -1]);
@@ -348,14 +371,19 @@ class Cube extends Shape {
             [ 5, 4, 6 ]
         ];
 
-        super(vertices, indices, mode, colors);
+        super({
+            vertices: vertices,
+            indices: indices,
+            mode: specs.mode,
+            colors: specs.colors
+        });
     }
 }
 
 class Pyramid extends Shape {
     // Made of triangles... Thus no need for indices... Just provide the mode...
-    constructor (mode, colors) {
-        var vertices = [];
+    constructor (specs) {
+        let vertices = [];
 
         vertices.push([ 0,  1,  0]);
         vertices.push([-1, -1, -1]);
@@ -363,7 +391,7 @@ class Pyramid extends Shape {
         vertices.push([ 1, -1,  1]);
         vertices.push([ 1, -1, -1]);
 
-        var indices = [
+        let indices = [
             [0, 1, 2],
             [0, 2, 3],
             [0, 3, 4],
@@ -372,16 +400,21 @@ class Pyramid extends Shape {
             [3, 2, 1]
         ];
 
-        super(vertices, indices, mode, colors);
+        super({
+            vertices: vertices,
+            indices: indices,
+            mode: specs.mode,
+            colors: specs.colors
+        });
     }
 }
 
 class Icosohedron extends Shape {
-    constructor (mode, colors) {
-        var X = 0.525731112119133606;
-        var Z = 0.850650808352039932;
+    constructor (specs) {
+        let X = 0.525731112119133606;
+        let Z = 0.850650808352039932;
 
-        var result =  {
+        let result =  {
             vertices: [
                 [ -X, 0.0, Z ],
                 [ X, 0.0, Z ],
@@ -421,6 +454,11 @@ class Icosohedron extends Shape {
             ]
         };
 
-        super (result.vertices, result.indices, mode, colors);
+        super ({
+            vertices: result.vertices,
+            indices: result.indices,
+            mode: specs.mode,
+            colors: specs.colors
+        });
     }
 }

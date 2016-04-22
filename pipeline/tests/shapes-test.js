@@ -16,12 +16,12 @@ $(() => {
         }, "Should throw exception for no provided indices or vertices");
 
         throws(() => {
-            const fail1 = new Shape(triangleArray);
+            const fail1 = new Shape({vertices: triangleArray});
         }, "Should throw and exception for no provided indices");
 
         // Should default to a mode of LINES and produce a triangle
         // Color should default to black...
-        var triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        var triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         equal(
             triangle.colors.length,
             triangle.vertices.length,
@@ -34,14 +34,24 @@ $(() => {
         );
         equal(triangle.mode, 1, "Make sure the defualt mode is LINES (1)");
 
-        var triangle = new Shape(triangleArray, [[0, 1, 2]], 1, {r: 1.0, g: 0.5, b: 0.0});
+        var triangle = new Shape({
+            vertices: triangleArray,
+            indices: [[0, 1, 2]],
+            mode: 1,
+            colors: {r: 1.0, g: 0.5, b: 0.0}
+        });
         equal(
             triangle.colors.length,
             triangle.vertices.length,
             "Make sure that colors are expanded from object"
         );
 
-        var triangle = new Shape(triangleArray, [[0, 1, 2]], 1, [1.0, 0.5, 0.0]);
+        var triangle = new Shape({
+            vertices: triangleArray,
+            indices: [[0, 1, 2]],
+            mode: 1,
+            colors: [1.0, 0.5, 0.0]
+        });
         equal(
             triangle.colors.length,
             triangle.vertices.length,
@@ -50,7 +60,12 @@ $(() => {
     });
 
     test("Methods: Buffer", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]], 1, [1.0, 0.5, 0.0]);
+        let triangle = new Shape({
+            vertices: triangleArray,
+            indices: [[0, 1, 2]],
+            mode: 1,
+            colors: [1.0, 0.5, 0.0]
+        });
         equal(
             triangle.buffer,
             undefined,
@@ -77,7 +92,7 @@ $(() => {
     });
 
     test("Methods: Child (Create and Remove)", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         let triChild = triangle.createChild();
         equal(
             triChild.parent,
@@ -96,13 +111,16 @@ $(() => {
             "Make sure that the child was properly removed"
         );
         triangle.scale(0.2, 0.4, 0.5);
-        let hourGlass = triangle.createChild(new Shape([
-            [-1, 1, 0],
-            [1, 1, 0],
-            [1, -1, 0],
-            [-1, -1, 0],
-            [0, 0, 0]
-        ], [[4, 3, 2], [4, 2, 1], [4, 1, 0]]));
+        let hourGlass = triangle.createChild(new Shape({
+            vertices: [
+                [-1, 1, 0],
+                [1, 1, 0],
+                [1, -1, 0],
+                [-1, -1, 0],
+                [0, 0, 0]
+            ],
+            indices: [[4, 3, 2], [4, 2, 1], [4, 1, 0]]
+        }));
         deepEqual(
             hourGlass.matrix,
             triangle.matrix,
@@ -113,13 +131,16 @@ $(() => {
             hourGlass,
             "Make sure the parent is aware of black sheep"
         );
-        let sqPacMan = triangle.createChild(new Shape([
-            [-1, 1, 0],
-            [1, 1, 0],
-            [1, -1, 0],
-            [-1, -1, 0],
-            [0, 0, 0]
-        ], [[0, 4, 1], [4, 3, 2]]));
+        let sqPacMan = triangle.createChild(new Shape({
+            vertices: [
+                [-1, 1, 0],
+                [1, 1, 0],
+                [1, -1, 0],
+                [-1, -1, 0],
+                [0, 0, 0]
+            ],
+            indices: [[0, 4, 1], [4, 3, 2]]
+        }));
         equal(
             triangle.children[1],
             sqPacMan,
@@ -146,18 +167,21 @@ $(() => {
         );
 
         throws(() => {
-            grandKid.createChild([
-                [-1, 1, 0],
-                [1, 1, 0],
-                [1, -1, 0],
-                [-1, -1, 0],
-                [0, 0, 0]
-            ], [[0, 4, 1], [4, 3, 2]]);
+            grandKid.createChild({
+                vertices: [
+                    [-1, 1, 0],
+                    [1, 1, 0],
+                    [1, -1, 0],
+                    [-1, -1, 0],
+                    [0, 0, 0]
+                ],
+                indices: [[0, 4, 1], [4, 3, 2]]
+            });
         }, "Make sure that only a shape can be passed to createChild")
     });
 
     test("Methods: Scale, Rotate, Translate", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         triangle.scale(0.5, 0.5, 0.5);
         let mScale = Matrix.scale(0.5, 0.5, 0.5);
         let mTrans = Matrix.translate(0.75, -0.3, 0.2);
@@ -174,7 +198,7 @@ $(() => {
             "Make sure that translate will update the matrix as well"
         );
 
-        let triangle2 = new Shape(triangleArray, [[0, 1, 2]]);
+        let triangle2 = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         triangle2.rotate(30, 0.3, 0.4, 0.5);
         deepEqual(
             triangle2.matrix,
@@ -209,7 +233,7 @@ $(() => {
     });
 
     test("Methods: State", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         triangle.saveState();
         triangle.translate(0.5, 0.6, 0.4);
         deepEqual(
@@ -279,7 +303,7 @@ $(() => {
     });
 
     test("Methods: copy", () => {
-        let triangle = new Shape(triangleArray, [[0, 1, 2]]);
+        let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
         triangle.translate(0.5, 0.6, 0.4);
         let triangle2 = triangle.copy();
         notDeepEqual(
@@ -296,7 +320,7 @@ $(() => {
 
     test("Methods: toRawArray", () => {
         // Should be 3 vertices each with an X,Y,Z... thus 9 values...
-        let triangle = new Shape(triangleArray, [[0, 1, 2]], gl.TRIANGLES);
+        let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]], mode: gl.TRIANGLES});
         let triangles = triangle.toRawArray({vertices: triangleArray, indices: [[0, 1, 2]]}, false);
         equal(
             triangle.vertices.length,
@@ -308,7 +332,7 @@ $(() => {
             triangles,
             "Make sure that the vertices are computed correctly for triangles"
         );
-        let linAngle = new Shape(triangleArray, [[0, 1, 2]], gl.LINES);
+        let linAngle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]], mode: gl.LINES});
         let lines = triangle.toRawArray({vertices: triangleArray, indices: [[0, 1, 2]]}, true);
         equal(
             linAngle.vertices.length,
