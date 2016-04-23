@@ -30,14 +30,27 @@
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.viewport(0, 0, canvas.width, canvas.height);
 
+    // Not technically, but we can pretend...
+    const sun = new Planet({
+        mass: 4.385 * Math.pow(10, 30),
+        radius: 432168.6,
+        colors: { r: 1.0, g: 1.0, b: 0.0 },
+        specularColors: { r: 0.5, g: 0.5, b: 0.5 },
+        shininess: 256
+    }).translate(1, 1, -10)
+
     const earthTexture = gl.createTexture();
 
     const earth = new Planet({
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
         textureId: gl.TEXTURE0,
         textureSrc: "earth.jpg",
         glTexture: earthTexture,
-        mass: 5,
-        radius: 7
+        mass: 1.317 * Math.pow(10, 25),
+        radius: 3958.8,
+        colors: { r: 0.0, g: 0.0, b: 0.5 },
+        shininess: 128
     }).translate(0, 0, -7);
 
     const minNear = 5;
@@ -53,33 +66,8 @@
     };
 
 
-    // Build the objects to display.
-    const aSphere =  new Sphere ({
-        n: 20,
-        mode: gl.TRIANGLES,
-        colors: { r: 1.0, g: 0.5, b: 0.0 },
-        shininess: 16
-    }).translate(0, -1, -10);
-    aSphere.speed = {x: 0, y: 0, z: 0};
-    aSphere.createChild().translate(0,2, 5);
-
-    aSphere.viewingVolume = viewingVolume;
-    // const aSphereKid = aSphere.createChild().translate(0, 2, 5).scale(0.5, 0.5, 0.5);
-    // const cube = aSphere.createChild(new Cube(gl.TRIANGLES, { r: 0.5, g: 0.5, b: 0.5 })).translate(3, 3, 0);
-
-    // 2 Spheres...
-    // aSphere.split(2, 'x');
-    // 4 Spheres
-    // aSphere.split(2, 'x');
-    // 8 Spheres
-    // aSphere.split(2, 'x');
-    // 16 Spheres
-    // aSphere.split(2, 'y');
-
     const objectsToDraw = [
-       aSphere,
-    //    aSphereKid,
-    //    cube
+        sun,
         earth
        ];
 

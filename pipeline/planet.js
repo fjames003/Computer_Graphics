@@ -3,10 +3,9 @@ const Planet = ((() => {
     const gravitationalConstant = 6.67408 * Math.pow(10, -11);
     class planet extends Sphere {
         constructor (specs) {
-            super({
-                n: 30,
-                mode: 4
-            });
+            specs.n = 75;
+            specs.mode = 4;
+            super(specs);
             // Planets must obey one plane... Thus z will always be 0...
             this.location = specs.location || {x: 0, y: 0, z: 0};
             this.textureId = specs.textureId;
@@ -19,6 +18,7 @@ const Planet = ((() => {
             // Will be used for scale to resemble more realistic sizes...
             this.radius = specs.radius;
             this.orbitOf = specs.orbitOf;
+            this.orbiterLoc = new Vector(this.orbitOf.location.x, this.orbitOf.location.y);
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
             if (specs.orbitOf && this.location.x !== this.orbitOf.location.x && this.location.y < this.orbitOf.location.y) {
@@ -46,6 +46,7 @@ const Planet = ((() => {
                 // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
                 // a = G*Ms / d^2
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
+                this.accelerationMagnitude = this.acceleration.magnitude();
             }
         }
 
@@ -55,24 +56,50 @@ const Planet = ((() => {
             this.image.src = this.textureSrc;
         }
 
-        // Golden rule of this function should be: Vf = Vo + a*t
-        updateLocation () {
+
+        update (time) {
             // Update velocity to be current velocity plus acceleration
+            this.updateVelocity(time);
             // Update location based on velocity
+            this.updatePosistion(time);
             // Update the direction of the acceleration vector...
         }
 
-        set velocity (s) {
-            this._velocity = {x: s.x, y: s.y, z: s.z};
+        // Golden rule of this function should be: Vf = Vo + a*t
+        // Need to remember to keep the x and y directions seperate...
+        updateVelocity (time) {
+            this.velocity = new Vector(
+                this.velocity.x() + this.acceleration.x() * time,
+                this.velocity.y() + this.acceleration.y() * time
+            );
         }
-        get velocity () {
-            return this._velocity;
+
+        updatePosistion (time) {
+            this.location = {
+                x: this.location.x + this.velocity.x() * time,
+                y: this.location.y + this.velocity.y() * time,
+                z: 0
+            };
         }
+
+        updateAccleration () {
+            let myLoc = new Vector(this.location.x, this.location.y);
+            let direction = this.orbiterLoc.subtract(myLoc).unit();
+            direction.multiply(this.accelerationMagnitude);
+            this.acceleration = new Vector(direction.x(), direction.y());
+        }
+
+        // set velocity (s) {
+        //     this._velocity = {x: s.x, y: s.y, z: s.z};
+        // }
+        // get velocity () {
+        //     return this._velocity;
+        // }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
             // this.setUpTexture(gl);
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
-            // this.updateLocation();
+            // this.update();
         }
     }
     const loadHandlerFor = (gl, texture, textureImage, textureId) => () => {

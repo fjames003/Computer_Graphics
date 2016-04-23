@@ -130,7 +130,7 @@
           float kd = max(dot(l, n), 0.0);
           vec3 finalDiffuse = kd * diffuseProduct;
           // Figure out the color of the specular light that lands on the vertex.
-          vec3 specularProduct = textureColor * fragmentSpecularColor * lightSpecular;
+          vec3 specularProduct = /*textureColor * */fragmentSpecularColor * lightSpecular;
           // Calculate the amount of specular light that hits the vertex.
           // Use dot(n, h) for the Blinn-Phong approximation.
           float ks = pow(max(dot(r, e), 0.0), shininess);
