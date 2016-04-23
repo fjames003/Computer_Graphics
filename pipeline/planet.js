@@ -3,7 +3,7 @@ const Planet = ((() => {
     const gravitationalConstant = 6.67408 * Math.pow(10, -11);
     class planet extends Sphere {
         constructor (specs) {
-            specs.n = 75;
+            specs.n = 25;
             specs.mode = 4;
             super(specs);
             // Planets must obey one plane... Thus z will always be 0...
@@ -18,11 +18,13 @@ const Planet = ((() => {
             // Will be used for scale to resemble more realistic sizes...
             this.radius = specs.radius;
             this.orbitOf = specs.orbitOf;
-            this.orbiterLoc = new Vector(this.orbitOf.location.x, this.orbitOf.location.y);
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
-            if (specs.orbitOf && this.location.x !== this.orbitOf.location.x && this.location.y < this.orbitOf.location.y) {
-                throw "Planets must be created in the XY plane below (in the y) the planet they orbit";
+            if (specs.orbitOf) {
+                this.orbiterLoc = new Vector(this.orbitOf.location.x, this.orbitOf.location.y);
+                if (this.location.x !== this.orbitOf.location.x && this.location.y < this.orbitOf.location.y) {
+                    throw "Planets must be created in the XY plane below (in the y) the planet they orbit";
+                }
             }
 
             // If I restrict the user to only creating planets below the one they orbit this cuts down on the calculation
@@ -52,7 +54,7 @@ const Planet = ((() => {
 
         setUpTexture (gl) {
             this.image = new Image();
-            this.image.onload = loadHandleFor(gl, this.glTexture, this.image, this.textureId);
+            this.image.onload = loadHandlerFor(gl, this.glTexture, this.image, this.textureId);
             this.image.src = this.textureSrc;
         }
 
@@ -96,9 +98,9 @@ const Planet = ((() => {
         //     return this._velocity;
         // }
 
-        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
-            // this.setUpTexture(gl);
-            super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
+        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
+            this.setUpTexture(gl);
+            super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate);
             // this.update();
         }
     }

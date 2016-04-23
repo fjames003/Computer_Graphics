@@ -50,7 +50,8 @@
         mass: 1.317 * Math.pow(10, 25),
         radius: 3958.8,
         colors: { r: 0.0, g: 0.0, b: 0.5 },
-        shininess: 128
+        shininess: 128,
+        orbitOf: sun
     }).translate(0, 0, -7);
 
     const minNear = 5;
