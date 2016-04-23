@@ -56,7 +56,7 @@
       attribute vec3 vertexDiffuseColor;
       attribute vec3 vertexSpecularColor;
       attribute vec3 normalVector;
-      attribute vec2 textureCoordinate;
+    //   attribute vec2 textureCoordinate;
 
 
       uniform mat4 transformMatrix;
@@ -74,7 +74,7 @@
       varying vec2 fragmentTextureCoordinate;
 
       void main(void) {
-          fragmentTextureCoordinate = textureCoordinate;
+        //   fragmentTextureCoordinate = textureCoordinate;
 
           fragmentNormal = vec3(uniRotationMatrix * transformMatrix * vec4(normalVector, 1.0));
           vec4 fragmentFinalPosition = uniRotationMatrix * transformMatrix * vec4(vertexPosition, 1.0);

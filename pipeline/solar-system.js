@@ -38,7 +38,7 @@
         glTexture: earthTexture,
         mass: 5,
         radius: 7
-    }).translate(0, 0, 7);
+    }).translate(0, 0, -7);
 
     const minNear = 5;
     const maxFar = 100;
@@ -80,7 +80,8 @@
        aSphere,
     //    aSphereKid,
     //    cube
-   ];
+        earth
+       ];
 
     // Initialize the shaders.
     let abort = false;
@@ -119,7 +120,7 @@
     const normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
     gl.enableVertexAttribArray(normalVector);
     const textureCoordinate = gl.getAttribLocation(shaderProgram, "textureCoordinate");
-    gl.enableVertexAttribArray(textureCoordinate);
+    // gl.enableVertexAttribArray(textureCoordinate);
 
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");

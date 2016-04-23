@@ -19,7 +19,7 @@ const Shape = ((() => {
                 this.matrix = new Matrix();
                 this._mode = (specs.mode === 0 || specs.mode === 1 || specs.mode === 4) ? specs.mode : 1;
                 this.compressedVertices = specs.vertices;
-                this.textureCoord = specs.textureCoord;
+                // this.textureCoord = specs.textureCoord;
                 this.normals = specs.normals || [];
 
                 // Set the vertices array according to the faces provided and the mode...
@@ -40,7 +40,7 @@ const Shape = ((() => {
         initVertexBuffer (gl) {
             this.buffer = initBuffer(gl, this.vertices);
             this.normalBuffer = initBuffer(gl, this.normals);
-            this.textureCoordinateBuffer = initBuffer(gl, this.textureCoord);
+            // this.textureCoordinateBuffer = initBuffer(gl, this.textureCoord);
             this.buffersInitiated.vertices = true;
             this.children.map(child => child.initVertexBuffer(gl));
             return this;
@@ -107,7 +107,6 @@ const Shape = ((() => {
         }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
-            console.log(this)
             if (!this.buffersInitiated.vertices || !this.buffersInitiated.color) {
                 this.initVertexBuffer(gl);
                 this.initColorBuffer(gl);
@@ -126,8 +125,8 @@ const Shape = ((() => {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
             gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
-            gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
+            // gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
+            // gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);

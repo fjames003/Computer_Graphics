@@ -70,7 +70,7 @@ const Planet = ((() => {
         }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix) {
-            this.setUpTexture(gl);
+            // this.setUpTexture(gl);
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix);
             // this.updateLocation();
         }
