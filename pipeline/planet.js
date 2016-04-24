@@ -41,6 +41,7 @@ const Planet = ((() => {
                     // We set the velocity in the x direction so that it is perpendicular to acceleration later.
                     // v^2 = G*Ms / d
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
+                console.log(velocitySquared);
                 this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
 
                 // Now compute the acceleration
@@ -50,6 +51,7 @@ const Planet = ((() => {
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
                 this.accelerationMagnitude = this.acceleration.magnitude();
             }
+            this.setUpTexture(specs.gl);
         }
 
         setUpTexture (gl) {
@@ -65,11 +67,13 @@ const Planet = ((() => {
             // Update location based on velocity
             this.updatePosistion(time);
             // Update the direction of the acceleration vector...
+            this.updateAccleration();
         }
 
         // Golden rule of this function should be: Vf = Vo + a*t
         // Need to remember to keep the x and y directions seperate...
         updateVelocity (time) {
+            console.log(this.acceleration);
             this.velocity = new Vector(
                 this.velocity.x() + this.acceleration.x() * time,
                 this.velocity.y() + this.acceleration.y() * time
@@ -99,9 +103,10 @@ const Planet = ((() => {
         // }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
-            this.setUpTexture(gl);
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate);
-            // this.update();
+            if (this.orbitOf) {
+                this.update();
+            }
         }
     }
     const loadHandlerFor = (gl, texture, textureImage, textureId) => () => {
@@ -111,6 +116,7 @@ const Planet = ((() => {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
         gl.generateMipmap(gl.TEXTURE_2D);
+        this.textureReady = true;
     };
     return planet;
 }))();

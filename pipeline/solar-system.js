@@ -32,26 +32,30 @@
 
     // Not technically, but we can pretend...
     const sun = new Planet({
+        location: {x: 0, y: 1, z: 0},
         mass: 4.385 * Math.pow(10, 30),
         radius: 432168.6,
         colors: { r: 1.0, g: 1.0, b: 0.0 },
         specularColors: { r: 0.5, g: 0.5, b: 0.5 },
-        shininess: 256
-    }).translate(1, 1, -10)
+        shininess: 256,
+        gl: gl
+    }).translate(0, 1, -10)
 
     const earthTexture = gl.createTexture();
 
     const earth = new Planet({
+        location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureId: gl.TEXTURE0,
-        textureSrc: "earth.jpg",
+        textureSrc: "earth_512.jpg",
         glTexture: earthTexture,
         mass: 1.317 * Math.pow(10, 25),
         radius: 3958.8,
         colors: { r: 0.0, g: 0.0, b: 0.5 },
         shininess: 128,
-        orbitOf: sun
+        orbitOf: sun,
+        gl: gl
     }).translate(0, 0, -7);
 
     const minNear = 5;
@@ -183,6 +187,21 @@
     let currentRotation = 0;
 
     const advanceScene = timestamp => {
+        let texturesReady = () => {
+            let numberReady = 0;
+            for (let i =0; i < objectsToDraw.length; i += 1) {
+                if (objectsToDraw[i].texturesReady) {
+                    numberReady += 1;
+                }
+            }
+            return numberReady;
+        }
+        let drawWhenReady = setInterval(function () {
+            if (texturesReady() === objectsToDraw.length) {
+                drawScene();
+                clearInterval(drawWhenReady);
+            }
+        }, 10);
         // Check if the user has turned things off.
         if (!animationActive) {
             return;
