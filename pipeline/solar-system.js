@@ -113,7 +113,6 @@
     const normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
     gl.enableVertexAttribArray(normalVector);
     const textureCoordinate = gl.getAttribLocation(shaderProgram, "textureCoordinate");
-    // gl.enableVertexAttribArray(textureCoordinate);
 
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
@@ -243,7 +242,7 @@
     };
 
     // Draw the initial scene.
-    drawScene();
+    window.requestAnimationFrame(advanceScene);
 
     // Set up the rotation toggle: clicking on the canvas does it.
     $(canvas).click(() => {

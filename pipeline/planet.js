@@ -51,7 +51,9 @@ const Planet = ((() => {
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
                 this.accelerationMagnitude = this.acceleration.magnitude();
             }
-            this.setUpTexture(specs.gl);
+            if (this.textureSrc) {
+                this.setUpTexture(specs.gl);
+            }
         }
 
         setUpTexture (gl) {
