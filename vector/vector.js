@@ -16,7 +16,7 @@ var Vector = (function () {
     var vector = function () {
         this.elements = [].slice.call(arguments);
     };
-    
+
     // A private method for checking dimensions,
     // throwing an exception when different.
     var checkDimensions = function (v1, v2) {
@@ -83,7 +83,7 @@ var Vector = (function () {
         var result = new Vector();
 
         for (var i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] / s;
+            result.elements[i] = (s === 0) ? this.elements[i] : this.elements[i] / s;
         }
 
         return result;

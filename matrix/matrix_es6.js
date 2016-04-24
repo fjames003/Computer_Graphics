@@ -202,11 +202,12 @@ const Matrix = ((() => {
 
             const projectionPoint = new Vector(pX, pY, pZ);
             const upVector = new Vector(uX, uY, uZ)
-
+            console.log(projectionPoint, upVector);
             const zTransformation = projectionPoint.subtract(new Vector(qX, qY, qZ)).unit();
-            const yTransformation = upVector.subtract(upVector.projectionPoint(zTransformation)).unit();
+            const yTransformation = upVector.subtract(upVector.projection(zTransformation)).unit();
             const xTransformation = yTransformation.cross(zTransformation);
 
+            console.log(zTransformation, yTransformation, xTransformation);
             // Row 1
             result.elements[0][0] = xTransformation.x();
             result.elements[0][1] = xTransformation.y();

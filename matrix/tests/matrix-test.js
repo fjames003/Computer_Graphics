@@ -285,5 +285,10 @@ $(function () {
         var mat1 = new Matrix([[1,0,-3,4], [0,6,7,-8], [3,10,0,12], [0,0,0,1]]);
         var vec1 = new Vector(0, 0, 0, 1);
         deepEqual(mat1.multiplyVector(vec1), new Vector(4, -8, 12, 1), "Testing matrix multiplied to a vector");
-    })
+    });
+
+    test("Camera Matrix", function () {
+        var cam = new Matrix().camera(0,0,0,0,0,0,0,0,0);
+        deepEqual(cam, new Matrix([[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,1]]), "Testing camera matrix");
+    });
 });
