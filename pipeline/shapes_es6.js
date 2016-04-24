@@ -112,6 +112,10 @@ const Shape = ((() => {
                 this.initColorBuffer(gl);
             }
 
+            if (this.textureId && !this.textureReady) {
+                return;
+            }
+
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
             gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
 
@@ -246,6 +250,26 @@ const Shape = ((() => {
                 this.vertices = this.toRawArray(this.indexedVertices, false);
                 if (this.normals.length === 0) {
                     this.normals = this.toNormalArray(this.indexedVertices, false);
+                }
+            }
+
+            // JD: See below.
+            //
+            // TODO This is a quick and dirty fix to the texture coordinate issue. The key is that
+            //      the number of texture coordinates must exactly match the number of *final* vertices,
+            //      not the number of mesh vertices (which the code calls the "compressedVertices").
+            //      Just to get things going, the texture coordinates are "unrolled" here. A more
+            //      general solution that accommodates a wide range of possibilities, like different
+            //      modes, whether there is even a texture, etc., will be needed.
+            this.compressedTextureCoordinates = this.textureCoord;
+            this.textureCoord = [];
+            for (var i = 0, maxi = this.indexedVertices.indices.length; i < maxi; i += 1) {
+                for (var j = 0, maxj = this.indexedVertices.indices[i].length; j < maxj; j += 1) {
+                    var textureCoordinateIndex = this.indexedVertices.indices[i][j] * 2;
+                    this.textureCoord = this.textureCoord.concat(
+                        this.compressedTextureCoordinates[textureCoordinateIndex],
+                        this.compressedTextureCoordinates[textureCoordinateIndex + 1]
+                    );
                 }
             }
         }

@@ -47,6 +47,7 @@
         location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
+        textureCoord: sun.textureCoord,
         textureId: gl.TEXTURE0,
         textureSrc: "earth_512.jpg",
         glTexture: earthTexture,
@@ -240,9 +241,6 @@
         previousTimestamp = timestamp;
         window.requestAnimationFrame(advanceScene);
     };
-
-    // Draw the initial scene.
-    window.requestAnimationFrame(advanceScene);
 
     // Set up the rotation toggle: clicking on the canvas does it.
     $(canvas).click(() => {
