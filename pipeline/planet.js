@@ -41,7 +41,7 @@ const Planet = ((() => {
                     // We set the velocity in the x direction so that it is perpendicular to acceleration later.
                     // v^2 = G*Ms / d
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
-                console.log(velocitySquared);
+                // console.log(velocitySquared);
                 this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
 
                 // Now compute the acceleration
@@ -73,7 +73,7 @@ const Planet = ((() => {
         // Golden rule of this function should be: Vf = Vo + a*t
         // Need to remember to keep the x and y directions seperate...
         updateVelocity (time) {
-            console.log(this.acceleration);
+            // console.log(this.acceleration);
             this.velocity = new Vector(
                 this.velocity.x() + this.acceleration.x() * time,
                 this.velocity.y() + this.acceleration.y() * time

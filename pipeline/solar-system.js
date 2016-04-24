@@ -117,7 +117,7 @@
 
     const transformMatrix = gl.getUniformLocation(shaderProgram, "transformMatrix");
     const projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");
-    const uniRotationMatrix = gl.getUniformLocation(shaderProgram, "uniRotationMatrix");
+    const cameraMatrix = gl.getUniformLocation(shaderProgram, "cameraMatrix");
 
     const lightPosition = gl.getUniformLocation(shaderProgram, "lightPosition");
     const lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
@@ -149,8 +149,16 @@
             }
             objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
 
-            let mat = new Matrix().rotation(currentRotation, 0,0, 1).toWebGL();
-            gl.uniformMatrix4fv(uniRotationMatrix, gl.FALSE, mat);
+            let camera = new Matrix().camera(
+                // Position
+                xMovement, 0, -zMovement,
+                // Eye
+                -rotationAroundY / 360, -rotationAroundX / 360, 1 - zMovement,
+                // Up vector...
+                0, 1, 0
+            ).toWebGL();
+
+            gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, camera);
 
             gl.uniform1i(gl.getUniformLocation(shaderProgram, "sampler"), 0);
 
@@ -181,15 +189,19 @@
     gl.uniform3fv(lightDiffuse, [0.5, 0.5, 0.5]);
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
-    let animationActive = false;
+    let animationActive = true;
     var rotationStep = 2;
     let previousTimestamp = null;
-    let currentRotation = 0;
+    let zMovement = 0;
+    let xMovement = 0;
+    let speed = 1;
+    let rotationAroundX = 0;
+    let rotationAroundY = 0;
 
     const advanceScene = timestamp => {
         let texturesReady = () => {
             let numberReady = 0;
-            for (let i =0; i < objectsToDraw.length; i += 1) {
+            for (let i = 0; i < objectsToDraw.length; i += 1) {
                 if (objectsToDraw[i].texturesReady) {
                     numberReady += 1;
                 }
@@ -223,10 +235,6 @@
         }
 
         // All clear.
-        currentRotation += 2;
-        if (currentRotation >= 360) {
-          currentRotation = 0;
-        }
         drawScene();
 
         // Request the next frame.
@@ -239,10 +247,74 @@
 
     // Set up the rotation toggle: clicking on the canvas does it.
     $(canvas).click(() => {
-        animationActive = !animationActive;
         if (animationActive) {
             previousTimestamp = null;
             window.requestAnimationFrame(advanceScene);
         }
     });
+    let width = (viewingVolume.right - viewingVolume.left);
+    let depth = (viewingVolume.far - viewingVolume.near);
+    let depthProportion = depth / width;
+    let multiplier = 0.0001;
+    const updateZposition = (direction) => {
+        zMovement +=  (depth / 256) * direction;
+        multiplier *= 1.15;
+    }
+    const updateXposition = (direction) => {
+        xMovement += (width / 256) * direction;
+        multiplier *= 1.15;
+    }
+    $(document).keydown(function(e) {
+        if (e.which === 80) {
+            animationActive = !animationActive;
+            window.requestAnimationFrame(advanceScene);
+        } else {
+            if (animationActive) {
+                switch(e.which) {
+                    case 37: // left
+                    updateXposition(-1);
+                    break;
+
+                    case 38: // up
+                    updateZposition(1);
+                    break;
+
+                    case 39: // right
+                    updateXposition(1);
+                    break;
+
+                    case 40: // down
+                    updateZposition(-1);
+                    break;
+
+                    default: return; // exit this handler for other keys
+                }
+                e.preventDefault(); // prevent the default action (scroll / move caret)
+            }
+        }
+    });
+    const rotateScene = (event) => {
+        rotationAroundX = xRotationStart - yDragStart + event.clientY;
+        rotationAroundY = yRotationStart - xDragStart + event.clientX;
+        drawScene();
+    };
+    $(document).keyup(function(e) {
+        if (animationActive) {
+            multiplier = 0.0001;
+        }
+    });
+    let xDragStart;
+    let yDragStart;
+    let xRotationStart;
+    let yRotationStart;
+    $(canvas).mousedown(function (event) {
+        xDragStart = event.clientX;
+        yDragStart = event.clientY;
+        xRotationStart = rotationAroundX;
+        yRotationStart = rotationAroundY;
+        $(canvas).mousemove(rotateScene);
+    }).mouseup(function (event) {
+        $(canvas).unbind("mousemove");
+    });
+    window.requestAnimationFrame(advanceScene);
 })(document.getElementById("canvas")));

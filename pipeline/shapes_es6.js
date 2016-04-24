@@ -125,8 +125,8 @@ const Shape = ((() => {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
             gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
-            gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
+            // gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
+            // gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);

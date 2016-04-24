@@ -201,15 +201,14 @@ const Matrix = ((() => {
             const result = new Matrix();
 
             const projectionPoint = new Vector(pX, pY, pZ);
-            const upVector = new Vector(uX, uY, uZ)
-            console.log(projectionPoint, upVector);
+            const upVector = new Vector(uX, uY, uZ);
+
             const zTransformation = projectionPoint.subtract(new Vector(qX, qY, qZ)).unit();
             const yTransformation = upVector.subtract(upVector.projection(zTransformation)).unit();
             const xTransformation = yTransformation.cross(zTransformation);
 
-            console.log(zTransformation, yTransformation, xTransformation);
             // Row 1
-            result.elements[0][0] = xTransformation.x();
+            result.elements[0][0] = -xTransformation.x();
             result.elements[0][1] = xTransformation.y();
             result.elements[0][2] = xTransformation.z();
             result.elements[0][3] = -1 * projectionPoint.dot(xTransformation);
@@ -223,7 +222,7 @@ const Matrix = ((() => {
             // Row 3
             result.elements[2][0] = zTransformation.x();
             result.elements[2][1] = zTransformation.y();
-            result.elements[2][2] = zTransformation.z();
+            result.elements[2][2] = -zTransformation.z();
             result.elements[2][3] = -1 * projectionPoint.dot(zTransformation);
 
             return result;
