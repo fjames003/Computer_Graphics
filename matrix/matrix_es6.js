@@ -197,6 +197,41 @@ const Matrix = ((() => {
             return new Matrix().perspective(left, right, bottom, top, near, far);
         }
 
+        camera(pX, pY, pZ, qX, qY, qZ, uX, uY, uZ) {
+            const result = new Matrix();
+
+            const projectionPoint = new Vector(pX, pY, pZ);
+            const upVector = new Vector(uX, uY, uZ)
+
+            const zTransformation = projectionPoint.subtract(new Vector(qX, qY, qZ)).unit();
+            const yTransformation = upVector.subtract(upVector.projectionPoint(zTransformation)).unit();
+            const xTransformation = yTransformation.cross(zTransformation);
+
+            // Row 1
+            result.elements[0][0] = xTransformation.x();
+            result.elements[0][1] = xTransformation.y();
+            result.elements[0][2] = xTransformation.z();
+            result.elements[0][3] = -1 * projectionPoint.dot(xTransformation);
+
+            // Row 2
+            result.elements[1][0] = yTransformation.x();
+            result.elements[1][1] = yTransformation.y();
+            result.elements[1][2] = yTransformation.z();
+            result.elements[1][3] = -1 * projectionPoint.dot(yTransformation);
+
+            // Row 3
+            result.elements[2][0] = zTransformation.x();
+            result.elements[2][1] = zTransformation.y();
+            result.elements[2][2] = zTransformation.z();
+            result.elements[2][3] = -1 * projectionPoint.dot(zTransformation);
+
+            return result;
+        }
+
+        static camera(pX, pY, pZ, qX, qY, qZ, uX, uY, uZ) {
+            return new Matrix().camera(pX, pY, pZ, qX, qY, qZ, uX, uY, uZ);
+        }
+
         toWebGL() {
             const result = [];
 
@@ -216,7 +251,7 @@ const Matrix = ((() => {
             }
         }
 
-        copy() {
+        copY() {
             return new Matrix(this.elements);
         }
     }
