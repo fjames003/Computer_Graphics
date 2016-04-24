@@ -149,13 +149,14 @@
             }
             objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
 
+            console.log(zMovement);
             let camera = new Matrix().camera(
                 // Position
                 xMovement, 0, -zMovement,
                 // Eye
                 -rotationAroundY / 360, -rotationAroundX / 360, 1 - zMovement,
                 // Up vector...
-                0, 1, 0
+                0, 1 - rotationAroundX / 360, 0
             ).toWebGL();
 
             gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, camera);
@@ -252,14 +253,11 @@
     let width = (viewingVolume.right - viewingVolume.left);
     let depth = (viewingVolume.far - viewingVolume.near);
     let depthProportion = depth / width;
-    let multiplier = 0.0001;
     const updateZposition = (direction) => {
         zMovement +=  (depth / 256) * direction;
-        multiplier *= 1.15;
     }
     const updateXposition = (direction) => {
         xMovement += (width / 256) * direction;
-        multiplier *= 1.15;
     }
     $(document).keydown(function(e) {
         if (e.which === 80) {
@@ -295,11 +293,7 @@
         rotationAroundY = yRotationStart - xDragStart + event.clientX;
         drawScene();
     };
-    $(document).keyup(function(e) {
-        if (animationActive) {
-            multiplier = 0.0001;
-        }
-    });
+
     let xDragStart;
     let yDragStart;
     let xRotationStart;
