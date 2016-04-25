@@ -41,10 +41,10 @@
         specularColors: { r: 0.5, g: 0.5, b: 0.5 },
         shininess: 256,
         gl: gl,
-        textureId: gl.TEXTURE1,
+        textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
         glTexture: sunTexture
-    }).translate(0, 1, -10)
+    }).translate(1, 1, -10)
 
     const earthTexture = gl.createTexture();
 
@@ -63,7 +63,7 @@
         shininess: 64,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -7);
+    }).translate(-1, 0, -7);
 
     const minNear = 5;
     const maxFar = 100;
