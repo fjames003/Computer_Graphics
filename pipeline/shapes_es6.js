@@ -339,16 +339,15 @@ class Sphere extends Shape {
         if (!specs.vertices || !specs.indices || specs.vertices.length === 0 || specs.indices.length === 0) {
             let vertices = [];
             let indices = [];
-            let textureCoord = [];
             // In fact, the easiest way to calculate the vertex position and the normal
             // is just to do the calculations above but not multiply them by the radius,
             // store the results as the normal, and then to multiply the normal values
             // by the radius to get the vertex positions.
-            for (let i = 0; i < specs.n + 1; i += 1) {
+            for (let i = 0; i <= specs.n; i += 1) {
                 let theta = Math.PI * i/specs.n;
                 let sTheta = Math.sin(theta);
                 let cTheta = Math.cos(theta);
-                for (let j = 0; j < specs.n + 1; j += 1) {
+                for (let j = 0; j <= specs.n; j += 1) {
                     vertices.push(
                         [
                             sTheta * Math.cos(2 * Math.PI * j/specs.n),
@@ -359,8 +358,8 @@ class Sphere extends Shape {
                 }
             }
 
-            for (let i = 0.0; i < specs.n; i += 1) {
-                for (let j = 0.0; j < specs.n; j += 1) {
+            for (let i = 0; i < specs.n; i += 1) {
+                for (let j = 0; j < specs.n; j += 1) {
                     let minimum = (i * (specs.n + 1)) + j;
                     let maximum = minimum + specs.n + 1;
 
@@ -378,7 +377,6 @@ class Sphere extends Shape {
             }
             console.log(vertices.length);
             console.log(indices.length);
-            console.log(textureCoord.length);
             specs.vertices = vertices;
             specs.indices = indices;
         }
