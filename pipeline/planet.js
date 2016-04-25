@@ -8,9 +8,7 @@ const Planet = ((() => {
             super(specs);
             // Planets must obey one plane... Thus z will always be 0...
             this.location = specs.location || {x: 0, y: 0, z: 0};
-            this.textureId = specs.textureId;
-            this.glTexture = specs.glTexture;
-            this.textureSrc = specs.textureSrc; //Default to something here...
+            //Default to something here...
             if (!specs.mass || !specs.radius) {
                 throw "A planet must have a mass and a radius";
             }

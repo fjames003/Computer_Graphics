@@ -38,7 +38,8 @@
         colors: { r: 1.0, g: 1.0, b: 0.0 },
         specularColors: { r: 0.5, g: 0.5, b: 0.5 },
         shininess: 256,
-        gl: gl
+        gl: gl,
+        textureId: gl.TEXTURE0
     }).translate(0, 1, -10)
 
     const earthTexture = gl.createTexture();

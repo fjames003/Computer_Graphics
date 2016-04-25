@@ -251,7 +251,7 @@ const Matrix = ((() => {
             }
         }
 
-        copY() {
+        copy() {
             return new Matrix(this.elements);
         }
     }

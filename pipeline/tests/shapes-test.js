@@ -93,7 +93,7 @@ $(() => {
 
     test("Methods: Child (Create and Remove)", () => {
         let triangle = new Shape({vertices: triangleArray, indices: [[0, 1, 2]]});
-        let triChild = triangle.createChild();
+        let triChild = triangle.addChild();
         equal(
             triChild.parent,
             triangle,
@@ -111,7 +111,7 @@ $(() => {
             "Make sure that the child was properly removed"
         );
         triangle.scale(0.2, 0.4, 0.5);
-        let hourGlass = triangle.createChild(new Shape({
+        let hourGlass = triangle.addChild(new Shape({
             vertices: [
                 [-1, 1, 0],
                 [1, 1, 0],
@@ -131,7 +131,7 @@ $(() => {
             hourGlass,
             "Make sure the parent is aware of black sheep"
         );
-        let sqPacMan = triangle.createChild(new Shape({
+        let sqPacMan = triangle.addChild(new Shape({
             vertices: [
                 [-1, 1, 0],
                 [1, 1, 0],
@@ -146,13 +146,13 @@ $(() => {
             sqPacMan,
             "Make sure that more than one black sheep (children) are allowed"
         );
-        triangle.createChild();
+        triangle.addChild();
         equal(
             triangle.children.length,
             3,
             "Make sure the parents can count"
         );
-        let grandKid = hourGlass.createChild();
+        let grandKid = hourGlass.addChild();
         triangle.scale(1, 1, 1);
         deepEqual(
             grandKid.matrix,
@@ -167,7 +167,7 @@ $(() => {
         );
 
         throws(() => {
-            grandKid.createChild({
+            grandKid.addChild({
                 vertices: [
                     [-1, 1, 0],
                     [1, 1, 0],
@@ -177,7 +177,7 @@ $(() => {
                 ],
                 indices: [[0, 4, 1], [4, 3, 2]]
             });
-        }, "Make sure that only a shape can be passed to createChild")
+        }, "Make sure that only a shape can be passed to addChild")
     });
 
     test("Methods: Scale, Rotate, Translate", () => {
@@ -206,7 +206,7 @@ $(() => {
             "Make sure that rotate will update the matrix"
         );
 
-        let triChild = triangle.createChild();
+        let triChild = triangle.addChild();
         deepEqual(
             triChild.matrix,
             mScale.multiply(mTrans),

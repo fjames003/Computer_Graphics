@@ -22,6 +22,10 @@ const Shape = ((() => {
                 this.textureCoord = specs.textureCoord;
                 this.normals = specs.normals || [];
 
+                this.textureId = specs.textureId;
+                this.glTexture = specs.glTexture;
+                this.textureSrc = specs.textureSrc;
+
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = specs.indices;
                 this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
@@ -54,7 +58,7 @@ const Shape = ((() => {
             return this;
         }
 
-        createChild (child) {
+        addChild (child) {
             if (arguments.length === 0) {
                 child = this.copy();
             }
@@ -64,7 +68,7 @@ const Shape = ((() => {
                 this.children.push(child);
                 return child;
             } else {
-                throw "Argument provided to createChild was not of type shape";
+                throw "Argument provided to addChild was not of type shape";
             }
         }
 
@@ -154,10 +158,13 @@ const Shape = ((() => {
         //      general solution that accommodates a wide range of possibilities, like different
         //      modes, whether there is even a texture, etc., will be needed.
         toRawArray (indexedVertices, isLines) {
+            console.log(this.textureId);
             var result = [];
-            this.compressedTextureCoordinates = this.textureCoord;
-            this.textureCoord = [];
-            var textureCoordinateIndex;
+            if (this.textureId) {
+                this.compressedTextureCoordinates = this.textureCoord;
+                this.textureCoord = [];
+                var textureCoordinateIndex;
+            }
             for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
                 for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
                     result = result.concat(
@@ -165,11 +172,14 @@ const Shape = ((() => {
                             indexedVertices.indices[i][j]
                         ]
                     );
-                    textureCoordinateIndex = indexedVertices.indices[i][j] * 3;
-                    this.textureCoord = this.textureCoord.concat(
-                        this.compressedTextureCoordinates[textureCoordinateIndex],
-                        this.compressedTextureCoordinates[textureCoordinateIndex + 1]
-                    );
+                    if (this.textureId) {
+                        textureCoordinateIndex = indexedVertices.indices[i][j] * 3;
+                        this.textureCoord = this.textureCoord.concat(
+                            this.compressedTextureCoordinates[textureCoordinateIndex],
+                            this.compressedTextureCoordinates[textureCoordinateIndex + 1]
+                        );
+                    }
+
                     if (isLines) {
                         result = result.concat(
                             indexedVertices.vertices[
@@ -179,7 +189,7 @@ const Shape = ((() => {
                     }
                 }
             }
-            console.log(result.length);
+            // console.log(result.length);
             return result;
         }
 
