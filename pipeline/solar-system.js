@@ -150,7 +150,6 @@
             }
             objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
 
-            console.log(zMovement);
             let camera = new Matrix().camera(
                 // Position
                 xMovement, 0, -zMovement,
