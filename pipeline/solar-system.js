@@ -139,27 +139,28 @@
     /*
      * Displays the scene.
      */
-    const newRandomXYZ = () => {
-      let result = {};
-      result.x = Math.random() * 2 - 1;
-      result.y = Math.random() * 2 - 1;
-      result.z = Math.random() * 2 - 1;
-      return result;
+
+    const earthRotate = {
+        x: -1,
+        y: 0,
+        z: -7
+    };
+    const sunRotate = {
+        x: 1,
+        y: 1,
+        z:-10
     }
-    const rands = [];
-    const rotationRands = newRandomXYZ();
     const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Display the objects.
         for (let i = 0; i < objectsToDraw.length; i += 1) {
-            if (rands.length < (i + 1)) {
-              rands[i] = newRandomXYZ();
+            if (i === 0) {
+                objectsToDraw[i].rotate(rotationStep, sunRotate.x, sunRotate.y, sunRotate.z);
+            } else {
+                objectsToDraw[i].rotate(rotationStep, earthRotate.x, earthRotate.y, earthRotate.z);
             }
-            // objectsToDraw[i].rotate(rotationStep, 0, 0, 1);
-            objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
-            
 
             let camera = new Matrix().camera(
                 // Position

@@ -91,8 +91,8 @@ const Shape = ((() => {
         }
 
         rotate (theta, x, y, z) {
-            // this.matrix = new Matrix().rotation(theta, x, y, z).multiply(this.matrix);
-            this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+            this.matrix = new Matrix().rotation(theta, x, y, z).multiply(this.matrix);
+            // this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
             this.children.map(child => child.rotate(theta, x, y, z));
             return this;
         }
