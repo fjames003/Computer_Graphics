@@ -157,7 +157,9 @@
             if (rands.length < (i + 1)) {
               rands[i] = newRandomXYZ();
             }
-            objectsToDraw[i].rotate(rotationStep, 0, 0, 1);
+            // objectsToDraw[i].rotate(rotationStep, 0, 0, 1);
+            objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
+            
 
             let camera = new Matrix().camera(
                 // Position
