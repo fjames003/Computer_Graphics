@@ -145,34 +145,30 @@ const Shape = ((() => {
             this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate));
         }
 
-        // split (type=1, direction="x") {
-        //     const finalDirection = {x: 0, y:0, z:0};
-        //     finalDirection[direction] = 1;
-        //     if (type === 1 || this.children.length === 0) {
+        // JD: See below.
         //
-        //         const splitChild = this.createChild();
-        //
-        //         this.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(this.matrix);
-        //         // this.matrix = this.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
-        //
-        //         splitChild.matrix = Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z).multiply(splitChild.matrix);
-        //         // splitChild.matrix = splitChild.matrix.multiply(Matrix.translate(finalDirection.x, finalDirection.y, finalDirection.z));
-        //
-        //         return splitChild;
-        //     } else {
-        //         this.children.map(child => child.split(2, direction));
-        //         this.split(1, direction);
-        //     }
-        // }
-
+        // TODO This is a quick and dirty fix to the texture coordinate issue. The key is that
+        //      the number of texture coordinates must exactly match the number of *final* vertices,
+        //      not the number of mesh vertices (which the code calls the "compressedVertices").
+        //      Just to get things going, the texture coordinates are "unrolled" here. A more
+        //      general solution that accommodates a wide range of possibilities, like different
+        //      modes, whether there is even a texture, etc., will be needed.
         toRawArray (indexedVertices, isLines) {
             var result = [];
+            this.compressedTextureCoordinates = this.textureCoord;
+            this.textureCoord = [];
+            var textureCoordinateIndex;
             for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
                 for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
                     result = result.concat(
                         indexedVertices.vertices[
                             indexedVertices.indices[i][j]
                         ]
+                    );
+                    textureCoordinateIndex = indexedVertices.indices[i][j] * 3;
+                    this.textureCoord = this.textureCoord.concat(
+                        this.compressedTextureCoordinates[textureCoordinateIndex],
+                        this.compressedTextureCoordinates[textureCoordinateIndex + 1]
                     );
                     if (isLines) {
                         result = result.concat(
@@ -183,6 +179,7 @@ const Shape = ((() => {
                     }
                 }
             }
+            console.log(result.length);
             return result;
         }
 
@@ -250,26 +247,6 @@ const Shape = ((() => {
                 this.vertices = this.toRawArray(this.indexedVertices, false);
                 if (this.normals.length === 0) {
                     this.normals = this.toNormalArray(this.indexedVertices, false);
-                }
-            }
-
-            // JD: See below.
-            //
-            // TODO This is a quick and dirty fix to the texture coordinate issue. The key is that
-            //      the number of texture coordinates must exactly match the number of *final* vertices,
-            //      not the number of mesh vertices (which the code calls the "compressedVertices").
-            //      Just to get things going, the texture coordinates are "unrolled" here. A more
-            //      general solution that accommodates a wide range of possibilities, like different
-            //      modes, whether there is even a texture, etc., will be needed.
-            this.compressedTextureCoordinates = this.textureCoord;
-            this.textureCoord = [];
-            for (var i = 0, maxi = this.indexedVertices.indices.length; i < maxi; i += 1) {
-                for (var j = 0, maxj = this.indexedVertices.indices[i].length; j < maxj; j += 1) {
-                    var textureCoordinateIndex = this.indexedVertices.indices[i][j] * 2;
-                    this.textureCoord = this.textureCoord.concat(
-                        this.compressedTextureCoordinates[textureCoordinateIndex],
-                        this.compressedTextureCoordinates[textureCoordinateIndex + 1]
-                    );
                 }
             }
         }
@@ -361,6 +338,9 @@ class Sphere extends Shape {
                     );
                 }
             }
+            console.log(vertices.length);
+            console.log(indices.length);
+            console.log(textureCoord.length);
             specs.vertices = vertices;
             specs.indices = indices;
             specs.textureCoord = textureCoord;

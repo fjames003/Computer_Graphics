@@ -208,7 +208,7 @@ const Matrix = ((() => {
             const xTransformation = yTransformation.cross(zTransformation);
 
             // Row 1
-            result.elements[0][0] = -xTransformation.x();
+            result.elements[0][0] = xTransformation.x();
             result.elements[0][1] = xTransformation.y();
             result.elements[0][2] = xTransformation.z();
             result.elements[0][3] = -1 * projectionPoint.dot(xTransformation);
