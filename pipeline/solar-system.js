@@ -77,7 +77,11 @@
         far: maxFar
     };
 
-
+    const building = earth.addChild(new Cube({
+        colors: {r: 1, g: 0, b: 0},
+        shininess: 128,
+        mode: gl.TRIANGLES
+    })).translate(0, 1.2, 0).scale(0.1, 0.2, 0.1);
     const objectsToDraw = [
         sun,
         earth
@@ -153,7 +157,7 @@
             if (rands.length < (i + 1)) {
               rands[i] = newRandomXYZ();
             }
-            objectsToDraw[i].rotate(rotationStep, rands[i].x, rands[i].y, rands[i].z);
+            objectsToDraw[i].rotate(rotationStep, 0, 0, 1);
 
             let camera = new Matrix().camera(
                 // Position

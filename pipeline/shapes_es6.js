@@ -91,7 +91,8 @@ const Shape = ((() => {
         }
 
         rotate (theta, x, y, z) {
-            this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
+            this.matrix = new Matrix().rotation(theta, x, y, z).multiply(this.matrix);
+            // this.matrix = this.matrix.multiply(new Matrix().rotation(theta, x, y, z));
             this.children.map(child => child.rotate(theta, x, y, z));
             return this;
         }
@@ -115,6 +116,12 @@ const Shape = ((() => {
         }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
+            // if (this.parent && !this.multipiedAlready) {
+            //     console.log(this.matrix, this.parent.matrix);
+            //     this.matrix = this.parent.matrix.multiply(this.matrix);
+            //     this.multipiedAlready = true;
+            //     console.log(this.matrix, this.parent.matrix);
+            // }
             if (!this.buffersInitiated.vertices || !this.buffersInitiated.color) {
                 this.initVertexBuffer(gl);
                 this.initColorBuffer(gl);
