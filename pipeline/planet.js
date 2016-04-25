@@ -47,7 +47,7 @@ const Planet = ((() => {
                 // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
                 // a = G*Ms / d^2
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
-                this.accelerationMagnitude = this.acceleration.magnitude();
+                this.forceOfGravity = this.acceleration.magnitude();
             }
 
         }
@@ -57,7 +57,7 @@ const Planet = ((() => {
             // Update velocity to be current velocity plus acceleration
             this.updateVelocity(time);
             // Update location based on velocity
-            this.updatePosistion(time);
+            // this.updatePosistion(time);
             // Update the direction of the acceleration vector...
             this.updateAccleration();
         }
@@ -80,11 +80,19 @@ const Planet = ((() => {
             };
         }
 
+        // Angle of acceleration can be calulated by finding the angle to the body we are orbiting,
+        // which can be found using the distance to that body... Using arcTan of our Y distance (sin) divided by
+        // our X distance (cos). This angle can then be passed to cos and sin to find the amount of gravity in
+        // each direction...
         updateAccleration () {
             let myLoc = new Vector(this.location.x, this.location.y);
-            let direction = this.orbiterLoc.subtract(myLoc).unit();
-            direction.multiply(this.accelerationMagnitude);
-            this.acceleration = new Vector(direction.x(), direction.y());
+            let direction = this.orbiterLoc.subtract(myLoc);
+            let angleToOrbiter = Math.atan(direction.y() / direction.x());
+            this.acceleration = new Vector(
+                this.forceOfGravity * Math.cos(angleToOrbiter),
+                this.forceOfGravity * Math.sin(angleToOrbiter)
+            );
+            console.log(this.acceleration);
         }
 
         // set velocity (s) {
