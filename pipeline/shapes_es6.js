@@ -382,8 +382,6 @@ class Sphere extends Shape {
                     );
                 }
             }
-            console.log(vertices.length);
-            console.log(indices.length);
             specs.vertices = vertices;
             specs.indices = indices;
         }

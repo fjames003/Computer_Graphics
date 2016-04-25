@@ -38,8 +38,8 @@
         mass: 4.385 * Math.pow(10, 30),
         radius: 432168.6,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
-        specularColors: { r: 0.5, g: 0.5, b: 0.5 },
-        shininess: 256,
+        specularColors: { r: 1.0, g: 1.0, b: 0.0 },
+        shininess: 32,
         gl: gl,
         textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
@@ -60,7 +60,7 @@
         radius: 3958.8,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColor: { r: 1.0, g: 1.0, b: 1.0 },
-        shininess: 64,
+        shininess: 32,
         orbitOf: sun,
         gl: gl
     }).translate(-1, 0, -7);
