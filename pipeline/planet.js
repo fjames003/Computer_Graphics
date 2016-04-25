@@ -49,15 +49,7 @@ const Planet = ((() => {
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
                 this.accelerationMagnitude = this.acceleration.magnitude();
             }
-            if (this.textureSrc) {
-                this.setUpTexture(specs.gl);
-            }
-        }
 
-        setUpTexture (gl) {
-            this.image = new Image();
-            this.image.onload = loadHandlerFor(gl, this.glTexture, this.image, this.textureId, this);
-            this.image.src = this.textureSrc;
         }
 
 
@@ -109,13 +101,5 @@ const Planet = ((() => {
             }
         }
     }
-    const loadHandlerFor = (gl, texture, textureImage, textureId, shape) => () => {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImage);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-        gl.generateMipmap(gl.TEXTURE_2D);
-        shape.textureReady = true;
-    };
     return planet;
 }))();

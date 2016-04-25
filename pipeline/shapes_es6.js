@@ -26,6 +26,10 @@ const Shape = ((() => {
                 this.glTexture = specs.glTexture;
                 this.textureSrc = specs.textureSrc;
 
+                if (this.textureSrc && this.textureId && this.glTexture) {
+                    this.setUpTexture(specs.gl);
+                }
+
                 // Set the vertices array according to the faces provided and the mode...
                 this.indices = specs.indices;
                 this.indexedVertices = {vertices: this.compressedVertices, indices: this.indices};
@@ -158,13 +162,8 @@ const Shape = ((() => {
         //      general solution that accommodates a wide range of possibilities, like different
         //      modes, whether there is even a texture, etc., will be needed.
         toRawArray (indexedVertices, isLines) {
-            console.log(this.textureId);
             var result = [];
-            if (this.textureId) {
-                this.compressedTextureCoordinates = this.textureCoord;
-                this.textureCoord = [];
-                var textureCoordinateIndex;
-            }
+
             for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
                 for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
                     result = result.concat(
@@ -172,13 +171,6 @@ const Shape = ((() => {
                             indexedVertices.indices[i][j]
                         ]
                     );
-                    if (this.textureId) {
-                        textureCoordinateIndex = indexedVertices.indices[i][j] * 3;
-                        this.textureCoord = this.textureCoord.concat(
-                            this.compressedTextureCoordinates[textureCoordinateIndex],
-                            this.compressedTextureCoordinates[textureCoordinateIndex + 1]
-                        );
-                    }
 
                     if (isLines) {
                         result = result.concat(
@@ -237,6 +229,28 @@ const Shape = ((() => {
             return result;
         }
 
+        // Works if slices on sphere is very large...
+        // toTextureArray(normals) {
+        //     let result = []
+        //     for (let i = 0; i < normals.length; i += 3) {
+        //         result = result.concat(
+        //             [Math.asin(normals[i]) / Math.PI + 0.5, Math.asin(normals[i + 1]) / Math.PI + 0.5]
+        //         );
+        //     }
+        //     return result;
+        // }
+
+        toTextureArray(vertices) {
+            let result = []
+            for (let i = 0; i < vertices.length; i += 3) {
+                let dHat = new Vector(vertices[i], vertices[i + 1], vertices[i + 2]).unit();
+                result = result.concat(
+                    [0.5 + Math.atan2(dHat.z(), dHat.x()) / (Math.PI * 2), 0.5 - Math.asin(dHat.y())/ Math.PI]
+                );
+            }
+            return result;
+        }
+
         set mode (newMode) {
             this._mode = newMode;
             this.setVertices();
@@ -259,6 +273,9 @@ const Shape = ((() => {
                     this.normals = this.toNormalArray(this.indexedVertices, false);
                 }
             }
+            if (this.textureId) {
+                this.textureCoord = this.toTextureArray(this.vertices);
+            }
         }
         checkColors (colors) {
             if (colors.r || colors.g || colors.b) {
@@ -278,6 +295,11 @@ const Shape = ((() => {
                 }
             }
         }
+        setUpTexture (gl) {
+            this.image = new Image();
+            this.image.onload = loadHandlerFor(gl, this.glTexture, this.image, this.textureId, this);
+            this.image.src = this.textureSrc;
+        }
     }
     var initBuffer = function (gl, sequence) {
         var buffer = gl.createBuffer();
@@ -293,6 +315,16 @@ const Shape = ((() => {
             result = result.concat(r, g, b);
         }
         return result;
+    };
+
+    const loadHandlerFor = (gl, texture, textureImage, textureId, shape) => () => {
+        gl.activeTexture(textureId);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImage);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        shape.textureReady = true;
     };
 
     return shape;
@@ -324,10 +356,6 @@ class Sphere extends Shape {
                             sTheta * Math.sin(2 * Math.PI * j/specs.n)
                         ]
                     );
-                    let u = 1 - (j / specs.n);
-                    let v = 1 - (i / specs.n);
-                    textureCoord.push(u);
-                    textureCoord.push(v);
                 }
             }
 
@@ -353,7 +381,6 @@ class Sphere extends Shape {
             console.log(textureCoord.length);
             specs.vertices = vertices;
             specs.indices = indices;
-            specs.textureCoord = textureCoord;
         }
         super(specs);
         this.slices = specs.n;

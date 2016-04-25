@@ -31,15 +31,19 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Not technically, but we can pretend...
+    const sunTexture = gl.createTexture();
+
     const sun = new Planet({
         location: {x: 0, y: 1, z: 0},
         mass: 4.385 * Math.pow(10, 30),
         radius: 432168.6,
-        colors: { r: 1.0, g: 1.0, b: 0.0 },
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColors: { r: 0.5, g: 0.5, b: 0.5 },
         shininess: 256,
         gl: gl,
-        textureId: gl.TEXTURE0
+        textureId: gl.TEXTURE1,
+        textureSrc: "sun_512.jpg",
+        glTexture: sunTexture
     }).translate(0, 1, -10)
 
     const earthTexture = gl.createTexture();
