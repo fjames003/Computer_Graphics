@@ -338,11 +338,16 @@
         }
     });
 
-    const rotateScene = (event) => {
+    const handleMouseMove = () => {
         rotationAroundX = xRotationStart - yDragStart + event.clientY;
         rotationAroundY = yRotationStart - xDragStart + event.clientX;
+        eyePosistionQ = new Vector(
+            eyePosistionQ.x() - (rotationAroundY / 3600),
+            eyePosistionQ.y() - (rotationAroundX / 3600),
+            eyePosistionQ.z()
+        );
         drawScene();
-    };
+    }
 
     let xDragStart;
     let yDragStart;
@@ -353,7 +358,7 @@
         yDragStart = event.clientY;
         xRotationStart = rotationAroundX;
         yRotationStart = rotationAroundY;
-        $(canvas).mousemove(rotateScene);
+        $(canvas).mousemove(handleMouseMove);
     }).mouseup(function (event) {
         $(canvas).unbind("mousemove");
     });
