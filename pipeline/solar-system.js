@@ -343,6 +343,23 @@
         }
     });
 
+    // const cameraReference = new Vector(0, 0, 1, 0);
+    // const handleMouseMove = () => {
+    //     rotationAroundX = xRotationStart - yDragStart + event.clientY;
+    //     rotationAroundY = yRotationStart - xDragStart + event.clientX;
+    //     let yRotationMatrix = new Matrix().rotation(rotationAroundY / 360, 0, 1, 0);
+    //     let xRotationMatrix = new Matrix().rotation(rotationAroundX / 360, 1, 0, 0);
+    //     let transformedReference = cameraReference.transform(yRotationMatrix);
+    //     console.log(transformedReference);
+    //     let lookAt = cameraPositionP.add(transformedReference);
+    //     console.log(lookAt);
+    //     eyePosistionQ = new Vector(
+    //         lookAt.x(),
+    //         lookAt.y(),
+    //         lookAt.z()
+    //     );
+    //     drawScene();
+    // }
     const handleMouseMove = () => {
         rotationAroundX = xRotationStart - yDragStart + event.clientY;
         rotationAroundY = yRotationStart - xDragStart + event.clientX;

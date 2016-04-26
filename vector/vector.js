@@ -133,5 +133,21 @@ var Vector = (function () {
         return unitv.multiply(this.dot(unitv));
     };
 
+    vector.prototype.transform  = function (mat) {
+        console.log(this.elements);
+        console.log(mat.elements);
+        var result = new Vector();
+        for ( var i = 0; i < 4; i += 1 ) {
+            console.log();
+            result.elements[i] = this.elements[0] * mat.elements[0][i] + this.elements[1] * mat.elements[1][i] + this.elements[2] + mat.elements[2][i] + this.elements[3] * mat.elements[3][i];
+        }
+        console.log(result);
+        result.elements[0] = result.elements[0]/result.elements[3];
+        result.elements[1] = result.elements[1]/result.elements[3];
+        result.elements[2] = result.elements[2]/result.elements[3];
+
+        return new Vector(result.x(), result.y(), result.z());
+    };
+
     return vector;
 })();
