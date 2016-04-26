@@ -1,6 +1,9 @@
 const Planet = ((() => {
     // m^3kg^-1s^-2
-    const gravitationalConstant = 6.67408 * Math.pow(10, -11);
+    // const gravitationalConstant = 6.67408 * Math.pow(10, -11);
+    // AU^3 * yr^-2 * SolarMasses^-1 -->Smaller units...
+    const gravitationalConstant = 4 * Math.PI * Math.PI;
+    let previousTimestamp = 0;
     class planet extends Sphere {
         constructor (specs) {
             specs.n = 25;
@@ -33,6 +36,7 @@ const Planet = ((() => {
             // );
             if (specs.orbitOf) {
                 let distanceToOrbiter = this.orbitOf.location.y - this.location.y;
+                console.log("Distance to Orbiter: " + distanceToOrbiter);
 
                 // Now using these values we can calculate the starting velocity of the planet...
                     // calculate velocity
@@ -41,35 +45,44 @@ const Planet = ((() => {
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
                 // console.log(velocitySquared);
                 this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
-
+                console.log(`Velocity: (${this.velocity.x()}, ${this.velocity.y()})`);
                 // Now compute the acceleration
                 // Set acceleration in the y direction... since that is where the orbiter is...
                 // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
                 // a = G*Ms / d^2
                 this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
+                console.log(`Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()})`);
                 this.forceOfGravity = this.acceleration.magnitude();
+
             }
 
         }
 
 
         update (time) {
-            // Update velocity to be current velocity plus acceleration
-            this.updateVelocity(time);
+            time /= 1000;
+            // time = time - previousTimestamp;
+            // previousTimestamp = time;
             // Update location based on velocity
-            // this.updatePosistion(time);
+            this.updatePosistion(time);
             // Update the direction of the acceleration vector...
             this.updateAccleration();
+            // Update velocity to be current velocity plus acceleration
+            this.updateVelocity(time);
         }
 
         // Golden rule of this function should be: Vf = Vo + a*t
         // Need to remember to keep the x and y directions seperate...
         updateVelocity (time) {
+
             // console.log(this.acceleration);
             this.velocity = new Vector(
                 this.velocity.x() + this.acceleration.x() * time,
                 this.velocity.y() + this.acceleration.y() * time
             );
+            console.log(time);
+            // this.velocity = this.velocity.add(this.acceleration.multiply(time));
+            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()})`);
         }
 
         updatePosistion (time) {
@@ -78,6 +91,7 @@ const Planet = ((() => {
                 y: this.location.y + this.velocity.y() * time,
                 z: 0
             };
+            console.log(`Updated location: (${this.location.x}, ${this.location.y})`);
         }
 
         // Angle of acceleration can be calulated by finding the angle to the body we are orbiting,
@@ -92,7 +106,7 @@ const Planet = ((() => {
                 this.forceOfGravity * Math.cos(angleToOrbiter),
                 this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-            // console.log(this.acceleration);
+            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()})`);
         }
 
         // set velocity (s) {
@@ -102,10 +116,10 @@ const Planet = ((() => {
         //     return this._velocity;
         // }
 
-        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
-            super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate);
+        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
+            super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
             if (this.orbitOf) {
-                this.update();
+                this.update(time);
             }
         }
     }

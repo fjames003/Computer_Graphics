@@ -33,9 +33,11 @@
     // Not technically, but we can pretend...
     const sunTexture = gl.createTexture();
 
+    // If is use AU for distance, years for time, and solar masses as mass my numbers are smaller...
     const sun = new Planet({
-        location: {x: 0, y: 1, z: 0},
-        mass: 4.385 * Math.pow(10, 30),
+        location: {x: 0, y: 0, z: 0},
+        // mass: 4.385 * Math.pow(10, 30),
+        mass: 1.0,
         radius: 432168.6,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColors: { r: 1.0, g: 1.0, b: 0.0 },
@@ -49,14 +51,16 @@
     const earthTexture = gl.createTexture();
 
     const earth = new Planet({
-        location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
+        // location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
+        location: {x: 0, y: -1.0, z: 0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
         textureId: gl.TEXTURE0,
         textureSrc: "earth_512.jpg",
         glTexture: earthTexture,
-        mass: 1.317 * Math.pow(10, 25),
+        // mass: 1.317 * Math.pow(10, 25),
+        mass: 3.003 * Math.pow(10, -6),
         radius: 3958.8,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColor: { r: 1.0, g: 1.0, b: 1.0 },
@@ -154,7 +158,7 @@
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
-    const drawScene = () => {
+    const drawScene = (time) => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -186,7 +190,7 @@
 
             gl.uniform1i(gl.getUniformLocation(shaderProgram, "sampler"), 0);
 
-            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate);
+            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
         }
 
         // All done.
@@ -234,7 +238,7 @@
         }
         let drawWhenReady = setInterval(function () {
             if (texturesReady() === objectsToDraw.length) {
-                drawScene();
+                drawScene(timestamp);
                 clearInterval(drawWhenReady);
             }
         }, 10);
@@ -259,7 +263,7 @@
         }
 
         // All clear.
-        drawScene();
+        drawScene(timestamp);
 
         // Request the next frame.
         previousTimestamp = timestamp;
