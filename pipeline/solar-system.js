@@ -221,7 +221,7 @@
     let speed = 1;
     let rotationAroundX = 0;
     let rotationAroundY = 0;
-
+    let progess;
     const advanceScene = timestamp => {
         let texturesReady = () => {
             let numberReady = 0;
@@ -251,7 +251,7 @@
         }
 
         // Check if it's time to advance.
-        const progress = timestamp - previousTimestamp;
+        progress = timestamp - previousTimestamp;
         if (progress < 30) {
             // Do nothing if it's too soon.
             window.requestAnimationFrame(advanceScene);
@@ -274,6 +274,7 @@
         }
     });
     let width = (viewingVolume.right - viewingVolume.left);
+    let height = (viewingVolume.top - viewingVolume.bottom)
     let depth = (viewingVolume.far - viewingVolume.near);
     let depthProportion = depth / width;
     const updateZposition = (direction) => {
@@ -363,6 +364,7 @@
     const handleMouseMove = () => {
         rotationAroundX = xRotationStart - yDragStart + event.clientY;
         rotationAroundY = yRotationStart - xDragStart + event.clientX;
+        // console.log(rotationAroundY / 3600, rotationAroundX / 3600);
         eyePosistionQ = new Vector(
             eyePosistionQ.x() - (rotationAroundY / 3600),
             eyePosistionQ.y() - (rotationAroundX / 3600),
