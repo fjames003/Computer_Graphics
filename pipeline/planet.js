@@ -92,7 +92,7 @@ const Planet = ((() => {
                 this.forceOfGravity * Math.cos(angleToOrbiter),
                 this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-            console.log(this.acceleration);
+            // console.log(this.acceleration);
         }
 
         // set velocity (s) {

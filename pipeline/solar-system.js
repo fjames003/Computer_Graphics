@@ -150,6 +150,9 @@
         y: 1,
         z:-10
     }
+    let cameraPositionP = new Vector(0, 0, 0);
+    let eyePosistionQ = new Vector(0, 0, 1);
+    let upVector = new Vector(0, 1, 0);
     const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -162,14 +165,21 @@
                 objectsToDraw[i].rotate(rotationStep, earthRotate.x, earthRotate.y, earthRotate.z);
             }
 
+            // let camera = new Matrix().camera(
+            //     // Position
+            //     xMovement, 0, -zMovement,
+            //     // Eye
+            //     -rotationAroundY / 360, -rotationAroundX / 360, 1 - zMovement,
+            //     // Up vector...
+            //     0, 1 - rotationAroundX / 360, 0
+            // ).toWebGL();
+
             let camera = new Matrix().camera(
-                // Position
-                xMovement, 0, -zMovement,
-                // Eye
-                -rotationAroundY / 360, -rotationAroundX / 360, 1 - zMovement,
-                // Up vector...
-                0, 1 - rotationAroundX / 360, 0
+                cameraPositionP.x(), cameraPositionP.y(), -cameraPositionP.z(),
+                eyePosistionQ.x(), eyePosistionQ.y(), eyePosistionQ.z(),
+                upVector.x(), upVector.y(), upVector.z()
             ).toWebGL();
+
 
             gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, camera);
 
@@ -271,6 +281,31 @@
     const updateXposition = (direction) => {
         xMovement += (width / 256) * direction;
     }
+    const updateForwardBackwardPosition = (direction, progress) => {
+        let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP).unit();
+        cameraPositionP = new Vector(
+            cameraPositionP.x() + (direction * whereCameraIsLooking.x() * 0.1),
+            cameraPositionP.y() + (direction * whereCameraIsLooking.y() * 0.1),
+            cameraPositionP.z() + (direction * whereCameraIsLooking.z() * 0.1)
+        );
+    }
+
+    const updateLeftRightPosition = (direction, progress) => {
+        let tempVec;
+        let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP).unit();
+        if (whereCameraIsLooking.x() !== 0 || whereCameraIsLooking.z() !== 0) {
+            tempVec = new Vector(0, 1, 0);
+        } else {
+            tempVec = new Vector(1, 0, 0);
+        }
+        let perpendicularToLooking = whereCameraIsLooking.cross(tempVec).unit();
+        cameraPositionP = new Vector(
+            cameraPositionP.x() + (direction * perpendicularToLooking.x() * 0.1),
+            cameraPositionP.y() + (direction * perpendicularToLooking.y() * 0.1),
+            cameraPositionP.z() + (direction * perpendicularToLooking.z() * 0.1)
+        );
+    }
+
     $(document).keydown(function(e) {
         if (e.which === 80) {
             animationActive = !animationActive;
@@ -279,19 +314,21 @@
             if (animationActive) {
                 switch(e.which) {
                     case 37: // left
-                    updateXposition(-1);
+                    updateLeftRightPosition(1);
                     break;
 
                     case 38: // up
-                    updateZposition(1);
+                    // updateZposition(1);
+                    updateForwardBackwardPosition(1);
                     break;
 
                     case 39: // right
-                    updateXposition(1);
+                    updateLeftRightPosition(-1);
                     break;
 
                     case 40: // down
-                    updateZposition(-1);
+                    // updateZposition(-1);
+                    updateForwardBackwardPosition(-1);
                     break;
 
                     default: return; // exit this handler for other keys
@@ -300,6 +337,7 @@
             }
         }
     });
+
     const rotateScene = (event) => {
         rotationAroundX = xRotationStart - yDragStart + event.clientY;
         rotationAroundY = yRotationStart - xDragStart + event.clientX;
