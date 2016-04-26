@@ -153,6 +153,7 @@
     let cameraPositionP = new Vector(0, 0, 0);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
+    var camera;
     const drawScene = () => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -174,7 +175,7 @@
             //     0, 1 - rotationAroundX / 360, 0
             // ).toWebGL();
 
-            let camera = new Matrix().camera(
+            camera = new Matrix().camera(
                 cameraPositionP.x(), cameraPositionP.y(), -cameraPositionP.z(),
                 eyePosistionQ.x(), eyePosistionQ.y(), eyePosistionQ.z(),
                 upVector.x(), upVector.y(), upVector.z()
@@ -310,6 +311,10 @@
         if (e.which === 80) {
             animationActive = !animationActive;
             window.requestAnimationFrame(advanceScene);
+        } else if (e.which === 76) {
+            for (let i = 0; i < objectsToDraw.length; i += 1) {
+                console.log(camera);
+            }
         } else {
             if (animationActive) {
                 switch(e.which) {
