@@ -63,12 +63,12 @@ const Planet = ((() => {
             time /= 1000000000000;
             // time = time - previousTimestamp;
             // previousTimestamp = time;
+            // Update velocity to be current velocity plus acceleration
+            this.updateVelocity(time);
             // Update location based on velocity
             this.updatePosistion(time);
             // Update the direction of the acceleration vector...
             this.updateAccleration();
-            // Update velocity to be current velocity plus acceleration
-            this.updateVelocity(time);
         }
 
         // Golden rule of this function should be: Vf = Vo + a*t

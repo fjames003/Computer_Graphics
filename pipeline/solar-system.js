@@ -67,7 +67,7 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(-2, 0, 0);
+    }).translate(-2, 0, 0).scale(0.5, 0.5, 0.5);
 
     const minNear = 5;
     const maxFar = 100;
@@ -85,7 +85,7 @@
         colors: {r: 1, g: 0, b: 0},
         shininess: 128,
         mode: gl.TRIANGLES
-    })).translate(0, 1.2, 0).scale(0.1, 0.2, 0.1);
+    })).translate(0, 1, 0).scale(0.05, 0.1, 0.05);
     const objectsToDraw = [
         sun,
         earth
@@ -145,14 +145,14 @@
      */
 
     const earthRotate = {
-        x: -1,
-        y: 0,
-        z: -7
+        x: 0,
+        y: 1,
+        z: 0
     };
     const sunRotate = {
-        x: 1,
+        x: 0,
         y: 1,
-        z:-10
+        z: 0
     }
     let cameraPositionP = new Vector(0, 0, 10);
     let eyePosistionQ = new Vector(0, 0, 1);
@@ -218,7 +218,7 @@
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
     let animationActive = true;
-    var rotationStep = 2;
+    var rotationStep = -2;
     let previousTimestamp = null;
     let zMovement = 0;
     let xMovement = 0;
