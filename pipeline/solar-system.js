@@ -46,7 +46,7 @@
         textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
         glTexture: sunTexture
-    }).translate(1, 1, -10)
+    });
 
     const earthTexture = gl.createTexture();
 
@@ -67,7 +67,7 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(-1, 0, -7);
+    }).translate(-2, 0, 0);
 
     const minNear = 5;
     const maxFar = 100;
@@ -154,7 +154,7 @@
         y: 1,
         z:-10
     }
-    let cameraPositionP = new Vector(0, 0, 0);
+    let cameraPositionP = new Vector(0, 0, 10);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
@@ -305,10 +305,18 @@
             tempVec = new Vector(1, 0, 0);
         }
         let perpendicularToLooking = whereCameraIsLooking.cross(tempVec).unit();
+        let x = (direction * perpendicularToLooking.x() * 0.1);
+        let y = (direction * perpendicularToLooking.y() * 0.1);
+        let z = (direction * perpendicularToLooking.z() * 0.1);
         cameraPositionP = new Vector(
-            cameraPositionP.x() + (direction * perpendicularToLooking.x() * 0.1),
-            cameraPositionP.y() + (direction * perpendicularToLooking.y() * 0.1),
-            cameraPositionP.z() + (direction * perpendicularToLooking.z() * 0.1)
+            cameraPositionP.x() + x,
+            cameraPositionP.y() + y,
+            cameraPositionP.z() + z
+        );
+        eyePosistionQ = new Vector(
+            eyePosistionQ.x() + x,
+            eyePosistionQ.y() + y,
+            eyePosistionQ.z() + z
         );
     }
 
@@ -324,21 +332,21 @@
             if (animationActive) {
                 switch(e.which) {
                     case 37: // left
-                    updateLeftRightPosition(1);
+                    updateLeftRightPosition(-1);
                     break;
 
                     case 38: // up
                     // updateZposition(1);
-                    updateForwardBackwardPosition(1);
+                    updateForwardBackwardPosition(-1);
                     break;
 
                     case 39: // right
-                    updateLeftRightPosition(-1);
+                    updateLeftRightPosition(1);
                     break;
 
                     case 40: // down
                     // updateZposition(-1);
-                    updateForwardBackwardPosition(-1);
+                    updateForwardBackwardPosition(1);
                     break;
 
                     default: return; // exit this handler for other keys
@@ -366,12 +374,12 @@
     //     drawScene();
     // }
     const handleMouseMove = () => {
-        rotationAroundX = xRotationStart - yDragStart + event.clientY;
-        rotationAroundY = yRotationStart - xDragStart + event.clientX;
+        rotationAroundX = xRotationStart - xDragStart + event.clientX;
+        rotationAroundY = yRotationStart - yDragStart + event.clientY;
         // console.log(rotationAroundY / 3600, rotationAroundX / 3600);
         eyePosistionQ = new Vector(
-            eyePosistionQ.x() - (rotationAroundY / 3600),
-            eyePosistionQ.y() - (rotationAroundX / 3600),
+            eyePosistionQ.x() + (rotationAroundX / 360),
+            eyePosistionQ.y() + (rotationAroundY / 360),
             eyePosistionQ.z()
         );
         drawScene();

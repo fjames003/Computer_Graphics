@@ -60,7 +60,7 @@ const Planet = ((() => {
 
 
         update (time) {
-            time /= 1000;
+            time /= 1000000000000;
             // time = time - previousTimestamp;
             // previousTimestamp = time;
             // Update location based on velocity
