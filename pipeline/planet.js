@@ -10,7 +10,8 @@ const Planet = ((() => {
             specs.mode = 4;
             super(specs);
             // Planets must obey one plane... Thus z will always be 0...
-            this.location = specs.location || {x: 0, y: 0, z: 0};
+            this.startLocation = specs.location || {x: 0, y: 0, z: 0};
+            this.locationVec = new Vector(this.startLocation.x, this.startLocation.y, this.startLocation.z);
             //Default to something here...
             if (!specs.mass || !specs.radius) {
                 throw "A planet must have a mass and a radius";
@@ -22,20 +23,20 @@ const Planet = ((() => {
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
             if (specs.orbitOf) {
-                this.orbiterLoc = new Vector(this.orbitOf.location.x, this.orbitOf.location.y);
-                if (this.location.x !== this.orbitOf.location.x && this.location.y < this.orbitOf.location.y) {
-                    throw "Planets must be created in the XY plane below (in the y) the planet they orbit";
+                this.orbiterLoc = new Vector(this.orbitOf.startLocation.x, this.orbitOf.startLocation.y, this.orbitOf.startLocation.z);
+                if (this.startLocation.x !== this.orbitOf.startLocation.x && this.startLocation.z < this.orbitOf.startLocation.z) {
+                    throw "Planets must be created in the XZ plane behind (in the z) the planet they orbit";
                 }
             }
 
             // If I restrict the user to only creating planets below the one they orbit this cuts down on the calculation
             // for distance to the orbiter... Thus this one can be commented out... (Just in case planets can be arbitray)
             // let distanceToOrbiter = Math.sqrt(
-            //     (this.location.x - this.orbitOf.location.x) * (this.location.x - this.orbitOf.location.x) +
-            //     (this.location.y - this.orbitOf.location.y) * (this.location.y - this.orbitOf.location.y)
+            //     (this.startLocation.x - this.orbitOf.startLocation.x) * (this.startLocation.x - this.orbitOf.startLocation.x) +
+            //     (this.startLocation.y - this.orbitOf.startLocation.y) * (this.startLocation.y - this.orbitOf.startLocation.y)
             // );
             if (specs.orbitOf) {
-                let distanceToOrbiter = this.orbitOf.location.y - this.location.y;
+                let distanceToOrbiter = this.orbitOf.startLocation.z - this.startLocation.z;
                 console.log("Distance to Orbiter: " + distanceToOrbiter);
 
                 // Now using these values we can calculate the starting velocity of the planet...
@@ -44,14 +45,17 @@ const Planet = ((() => {
                     // v^2 = G*Ms / d
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
                 // console.log(velocitySquared);
-                this.velocity = new Vector(Math.sqrt(velocitySquared), 0);
-                console.log(`Velocity: (${this.velocity.x()}, ${this.velocity.y()})`);
+                // Moving left, aka negative x velocity...
+                this.velocity = new Vector(-Math.sqrt(velocitySquared), 0, 0);
+                console.log(`Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
                 // Now compute the acceleration
                 // Set acceleration in the y direction... since that is where the orbiter is...
                 // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
                 // a = G*Ms / d^2
-                this.acceleration = new Vector(0, velocitySquared / distanceToOrbiter);
-                console.log(`Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()})`);
+                // Moving forward in the z toward orbiter...
+                console.log(velocitySquared / distanceToOrbiter);
+                this.acceleration = new Vector(0, 0, (velocitySquared / distanceToOrbiter));
+                console.log(`Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
                 this.forceOfGravity = this.acceleration.magnitude();
 
             }
@@ -60,7 +64,7 @@ const Planet = ((() => {
 
 
         update (time) {
-            time /= 1000000000000;
+            time /= 1000000;
             // time = time - previousTimestamp;
             // previousTimestamp = time;
             // Update velocity to be current velocity plus acceleration
@@ -76,22 +80,29 @@ const Planet = ((() => {
         updateVelocity (time) {
 
             // console.log(this.acceleration);
-            this.velocity = new Vector(
-                this.velocity.x() + this.acceleration.x() * time,
-                this.velocity.y() + this.acceleration.y() * time
-            );
+            // this.velocity = new Vector(
+            //     this.velocity.x() + this.acceleration.x() * time,
+            //     0,
+            //     this.velocity.z() + this.acceleration.z() * time
+            // );
             console.log(time);
-            // this.velocity = this.velocity.add(this.acceleration.multiply(time));
-            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()})`);
+            this.velocity = this.velocity.add(this.acceleration.multiply(time));
+            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
         }
 
         updatePosistion (time) {
-            this.location = {
-                x: this.location.x + this.velocity.x() * time,
-                y: this.location.y + this.velocity.y() * time,
-                z: 0
-            };
-            console.log(`Updated location: (${this.location.x}, ${this.location.y})`);
+            // this.location = {
+            //     x: this.location.x + this.velocity.x() * time,
+            //     y: this.location.y + this.velocity.y() * time,
+            //     z: 0
+            // };
+            this.locationVec = this.locationVec.add(this.velocity.multiply(time));
+            // console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
+            this.translate(
+                this.locationVec.x() - this.startLocation.x,
+                this.locationVec.y() - this.startLocation.y,
+                this.locationVec.z() - this.startLocation.z
+            );
         }
 
         // Angle of acceleration can be calulated by finding the angle to the body we are orbiting,
@@ -99,14 +110,14 @@ const Planet = ((() => {
         // our X distance (cos). This angle can then be passed to cos and sin to find the amount of gravity in
         // each direction...
         updateAccleration () {
-            let myLoc = new Vector(this.location.x, this.location.y);
-            let direction = this.orbiterLoc.subtract(myLoc);
-            let angleToOrbiter = Math.atan(direction.y() / direction.x());
+            let direction = this.orbiterLoc.subtract(this.locationVec);
+            let angleToOrbiter = Math.atan(direction.z() / direction.x());
             this.acceleration = new Vector(
                 this.forceOfGravity * Math.cos(angleToOrbiter),
+                0,
                 this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()})`);
+            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
         }
 
         // set velocity (s) {

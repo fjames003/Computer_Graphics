@@ -46,13 +46,13 @@
         textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
         glTexture: sunTexture
-    });
+    }).translate(1,0,0);
 
     const earthTexture = gl.createTexture();
 
     const earth = new Planet({
         // location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
-        location: {x: 0, y: -1.0, z: 0},
+        location: {x: 0, y: 0.0, z: -2.0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
@@ -67,7 +67,7 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(-2, 0, 0).scale(0.5, 0.5, 0.5);
+    }).translate(0, 0, -2).scale(0.5, 0.5, 0.5);
 
     const minNear = 5;
     const maxFar = 100;
@@ -154,7 +154,7 @@
         y: 1,
         z: 0
     }
-    let cameraPositionP = new Vector(0, 0, 10);
+    let cameraPositionP = new Vector(0, 0, 50);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
@@ -164,11 +164,11 @@
 
         // Display the objects.
         for (let i = 0; i < objectsToDraw.length; i += 1) {
-            if (i === 0) {
-                objectsToDraw[i].rotate(rotationStep, sunRotate.x, sunRotate.y, sunRotate.z);
-            } else {
-                objectsToDraw[i].rotate(rotationStep, earthRotate.x, earthRotate.y, earthRotate.z);
-            }
+            // if (i === 0) {
+            //     objectsToDraw[i].rotate(rotationStep, sunRotate.x, sunRotate.y, sunRotate.z);
+            // } else {
+            //     objectsToDraw[i].rotate(rotationStep, earthRotate.x, earthRotate.y, earthRotate.z);
+            // }
 
             // let camera = new Matrix().camera(
             //     // Position
