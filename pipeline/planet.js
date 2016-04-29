@@ -46,7 +46,7 @@ const Planet = ((() => {
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
                 // console.log(velocitySquared);
                 // Moving left, aka negative x velocity...
-                this.velocity = new Vector(-Math.sqrt(velocitySquared), 0, 0);
+                this.velocity = new Vector(Math.sqrt(velocitySquared), 0, 0);
                 console.log(`Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
                 // Now compute the acceleration
                 // Set acceleration in the y direction... since that is where the orbiter is...
@@ -85,9 +85,9 @@ const Planet = ((() => {
             //     0,
             //     this.velocity.z() + this.acceleration.z() * time
             // );
-            console.log(time);
+            // console.log(time);
             this.velocity = this.velocity.add(this.acceleration.multiply(time));
-            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
+            // console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
         }
 
         updatePosistion (time) {
@@ -97,9 +97,9 @@ const Planet = ((() => {
             //     z: 0
             // };
             this.locationVec = this.locationVec.add(this.velocity.multiply(time));
-            // console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
+            console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
             this.translate(
-                this.locationVec.x() - this.startLocation.x,
+                -this.locationVec.x() - this.startLocation.x,
                 this.locationVec.y() - this.startLocation.y,
                 this.locationVec.z() - this.startLocation.z
             );
@@ -112,12 +112,17 @@ const Planet = ((() => {
         updateAccleration () {
             let direction = this.orbiterLoc.subtract(this.locationVec);
             let angleToOrbiter = Math.atan(direction.z() / direction.x());
+
+            // angleToOrbiter = (angleToOrbiter < 0) ? (2 * Math.PI + angleToOrbiter) : angleToOrbiter;
+            console.log("Degrees to Sun: "+ (angleToOrbiter * (180 / Math.PI)));
+            let cosineCorrection = (angleToOrbiter > 0) ? -1 : 1;
+            let sineCorrection = (direction.z() < 0) ? 1 : -1;
             this.acceleration = new Vector(
-                this.forceOfGravity * Math.cos(angleToOrbiter),
+                this.forceOfGravity * Math.cos(angleToOrbiter) * cosineCorrection,
                 0,
-                this.forceOfGravity * Math.sin(angleToOrbiter)
+                this.forceOfGravity * Math.sin(angleToOrbiter) * sineCorrection
             );
-            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
+            // console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
         }
 
         // set velocity (s) {
@@ -130,7 +135,7 @@ const Planet = ((() => {
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
             if (this.orbitOf) {
-                this.update(time);
+                // this.update(time);
             }
         }
     }

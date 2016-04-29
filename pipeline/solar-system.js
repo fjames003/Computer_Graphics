@@ -73,10 +73,10 @@
     const maxFar = 100;
     const aspect = canvas.width / canvas.height;
     const viewingVolume = {
-        left: -2 * aspect,
-        right: 2 * aspect,
-        bottom: -2,
-        top: 2,
+        left: -4 * aspect,
+        right: 4 * aspect,
+        bottom: -4,
+        top: 4,
         near: minNear,
         far: maxFar
     };
@@ -154,7 +154,7 @@
         y: 1,
         z: 0
     }
-    let cameraPositionP = new Vector(0, 0, 50);
+    let cameraPositionP = new Vector(0, 0, 10);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
@@ -277,16 +277,7 @@
             window.requestAnimationFrame(advanceScene);
         }
     });
-    let width = (viewingVolume.right - viewingVolume.left);
-    let height = (viewingVolume.top - viewingVolume.bottom)
-    let depth = (viewingVolume.far - viewingVolume.near);
-    let depthProportion = depth / width;
-    const updateZposition = (direction) => {
-        zMovement +=  (depth / 256) * direction;
-    }
-    const updateXposition = (direction) => {
-        xMovement += (width / 256) * direction;
-    }
+
     const updateForwardBackwardPosition = (direction, progress) => {
         let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP).unit();
         cameraPositionP = new Vector(
@@ -356,44 +347,39 @@
         }
     });
 
-    // const cameraReference = new Vector(0, 0, 1, 0);
-    // const handleMouseMove = () => {
-    //     rotationAroundX = xRotationStart - yDragStart + event.clientY;
-    //     rotationAroundY = yRotationStart - xDragStart + event.clientX;
-    //     let yRotationMatrix = new Matrix().rotation(rotationAroundY / 360, 0, 1, 0);
-    //     let xRotationMatrix = new Matrix().rotation(rotationAroundX / 360, 1, 0, 0);
-    //     let transformedReference = cameraReference.transform(yRotationMatrix);
-    //     console.log(transformedReference);
-    //     let lookAt = cameraPositionP.add(transformedReference);
-    //     console.log(lookAt);
-    //     eyePosistionQ = new Vector(
-    //         lookAt.x(),
-    //         lookAt.y(),
-    //         lookAt.z()
-    //     );
-    //     drawScene();
-    // }
     const handleMouseMove = () => {
-        rotationAroundX = xRotationStart - xDragStart + event.clientX;
-        rotationAroundY = yRotationStart - yDragStart + event.clientY;
-        // console.log(rotationAroundY / 3600, rotationAroundX / 3600);
-        eyePosistionQ = new Vector(
-            eyePosistionQ.x() + (rotationAroundX / 360),
-            eyePosistionQ.y() + (rotationAroundY / 360),
-            eyePosistionQ.z()
-        );
+        angleY = yAngleStart + (xDragStart - event.clientX) / 10000;
+        angleZ = zAngleStart + -(yDragStart - event.clientY) / 10000;
+
+        // Make camera look faster as we go up...
+        eyePosistionQ.elements[1] += angleZ * 2;
+
+        rotateCamera(-angleY);
         drawScene();
+    }
+    const rotateCamera  = (speed) => {
+        let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP);
+
+        eyePosistionQ = new Vector(
+            cameraPositionP.x() +
+            Math.cos(speed) * whereCameraIsLooking.x() - Math.sin(speed) * whereCameraIsLooking.z(),
+            eyePosistionQ.y(),
+            cameraPositionP.z() +
+            Math.sin(speed) * whereCameraIsLooking.x() + Math.cos(speed) * whereCameraIsLooking.z()
+        );
     }
 
     let xDragStart;
     let yDragStart;
-    let xRotationStart;
-    let yRotationStart;
+    let angleY = 0.0;
+    let angleZ = 0.0;
+    let yAngleStart;
+    let zAngleStart;
     $(canvas).mousedown(function (event) {
         xDragStart = event.clientX;
         yDragStart = event.clientY;
-        xRotationStart = rotationAroundX;
-        yRotationStart = rotationAroundY;
+        yAngleStart = angleY;
+        zAngleStart = angleZ;
         $(canvas).mousemove(handleMouseMove);
     }).mouseup(function (event) {
         $(canvas).unbind("mousemove");
