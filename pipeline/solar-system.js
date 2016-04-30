@@ -73,10 +73,10 @@
     const maxFar = 100;
     const aspect = canvas.width / canvas.height;
     const viewingVolume = {
-        left: -4 * aspect,
-        right: 4 * aspect,
-        bottom: -4,
-        top: 4,
+        left: -10 * aspect,
+        right: 10 * aspect,
+        bottom: -10,
+        top: 10,
         near: minNear,
         far: maxFar
     };
@@ -256,14 +256,14 @@
 
         // Check if it's time to advance.
         progress = timestamp - previousTimestamp;
-        if (progress < 30) {
+        if (progress < 100) {
             // Do nothing if it's too soon.
             window.requestAnimationFrame(advanceScene);
             return;
         }
 
         // All clear.
-        drawScene(timestamp);
+        drawScene(progress);
 
         // Request the next frame.
         previousTimestamp = timestamp;

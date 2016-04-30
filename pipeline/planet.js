@@ -87,7 +87,7 @@ const Planet = ((() => {
             // );
             // console.log(time);
             this.velocity = this.velocity.add(this.acceleration.multiply(time));
-            // console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
+            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
         }
 
         updatePosistion (time) {
@@ -122,7 +122,7 @@ const Planet = ((() => {
                 0,
                 this.forceOfGravity * Math.sin(angleToOrbiter) * sineCorrection
             );
-            // console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
+            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
         }
 
         // set velocity (s) {
@@ -135,7 +135,7 @@ const Planet = ((() => {
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
             if (this.orbitOf) {
-                // this.update(time);
+                this.update(time);
             }
         }
     }
