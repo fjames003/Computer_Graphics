@@ -46,7 +46,7 @@
         textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
         glTexture: sunTexture
-    }).translate(1,0,0);
+    }).translate(0,0,0);
 
     const earthTexture = gl.createTexture();
 
@@ -67,7 +67,7 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -2).scale(0.5, 0.5, 0.5);
+    }).translate(0, 0, -2);
 
     const minNear = 5;
     const maxFar = 100;
@@ -217,7 +217,7 @@
     gl.uniform3fv(lightDiffuse, [0.5, 0.5, 0.5]);
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
-    let animationActive = true;
+    let animationActive = false;
     var rotationStep = -2;
     let previousTimestamp = null;
     let zMovement = 0;
@@ -238,7 +238,7 @@
         }
         let drawWhenReady = setInterval(function () {
             if (texturesReady() === objectsToDraw.length) {
-                drawScene(timestamp);
+                drawScene(progress);
                 clearInterval(drawWhenReady);
             }
         }, 10);
@@ -317,8 +317,16 @@
             window.requestAnimationFrame(advanceScene);
         } else if (e.which === 76) {
             for (let i = 0; i < objectsToDraw.length; i += 1) {
-                console.log(camera);
+                console.log("Actual Location!");
+                console.log(objectsToDraw[i].matrix.multiplyVector(new Vector(0, 0, 0, 1)));
             }
+        } else if (e.which === 78) {
+            let nextFrame = setInterval(function () {
+                drawScene(1);
+                clearInterval(nextFrame);
+            }, 10);
+
+
         } else {
             if (animationActive) {
                 switch(e.which) {
@@ -355,7 +363,7 @@
         eyePosistionQ.elements[1] += angleZ * 2;
 
         rotateCamera(-angleY);
-        drawScene();
+        window.requestAnimationFrame(advanceScene);
     }
     const rotateCamera  = (speed) => {
         let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP);

@@ -64,7 +64,8 @@ const Planet = ((() => {
 
 
         update (time) {
-            time /= 1000000;
+            // Getting passed 1... aka 1 year, thus dividing by the seconds in a week to make each iteration a week...
+            time /= 60480;
             // time = time - previousTimestamp;
             // previousTimestamp = time;
             // Update velocity to be current velocity plus acceleration
@@ -78,28 +79,21 @@ const Planet = ((() => {
         // Golden rule of this function should be: Vf = Vo + a*t
         // Need to remember to keep the x and y directions seperate...
         updateVelocity (time) {
-
-            // console.log(this.acceleration);
-            // this.velocity = new Vector(
-            //     this.velocity.x() + this.acceleration.x() * time,
-            //     0,
-            //     this.velocity.z() + this.acceleration.z() * time
-            // );
-            // console.log(time);
             this.velocity = this.velocity.add(this.acceleration.multiply(time));
-            console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
+            // console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
         }
 
         updatePosistion (time) {
             // this.location = {
             //     x: this.location.x + this.velocity.x() * time,
-            //     y: this.location.y + this.velocity.y() * time,
-            //     z: 0
+            //     y: 0,
+            //     z: this.location.z + this.velocity.z() * time
             // };
+
             this.locationVec = this.locationVec.add(this.velocity.multiply(time));
-            console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
+            // console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
             this.translate(
-                -this.locationVec.x() - this.startLocation.x,
+                -(this.locationVec.x() - this.startLocation.x),
                 this.locationVec.y() - this.startLocation.y,
                 this.locationVec.z() - this.startLocation.z
             );
@@ -110,27 +104,16 @@ const Planet = ((() => {
         // our X distance (cos). This angle can then be passed to cos and sin to find the amount of gravity in
         // each direction...
         updateAccleration () {
-            let direction = this.orbiterLoc.subtract(this.locationVec);
-            let angleToOrbiter = Math.atan(direction.z() / direction.x());
+            let angleToOrbiter = Math.atan2(this.orbiterLoc.z() - this.locationVec.z(), -(this.orbiterLoc.x() - this.locationVec.x())) + Math.PI;
 
-            // angleToOrbiter = (angleToOrbiter < 0) ? (2 * Math.PI + angleToOrbiter) : angleToOrbiter;
-            console.log("Degrees to Sun: "+ (angleToOrbiter * (180 / Math.PI)));
-            let cosineCorrection = (angleToOrbiter > 0) ? -1 : 1;
-            let sineCorrection = (direction.z() < 0) ? 1 : -1;
+            // console.log("Degrees to Sun: "+ (angleToOrbiter * (180 / Math.PI)));
             this.acceleration = new Vector(
-                this.forceOfGravity * Math.cos(angleToOrbiter) * cosineCorrection,
+                this.forceOfGravity * Math.cos(angleToOrbiter),
                 0,
-                this.forceOfGravity * Math.sin(angleToOrbiter) * sineCorrection
+                -this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-            console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
+            // console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
         }
-
-        // set velocity (s) {
-        //     this._velocity = {x: s.x, y: s.y, z: s.z};
-        // }
-        // get velocity () {
-        //     return this._velocity;
-        // }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
             super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
