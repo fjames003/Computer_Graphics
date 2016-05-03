@@ -106,7 +106,7 @@
     const mercuryTexture = gl.createTexture();
 
     const mercury = new Planet({
-        location: {x: 0, y: 0, z: -23.04},
+        location: {x: 0, y: 0, z: -12.48},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
@@ -119,7 +119,7 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -23.04);
+    }).translate(0, 0, -12.48);
 
     const minNear = 5;
     const maxFar = 500;
@@ -143,7 +143,7 @@
         earth,
         mars,
         venus,
-        mercury./textures/
+        mercury
        ];
 
     // Initialize the shaders.
