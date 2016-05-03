@@ -52,7 +52,7 @@
 
     const earth = new Planet({
         // location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
-        location: {x: 0, y: 0.0, z: -2.0},
+        location: {x: 0, y: 0.0, z: -10.0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
@@ -67,16 +67,16 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -2);
+    }).translate(0, 0, -10);
 
     const minNear = 5;
     const maxFar = 100;
     const aspect = canvas.width / canvas.height;
     const viewingVolume = {
-        left: -10 * aspect,
-        right: 10 * aspect,
-        bottom: -10,
-        top: 10,
+        left: -4 * aspect,
+        right: 4 * aspect,
+        bottom: -4,
+        top: 4,
         near: minNear,
         far: maxFar
     };
@@ -154,7 +154,7 @@
         y: 1,
         z: 0
     }
-    let cameraPositionP = new Vector(0, 0, 10);
+    let cameraPositionP = new Vector(0, 0, 20);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
@@ -213,7 +213,7 @@
          ).toWebGL()
      );
 
-    gl.uniform4fv(lightPosition, [0, 0, -500, 1.0]);
+    gl.uniform4fv(lightPosition, [0, 0, -25, 1.0]);
     gl.uniform3fv(lightDiffuse, [0.5, 0.5, 0.5]);
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
@@ -322,7 +322,7 @@
             }
         } else if (e.which === 78) {
             let nextFrame = setInterval(function () {
-                drawScene(1);
+                drawScene(10000);
                 clearInterval(nextFrame);
             }, 10);
 

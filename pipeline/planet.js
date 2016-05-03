@@ -29,46 +29,23 @@ const Planet = ((() => {
                 }
             }
 
-            // If I restrict the user to only creating planets below the one they orbit this cuts down on the calculation
-            // for distance to the orbiter... Thus this one can be commented out... (Just in case planets can be arbitray)
-            // let distanceToOrbiter = Math.sqrt(
-            //     (this.startLocation.x - this.orbitOf.startLocation.x) * (this.startLocation.x - this.orbitOf.startLocation.x) +
-            //     (this.startLocation.y - this.orbitOf.startLocation.y) * (this.startLocation.y - this.orbitOf.startLocation.y)
-            // );
             if (specs.orbitOf) {
                 let distanceToOrbiter = this.orbitOf.startLocation.z - this.startLocation.z;
-                console.log("Distance to Orbiter: " + distanceToOrbiter);
-
-                // Now using these values we can calculate the starting velocity of the planet...
-                    // calculate velocity
-                    // We set the velocity in the x direction so that it is perpendicular to acceleration later.
-                    // v^2 = G*Ms / d
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
-                // console.log(velocitySquared);
-                // Moving left, aka negative x velocity...
+
                 this.velocity = new Vector(Math.sqrt(velocitySquared), 0, 0);
-                console.log(`Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
-                // Now compute the acceleration
-                // Set acceleration in the y direction... since that is where the orbiter is...
-                // This is starting the planet with a acceleration pointing directly up at the planet it orbits...
-                // a = G*Ms / d^2
-                // Moving forward in the z toward orbiter...
-                console.log(velocitySquared / distanceToOrbiter);
+
                 this.acceleration = new Vector(0, 0, (velocitySquared / distanceToOrbiter));
-                console.log(`Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
+
                 this.forceOfGravity = this.acceleration.magnitude();
 
             }
-
         }
 
 
         update (time) {
             // Getting passed 1... aka 1 year, thus dividing by the seconds in a week to make each iteration a week...
             time /= 60480;
-            // time = time - previousTimestamp;
-            // previousTimestamp = time;
-            // Update velocity to be current velocity plus acceleration
             this.updateVelocity(time);
             // Update location based on velocity
             this.updatePosistion(time);
@@ -76,43 +53,30 @@ const Planet = ((() => {
             this.updateAccleration();
         }
 
-        // Golden rule of this function should be: Vf = Vo + a*t
-        // Need to remember to keep the x and y directions seperate...
         updateVelocity (time) {
             this.velocity = this.velocity.add(this.acceleration.multiply(time));
-            // console.log(`Updated Velocity: (${this.velocity.x()}, ${this.velocity.y()}, ${this.velocity.z()})`);
         }
 
         updatePosistion (time) {
-            // this.location = {
-            //     x: this.location.x + this.velocity.x() * time,
-            //     y: 0,
-            //     z: this.location.z + this.velocity.z() * time
-            // };
-
-            this.locationVec = this.locationVec.add(this.velocity.multiply(time));
-            // console.log(`Updated location: (${this.locationVec.x()}, ${this.locationVec.y()}, ${this.locationVec.z()})`);
             this.translate(
-                -(this.locationVec.x() - this.startLocation.x),
-                this.locationVec.y() - this.startLocation.y,
-                this.locationVec.z() - this.startLocation.z
+                this.velocity.x() * time,
+                this.velocity.y() * time,
+                this.velocity.z() * time
             );
         }
 
-        // Angle of acceleration can be calulated by finding the angle to the body we are orbiting,
-        // which can be found using the distance to that body... Using arcTan of our Y distance (sin) divided by
-        // our X distance (cos). This angle can then be passed to cos and sin to find the amount of gravity in
-        // each direction...
         updateAccleration () {
-            let angleToOrbiter = Math.atan2(this.orbiterLoc.z() - this.locationVec.z(), -(this.orbiterLoc.x() - this.locationVec.x())) + Math.PI;
+            let transVec = new Vector(0, 0, 0, 1);
+            let myCoord = this.matrix.multiplyVector(transVec);
+            let orbiterCoord = this.orbitOf.matrix.multiplyVector(transVec);
+            let angleToOrbiter = Math.atan2(orbiterCoord.z() - myCoord.z(), orbiterCoord.x() - myCoord.x());
 
-            // console.log("Degrees to Sun: "+ (angleToOrbiter * (180 / Math.PI)));
             this.acceleration = new Vector(
                 this.forceOfGravity * Math.cos(angleToOrbiter),
                 0,
-                -this.forceOfGravity * Math.sin(angleToOrbiter)
+                this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-            // console.log(`Updated Acceleration: (${this.acceleration.x()}, ${this.acceleration.y()}, ${this.acceleration.z()})`);
+
         }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
