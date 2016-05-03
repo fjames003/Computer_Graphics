@@ -13,12 +13,11 @@ const Planet = ((() => {
             this.startLocation = specs.location || {x: 0, y: 0, z: 0};
             this.locationVec = new Vector(this.startLocation.x, this.startLocation.y, this.startLocation.z);
             //Default to something here...
-            if (!specs.mass || !specs.radius) {
-                throw "A planet must have a mass and a radius";
+            if (!specs.mass) {
+                throw "A planet must have a mass";
             }
             this.mass = specs.mass;
             // Will be used for scale to resemble more realistic sizes...
-            this.radius = specs.radius;
             this.orbitOf = specs.orbitOf;
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
@@ -45,7 +44,7 @@ const Planet = ((() => {
 
         update (time) {
             // Getting passed 1... aka 1 year, thus dividing by the seconds in a week to make each iteration a week...
-            time /= 60480;
+            time /= 60;
             this.updateVelocity(time);
             // Update location based on velocity
             this.updatePosistion(time);

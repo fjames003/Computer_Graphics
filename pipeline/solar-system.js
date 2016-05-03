@@ -38,21 +38,20 @@
         location: {x: 0, y: 0, z: 0},
         // mass: 4.385 * Math.pow(10, 30),
         mass: 1.0,
-        radius: 432168.6,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColors: { r: 1.0, g: 1.0, b: 0.0 },
-        shininess: 32,
+        shininess: 16384,
         gl: gl,
         textureId: gl.TEXTURE0,
         textureSrc: "sun_512.jpg",
         glTexture: sunTexture
-    }).translate(0,0,0);
+    }).translate(0,0,0).scale(10.9, 10.9, 10.9);
 
     const earthTexture = gl.createTexture();
 
     const earth = new Planet({
         // location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
-        location: {x: 0, y: 0.0, z: -10.0},
+        location: {x: 0.0, y: 0.0, z: -16.0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
@@ -61,13 +60,30 @@
         glTexture: earthTexture,
         // mass: 1.317 * Math.pow(10, 25),
         mass: 3.003 * Math.pow(10, -6),
-        radius: 3958.8,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColor: { r: 1.0, g: 1.0, b: 1.0 },
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -10);
+    }).translate(0, 0, -16);
+
+    const marsTexture = gl.createTexture();
+
+    const mars = new Planet({
+        location: {x: 0, y: 0, z: -24.32},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "mars_512.png",
+        glTexture: marsTexture,
+        mass: 3.227 * Math.pow(10, -7),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -24.32);
 
     const minNear = 5;
     const maxFar = 100;
@@ -88,7 +104,8 @@
     })).translate(0, 1, 0).scale(0.05, 0.1, 0.05);
     const objectsToDraw = [
         sun,
-        earth
+        earth,
+        mars
        ];
 
     // Initialize the shaders.
@@ -154,7 +171,7 @@
         y: 1,
         z: 0
     }
-    let cameraPositionP = new Vector(0, 0, 20);
+    let cameraPositionP = new Vector(0, 0, 25);
     let eyePosistionQ = new Vector(0, 0, 1);
     let upVector = new Vector(0, 1, 0);
     var camera;
@@ -213,7 +230,7 @@
          ).toWebGL()
      );
 
-    gl.uniform4fv(lightPosition, [0, 0, -25, 1.0]);
+    gl.uniform4fv(lightPosition, [0, 0, -500, 1.0]);
     gl.uniform3fv(lightDiffuse, [0.5, 0.5, 0.5]);
     gl.uniform3fv(lightSpecular, [0.5, 0.5, 0.5]);
 
@@ -241,7 +258,7 @@
                 drawScene(progress);
                 clearInterval(drawWhenReady);
             }
-        }, 10);
+        }, 1000);
         // Check if the user has turned things off.
         if (!animationActive) {
             return;
