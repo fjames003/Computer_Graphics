@@ -1,6 +1,4 @@
 const Planet = ((() => {
-    // m^3kg^-1s^-2
-    // const gravitationalConstant = 6.67408 * Math.pow(10, -11);
     // AU^3 * yr^-2 * SolarMasses^-1 -->Smaller units...
     const gravitationalConstant = 4 * Math.PI * Math.PI;
     let previousTimestamp = 0;
@@ -11,13 +9,11 @@ const Planet = ((() => {
             super(specs);
             // Planets must obey one plane... Thus z will always be 0...
             this.startLocation = specs.location || {x: 0, y: 0, z: 0};
-            this.locationVec = new Vector(this.startLocation.x, this.startLocation.y, this.startLocation.z);
             //Default to something here...
             if (!specs.mass) {
                 throw "A planet must have a mass";
             }
             this.mass = specs.mass;
-            // Will be used for scale to resemble more realistic sizes...
             this.orbitOf = specs.orbitOf;
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
@@ -33,18 +29,14 @@ const Planet = ((() => {
                 let velocitySquared = (gravitationalConstant * this.orbitOf.mass) / distanceToOrbiter;
 
                 this.velocity = new Vector(Math.sqrt(velocitySquared), 0, 0);
-
                 this.acceleration = new Vector(0, 0, (velocitySquared / distanceToOrbiter));
-
                 this.forceOfGravity = this.acceleration.magnitude();
 
             }
         }
 
-
         update (time) {
-            // Getting passed 1... aka 1 year, thus dividing by the seconds in a week to make each iteration a week...
-            time /= 60;
+            time /= 120;
             this.updateVelocity(time);
             // Update location based on velocity
             this.updatePosistion(time);
@@ -75,7 +67,6 @@ const Planet = ((() => {
                 0,
                 this.forceOfGravity * Math.sin(angleToOrbiter)
             );
-
         }
 
         draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {

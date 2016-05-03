@@ -43,7 +43,7 @@
         shininess: 16384,
         gl: gl,
         textureId: gl.TEXTURE0,
-        textureSrc: "sun_512.jpg",
+        textureSrc: "./textures/sun_512.jpg",
         glTexture: sunTexture
     }).translate(0,0,0).scale(10.9, 10.9, 10.9);
 
@@ -51,12 +51,12 @@
 
     const earth = new Planet({
         // location: {x: 0, y: -1.4960 * Math.pow(10, 11), z: 0},
-        location: {x: 0.0, y: 0.0, z: -16.0},
+        location: {x: 0.0, y: 0.0, z: -32.0},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
         textureId: gl.TEXTURE0,
-        textureSrc: "earth_512.jpg",
+        textureSrc: "./textures/earth_512.jpg",
         glTexture: earthTexture,
         // mass: 1.317 * Math.pow(10, 25),
         mass: 3.003 * Math.pow(10, -6),
@@ -65,17 +65,17 @@
         shininess: 32,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -16);
+    }).translate(0, 0, -32);
 
     const marsTexture = gl.createTexture();
 
     const mars = new Planet({
-        location: {x: 0, y: 0, z: -24.32},
+        location: {x: 0, y: 0, z: -48.64},
         vertices: sun.compressedVertices,
         indices: sun.indices,
         textureCoord: sun.textureCoord,
         textureId: gl.TEXTURE0,
-        textureSrc: "mars_512.png",
+        textureSrc: "./textures/mars_512.png",
         glTexture: marsTexture,
         mass: 3.227 * Math.pow(10, -7),
         colors: { r: 1.0, g: 1.0, b: 1.0 },
@@ -83,10 +83,46 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -24.32);
+    }).translate(0, 0, -48.64);
+
+    const venusTexture = gl.createTexture();
+
+    const venus = new Planet({
+        location: {x: 0, y: 0, z: -23.04},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "./textures/venus_512.jpg",
+        glTexture: venusTexture,
+        mass: 2.450 * Math.pow(10, -6),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -23.04);
+
+    const mercuryTexture = gl.createTexture();
+
+    const mercury = new Planet({
+        location: {x: 0, y: 0, z: -23.04},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "./textures/mercury_512.jpg",
+        glTexture: mercuryTexture,
+        mass: 2.450 * Math.pow(10, -6),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -23.04);
 
     const minNear = 5;
-    const maxFar = 100;
+    const maxFar = 500;
     const aspect = canvas.width / canvas.height;
     const viewingVolume = {
         left: -4 * aspect,
@@ -101,11 +137,13 @@
         colors: {r: 1, g: 0, b: 0},
         shininess: 128,
         mode: gl.TRIANGLES
-    })).translate(0, 1, 0).scale(0.05, 0.1, 0.05);
+    })).translate(0, 1, 0).scale(0.07, 0.3, 0.07);
     const objectsToDraw = [
         sun,
         earth,
-        mars
+        mars,
+        venus,
+        mercury./textures/
        ];
 
     // Initialize the shaders.
@@ -161,19 +199,9 @@
      * Displays the scene.
      */
 
-    const earthRotate = {
-        x: 0,
-        y: 1,
-        z: 0
-    };
-    const sunRotate = {
-        x: 0,
-        y: 1,
-        z: 0
-    }
-    let cameraPositionP = new Vector(0, 0, 25);
+    let cameraPositionP = new Vector(0, 0, 75);
     let eyePosistionQ = new Vector(0, 0, 1);
-    let upVector = new Vector(0, 1, 0);
+    const upVector = new Vector(0, 1, 0);
     var camera;
     const drawScene = (time) => {
         // Clear the display.
@@ -181,20 +209,6 @@
 
         // Display the objects.
         for (let i = 0; i < objectsToDraw.length; i += 1) {
-            // if (i === 0) {
-            //     objectsToDraw[i].rotate(rotationStep, sunRotate.x, sunRotate.y, sunRotate.z);
-            // } else {
-            //     objectsToDraw[i].rotate(rotationStep, earthRotate.x, earthRotate.y, earthRotate.z);
-            // }
-
-            // let camera = new Matrix().camera(
-            //     // Position
-            //     xMovement, 0, -zMovement,
-            //     // Eye
-            //     -rotationAroundY / 360, -rotationAroundX / 360, 1 - zMovement,
-            //     // Up vector...
-            //     0, 1 - rotationAroundX / 360, 0
-            // ).toWebGL();
 
             camera = new Matrix().camera(
                 cameraPositionP.x(), cameraPositionP.y(), -cameraPositionP.z(),

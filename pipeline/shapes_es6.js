@@ -98,7 +98,7 @@ const Shape = ((() => {
         }
 
         translate (x, y, z) {
-            this.matrix = this.matrix.multiply(new Matrix().translate(x, y, z));
+            this.matrix = Matrix.translate(x, y, z).multiply(this.matrix);
             this.children.map(child => child.translate(x, y, z));
             return this;
         }
