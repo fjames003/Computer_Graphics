@@ -121,14 +121,32 @@
         gl: gl
     }).translate(0, 0, -12.48);
 
+    const jupiterTexture = gl.createTexture();
+
+    const jupiter = new Planet({
+        location: {x: 0, y: 0, z: -166.4},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "./textures/jupiter_512.jpg",
+        glTexture: jupiterTexture,
+        mass: 2.450 * Math.pow(10, -6),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -166.4);
+
     const minNear = 5;
     const maxFar = 500;
     const aspect = canvas.width / canvas.height;
     const viewingVolume = {
-        left: -4 * aspect,
-        right: 4 * aspect,
-        bottom: -4,
-        top: 4,
+        left: -2 * aspect,
+        right: 2 * aspect,
+        bottom: -2,
+        top: 2,
         near: minNear,
         far: maxFar
     };
@@ -143,7 +161,8 @@
         earth,
         mars,
         venus,
-        mercury
+        mercury,
+        jupiter
        ];
 
     // Initialize the shaders.
