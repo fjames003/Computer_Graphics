@@ -1,20 +1,6 @@
-/*
- * For maximum modularity, we place everything within a single function that
- * takes the canvas that it will need.
- */
 
 ((canvas => {
-    /*
-     * This code does not really belong here: it should live
-     * in a separate library of matrix and transformation
-     * functions.  It is here only to show you how matrices
-     * can be used with GLSL.
-     *
-     * Based on the original glRotate reference:
-     *     http://www.opengl.org/sdk/docs/man/xhtml/glRotate.xml
-     */
 
-    // Grab the WebGL rendering context.
     const gl = GLSLUtilities.getGL(canvas);
     if (!gl) {
         alert("No WebGL context found...sorry.");
@@ -23,9 +9,6 @@
         return;
     }
 
-    // Set up settings that will not change.  This is not "canned" into a
-    // utility function because these settings really can vary from program
-    // to program.
     gl.enable(gl.DEPTH_TEST);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -40,12 +23,48 @@
         mass: 1.0,
         colors: { r: 1.0, g: 1.0, b: 1.0 },
         specularColors: { r: 1.0, g: 1.0, b: 0.0 },
-        shininess: 16384,
+        shininess: 64,
         gl: gl,
         textureId: gl.TEXTURE0,
         textureSrc: "./textures/sun_512.jpg",
         glTexture: sunTexture
     }).translate(0,0,0).scale(10.9, 10.9, 10.9);
+
+    const mercuryTexture = gl.createTexture();
+
+    const mercury = new Planet({
+        location: {x: 0, y: 0, z: -12.48},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "./textures/mercury_512.jpg",
+        glTexture: mercuryTexture,
+        mass: 2.450 * Math.pow(10, -6),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -12.48);
+
+    const venusTexture = gl.createTexture();
+
+    const venus = new Planet({
+        location: {x: 0, y: 0, z: -23.04},
+        vertices: sun.compressedVertices,
+        indices: sun.indices,
+        textureCoord: sun.textureCoord,
+        textureId: gl.TEXTURE0,
+        textureSrc: "./textures/venus_512.jpg",
+        glTexture: venusTexture,
+        mass: 2.450 * Math.pow(10, -6),
+        colors: { r: 1.0, g: 1.0, b: 1.0 },
+        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+        shininess: 16,
+        orbitOf: sun,
+        gl: gl
+    }).translate(0, 0, -23.04);
 
     const earthTexture = gl.createTexture();
 
@@ -85,42 +104,6 @@
         gl: gl
     }).translate(0, 0, -48.64);
 
-    const venusTexture = gl.createTexture();
-
-    const venus = new Planet({
-        location: {x: 0, y: 0, z: -23.04},
-        vertices: sun.compressedVertices,
-        indices: sun.indices,
-        textureCoord: sun.textureCoord,
-        textureId: gl.TEXTURE0,
-        textureSrc: "./textures/venus_512.jpg",
-        glTexture: venusTexture,
-        mass: 2.450 * Math.pow(10, -6),
-        colors: { r: 1.0, g: 1.0, b: 1.0 },
-        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
-        shininess: 16,
-        orbitOf: sun,
-        gl: gl
-    }).translate(0, 0, -23.04);
-
-    const mercuryTexture = gl.createTexture();
-
-    const mercury = new Planet({
-        location: {x: 0, y: 0, z: -12.48},
-        vertices: sun.compressedVertices,
-        indices: sun.indices,
-        textureCoord: sun.textureCoord,
-        textureId: gl.TEXTURE0,
-        textureSrc: "./textures/mercury_512.jpg",
-        glTexture: mercuryTexture,
-        mass: 2.450 * Math.pow(10, -6),
-        colors: { r: 1.0, g: 1.0, b: 1.0 },
-        specularColor: { r: 1.0, g: 1.0, b: 1.0 },
-        shininess: 16,
-        orbitOf: sun,
-        gl: gl
-    }).translate(0, 0, -12.48);
-
     const jupiterTexture = gl.createTexture();
 
     const jupiter = new Planet({
@@ -156,12 +139,13 @@
         shininess: 128,
         mode: gl.TRIANGLES
     })).translate(0, 1, 0).scale(0.07, 0.3, 0.07);
+
     const objectsToDraw = [
         sun,
+        mercury,
+        venus,
         earth,
         mars,
-        venus,
-        mercury,
         jupiter
        ];
 
@@ -212,29 +196,23 @@
     const lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
     const shininess = gl.getUniformLocation(shaderProgram, "shininess");
 
-    const alpha = gl.getUniformLocation(shaderProgram, "alpha");
-
-    /*
-     * Displays the scene.
-     */
-
     let cameraPositionP = new Vector(0, 0, 75);
-    let eyePosistionQ = new Vector(0, 0, 1);
-    const upVector = new Vector(0, 1, 0);
-    var camera;
+    let eyePosistionQ   = new Vector(0, 0, 1);
+    const upVector      = new Vector(0, 1, 0);
+
     const drawScene = (time) => {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        objectsToDraw[0].rotate(rotationStep, 0, 1, 0);
         // Display the objects.
         for (let i = 0; i < objectsToDraw.length; i += 1) {
 
-            camera = new Matrix().camera(
+            let camera = new Matrix().camera(
                 cameraPositionP.x(), cameraPositionP.y(), -cameraPositionP.z(),
                 eyePosistionQ.x(), eyePosistionQ.y(), eyePosistionQ.z(),
                 upVector.x(), upVector.y(), upVector.z()
             ).toWebGL();
-
 
             gl.uniformMatrix4fv(cameraMatrix, gl.FALSE, camera);
 
@@ -247,9 +225,6 @@
         gl.flush();
     };
 
-    /*
-     * Animates the scene.
-     */
      gl.uniformMatrix4fv(
          projectionMatrix,
          gl.FALSE,
@@ -272,11 +247,9 @@
     let previousTimestamp = null;
     let zMovement = 0;
     let xMovement = 0;
-    let speed = 1;
-    let rotationAroundX = 0;
-    let rotationAroundY = 0;
-    let progess;
+
     const advanceScene = timestamp => {
+
         let texturesReady = () => {
             let numberReady = 0;
             for (let i = 0; i < objectsToDraw.length; i += 1) {
@@ -286,12 +259,14 @@
             }
             return numberReady;
         }
+
         let drawWhenReady = setInterval(function () {
             if (texturesReady() === objectsToDraw.length) {
                 drawScene(progress);
                 clearInterval(drawWhenReady);
             }
-        }, 1000);
+        }, 10);
+
         // Check if the user has turned things off.
         if (!animationActive) {
             return;
@@ -322,10 +297,8 @@
 
     // Set up the rotation toggle: clicking on the canvas does it.
     $(canvas).click(() => {
-        if (animationActive) {
-            previousTimestamp = null;
-            window.requestAnimationFrame(advanceScene);
-        }
+        animationActive = !animationActive;
+        window.requestAnimationFrame(advanceScene);
     });
 
     const updateForwardBackwardPosition = (direction, progress) => {
@@ -362,85 +335,26 @@
     }
 
     $(document).keydown(function(e) {
-        if (e.which === 80) {
-            animationActive = !animationActive;
-            window.requestAnimationFrame(advanceScene);
-        } else if (e.which === 76) {
-            for (let i = 0; i < objectsToDraw.length; i += 1) {
-                console.log("Actual Location!");
-                console.log(objectsToDraw[i].matrix.multiplyVector(new Vector(0, 0, 0, 1)));
-            }
-        } else if (e.which === 78) {
-            let nextFrame = setInterval(function () {
-                drawScene(10000);
-                clearInterval(nextFrame);
-            }, 10);
-
-
-        } else {
-            if (animationActive) {
-                switch(e.which) {
-                    case 37: // left
+        if (animationActive) {
+            switch(e.which) {
+                case 37: // left
                     updateLeftRightPosition(-1);
                     break;
-
-                    case 38: // up
-                    // updateZposition(1);
+                case 38: // up
                     updateForwardBackwardPosition(-1);
                     break;
-
-                    case 39: // right
+                case 39: // right
                     updateLeftRightPosition(1);
                     break;
-
-                    case 40: // down
-                    // updateZposition(-1);
+                case 40: // down
                     updateForwardBackwardPosition(1);
                     break;
-
-                    default: return; // exit this handler for other keys
-                }
-                e.preventDefault(); // prevent the default action (scroll / move caret)
+                default:
+                    return;
             }
+            e.preventDefault(); // prevent the default action (scroll / move caret)
         }
     });
 
-    const handleMouseMove = () => {
-        angleY = yAngleStart + (xDragStart - event.clientX) / 10000;
-        angleZ = zAngleStart + -(yDragStart - event.clientY) / 10000;
-
-        // Make camera look faster as we go up...
-        eyePosistionQ.elements[1] += angleZ * 2;
-
-        rotateCamera(-angleY);
-        window.requestAnimationFrame(advanceScene);
-    }
-    const rotateCamera  = (speed) => {
-        let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP);
-
-        eyePosistionQ = new Vector(
-            cameraPositionP.x() +
-            Math.cos(speed) * whereCameraIsLooking.x() - Math.sin(speed) * whereCameraIsLooking.z(),
-            eyePosistionQ.y(),
-            cameraPositionP.z() +
-            Math.sin(speed) * whereCameraIsLooking.x() + Math.cos(speed) * whereCameraIsLooking.z()
-        );
-    }
-
-    let xDragStart;
-    let yDragStart;
-    let angleY = 0.0;
-    let angleZ = 0.0;
-    let yAngleStart;
-    let zAngleStart;
-    $(canvas).mousedown(function (event) {
-        xDragStart = event.clientX;
-        yDragStart = event.clientY;
-        yAngleStart = angleY;
-        zAngleStart = angleZ;
-        $(canvas).mousemove(handleMouseMove);
-    }).mouseup(function (event) {
-        $(canvas).unbind("mousemove");
-    });
     window.requestAnimationFrame(advanceScene);
 })(document.getElementById("canvas")));

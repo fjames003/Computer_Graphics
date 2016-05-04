@@ -9,20 +9,24 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            background-image: url('space.jpg');
         }
+        p { text-align: center }
+        h1 { text-align: center }
     </style>
   </head>
   <body>
-    <h1>Shape Library Demo</h1>
-
     <p>You’ll need a WebGL-capable web browser to see anything here;
-     instructions can be found in this
-     <a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">official
-     WebGL wiki page</a>.</p>
+    instructions can be found in this
+    <a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">official
+    WebGL wiki page</a>.</p>
+    <h1>Solar System Simulation</h1>
 
-    <p>This page adds a few more fundamental features, showing how
-      further functionality can be added to the software stack.
-      Click the canvas to see what else is new.</p>
+    <p>This page is a basic simulation of the solar system.<br>
+        --------------------------------------------------------<br>
+    Click the scene to begin!<br>
+    To get closer to the Sun, press the [down] key.<br>
+    To get further from the Sun, press the [up] key.</p>
 
     <canvas id="canvas" width="1024" height="512">
       Sorry, your web browser does not appear to support
@@ -112,9 +116,6 @@
 
       varying vec2 fragmentTextureCoordinate;
       uniform sampler2D sampler;
-
-      // And finally, blending!
-      uniform float alpha;
 
       void main(void) {
           vec3 textureColor = vec3(texture2D(sampler, fragmentTextureCoordinate));

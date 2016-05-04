@@ -236,17 +236,6 @@ const Shape = ((() => {
             return result;
         }
 
-        // Works if slices on sphere is very large...
-        // toTextureArray(normals) {
-        //     let result = []
-        //     for (let i = 0; i < normals.length; i += 3) {
-        //         result = result.concat(
-        //             [Math.asin(normals[i]) / Math.PI + 0.5, Math.asin(normals[i + 1]) / Math.PI + 0.5]
-        //         );
-        //     }
-        //     return result;
-        // }
-
         toTextureArray(vertices) {
             let result = []
             for (let i = 0; i < vertices.length; i += 3) {
