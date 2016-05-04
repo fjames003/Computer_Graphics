@@ -195,7 +195,7 @@
     const lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
     const shininess = gl.getUniformLocation(shaderProgram, "shininess");
 
-    let cameraPositionP = new Vector(0, 0, 75);
+    let cameraPositionP = new Vector(0, -15, 75);
     let eyePosistionQ   = new Vector(0, 0, 1);
     const upVector      = new Vector(0, 1, 0);
 
