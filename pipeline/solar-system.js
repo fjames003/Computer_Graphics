@@ -45,7 +45,7 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -12.48);
+    }).translate(0, 0, -12.48).scale(0.3829, 0.3829, 0.3829);
 
     const venusTexture = gl.createTexture();
 
@@ -63,7 +63,7 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -23.04);
+    }).translate(0, 0, -23.04).scale(0.9499, 0.9499, 0.9499);
 
     const earthTexture = gl.createTexture();
 
@@ -101,7 +101,7 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -48.64);
+    }).translate(0, 0, -48.64).scale(0.5320, 0.5320, 0.5320);
 
     const jupiterTexture = gl.createTexture();
 
@@ -119,7 +119,7 @@
         shininess: 16,
         orbitOf: sun,
         gl: gl
-    }).translate(0, 0, -166.4);
+    }).translate(0, 0, -166.4).scale(10.97, 10.97, 10.97);
 
     const minNear = 5;
     const maxFar = 500;
@@ -311,9 +311,9 @@
     const updateForwardBackwardPosition = (direction, progress) => {
         let whereCameraIsLooking = eyePosistionQ.subtract(cameraPositionP).unit();
         cameraPositionP = new Vector(
-            cameraPositionP.x() + (direction * whereCameraIsLooking.x() * 0.1),
-            cameraPositionP.y() + (direction * whereCameraIsLooking.y() * 0.1),
-            cameraPositionP.z() + (direction * whereCameraIsLooking.z() * 0.1)
+            cameraPositionP.x() + (direction * whereCameraIsLooking.x() * 1),
+            cameraPositionP.y() + (direction * whereCameraIsLooking.y() * 1),
+            cameraPositionP.z() + (direction * whereCameraIsLooking.z() * 1)
         );
     };
 
