@@ -18,8 +18,13 @@ const Planet = ((() => {
 
             // This is a simplification that will same me some calculating since I know how I will start the scene.
             if (specs.orbitOf) {
-                this.orbiterLoc = new Vector(this.orbitOf.startLocation.x, this.orbitOf.startLocation.y, this.orbitOf.startLocation.z);
-                if (this.startLocation.x !== this.orbitOf.startLocation.x && this.startLocation.z < this.orbitOf.startLocation.z) {
+                this.orbiterLoc = new Vector(
+                    this.orbitOf.startLocation.x,
+                    this.orbitOf.startLocation.y,
+                    this.orbitOf.startLocation.z
+                );
+                if (this.startLocation.x !== this.orbitOf.startLocation.x
+                   && this.startLocation.z < this.orbitOf.startLocation.z) {
                     throw "Planets must be created in the XZ plane behind (in the z) the planet they orbit";
                 }
             }
@@ -69,10 +74,10 @@ const Planet = ((() => {
             );
         }
 
-        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time) {
-            super.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
+        draw (sceneParameters) {
+            super.draw(sceneParameters);
             if (this.orbitOf) {
-                this.update(time);
+                this.update(sceneParameters.time);
             }
         }
     }

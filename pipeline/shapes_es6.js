@@ -36,12 +36,13 @@ const Shape = ((() => {
 
                 this.setVertices();
 
-                this.colors = this.checkColors((specs.colors) ? specs.colors : {r: 0, g: 0, b: 0});
+                this.colors = this.checkColors(
+                    (specs.colors) ? specs.colors : {r: 0, g: 0, b: 0});
                 this.specularColors = this.checkColors(
                     (specs.specularColors) ? specs.specularColors : {r: 1.0, g: 1.0, b: 1.0}
                 );
                 this.shininess = specs.shininess || 1.0;
-                this.buffersInitiated = {vertices: false, color: false}
+                this.buffersInitiated = {vertices: false, color: false};
             }
         }
 
@@ -115,16 +116,11 @@ const Shape = ((() => {
             }
         }
 
-        draw (gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate) {
-            // if (this.parent && !this.multipiedAlready) {
-            //     console.log(this.matrix, this.parent.matrix);
-            //     this.matrix = this.parent.matrix.multiply(this.matrix);
-            //     this.multipiedAlready = true;
-            //     console.log(this.matrix, this.parent.matrix);
-            // }
+        draw (sceneParameters) {
+            let gl = sceneParameters.gl;
             if (!this.buffersInitiated.vertices || !this.buffersInitiated.color) {
-                this.initVertexBuffer(gl);
-                this.initColorBuffer(gl);
+                this.initVertexBuffer(sceneParameters.gl);
+                this.initColorBuffer(sceneParameters.gl);
             }
 
             if (this.textureId && !this.textureReady) {
@@ -132,42 +128,34 @@ const Shape = ((() => {
             }
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.colorBuffer);
-            gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(sceneParameters.vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.specularBuffer);
-            gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(sceneParameters.vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
 
-            gl.uniform1f(shininess, this.shininess);
+            gl.uniform1f(sceneParameters.shininess, this.shininess);
 
-            gl.uniformMatrix4fv(transformMatrix, gl.FALSE, this.matrix.toWebGL());
+            gl.uniformMatrix4fv(sceneParameters.transformMatrix, gl.FALSE, this.matrix.toWebGL());
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-            gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(sceneParameters.normalVector, 3, gl.FLOAT, false, 0, 0);
 
             if (this.textureId && this.textureReady) {
-                gl.enableVertexAttribArray(textureCoordinate);
+                gl.enableVertexAttribArray(sceneParameters.textureCoordinate);
                 gl.activeTexture(this.textureId);
                 gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.textureCoordinateBuffer);
-                gl.vertexAttribPointer(textureCoordinate, 2, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(sceneParameters.textureCoordinate, 2, gl.FLOAT, false, 0, 0);
             }
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-            gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(sceneParameters.vertexPosition, 3, gl.FLOAT, false, 0, 0);
 
             gl.drawArrays(this._mode, 0, this.vertices.length / 3);
 
-            this.children.map(child => child.draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate));
+            this.children.map(child => child.draw(sceneParameters));
         }
 
-        // JD: See below.
-        //
-        // TODO This is a quick and dirty fix to the texture coordinate issue. The key is that
-        //      the number of texture coordinates must exactly match the number of *final* vertices,
-        //      not the number of mesh vertices (which the code calls the "compressedVertices").
-        //      Just to get things going, the texture coordinates are "unrolled" here. A more
-        //      general solution that accommodates a wide range of possibilities, like different
-        //      modes, whether there is even a texture, etc., will be needed.
         toRawArray (indexedVertices, isLines) {
             var result = [];
 
@@ -188,56 +176,54 @@ const Shape = ((() => {
                     }
                 }
             }
-            // console.log(result.length);
             return result;
         }
 
         toNormalArray (indexedVertices, isLines) {
-            var result = [];
+            let result = [];
 
             // For each face...
-            for (var i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            for (let i = 0; i < indexedVertices.indices.length; i += 1) {
                 // We form vectors from the first and second then second and third vertices.
-                var p0 = indexedVertices.vertices[indexedVertices.indices[i][0]];
-                var p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
-                var p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
+                const p0 = indexedVertices.vertices[indexedVertices.indices[i][0]];
+                const p1 = indexedVertices.vertices[indexedVertices.indices[i][1]];
+                const p2 = indexedVertices.vertices[indexedVertices.indices[i][2]];
 
-                var v0 = new Vector(p0[0], p0[1], p0[2]);
-                var v1 = new Vector(p1[0], p1[1], p1[2]).subtract(v0);
-                var v2 = new Vector(p2[0], p2[1], p2[2]).subtract(v0);
+                const v0 = new Vector(p0[0], p0[1], p0[2]);
+                const v1 = new Vector(p1[0], p1[1], p1[2]).subtract(v0);
+                const v2 = new Vector(p2[0], p2[1], p2[2]).subtract(v0);
 
-                var normal = v1.cross(v2).unit();
+                const normal = v1.cross(v2).unit();
 
                 if (isLines) {
-                    var p3 = indexedVertices.vertices[indexedVertices.indices[i][1]];
-                    var p4 = indexedVertices.vertices[indexedVertices.indices[i][2]];
-                    var p5 = indexedVertices.vertices[indexedVertices.indices[i][0]];
+                const p3 = indexedVertices.vertices[indexedVertices.indices[i][1]];
+                const p4 = indexedVertices.vertices[indexedVertices.indices[i][2]];
+                const p5 = indexedVertices.vertices[indexedVertices.indices[i][0]];
 
-                    var v3 = new Vector(p3[0], p3[1], p3[2]);
-                    var v4 = new Vector(p4[0], p4[1], p4[2]).subtract(v3);
-                    var v5 = new Vector(p5[0], p5[1], p5[2]).subtract(v3);
+                const v3 = new Vector(p3[0], p3[1], p3[2]);
+                const v4 = new Vector(p4[0], p4[1], p4[2]).subtract(v3);
+                const v5 = new Vector(p5[0], p5[1], p5[2]).subtract(v3);
 
-                    var normal1 = v4.cross(v5).unit();
+                var normal1 = v4.cross(v5).unit();
                 }
 
                 // We then use this same normal for every vertex in this face.
-                for (var j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                for (let j = 0; j < indexedVertices.indices[i].length; j += 1) {
                     result = result.concat(
                         [ normal.x(), normal.y(), normal.z() ]
                     );
                     if(isLines) {
                         result = result.concat(
                             [ normal1.x(), normal1.y(), normal1.z() ]
-                        )
+                        );
                     }
                 }
             }
-
             return result;
         }
 
         toTextureArray(vertices) {
-            let result = []
+            let result = [];
             for (let i = 0; i < vertices.length; i += 3) {
                 let dHat = new Vector(vertices[i], vertices[i + 1], vertices[i + 2]).unit();
                 result = result.concat(
@@ -257,7 +243,7 @@ const Shape = ((() => {
         }
         setVertices () {
             if (this._mode === 0) {
-                this.vertices = this.toRawPointArray(vertices);
+                // Pass just use vertices
             } else if (this._mode === 1) {
                 this.vertices = this.toRawArray(this.indexedVertices, true);
                 if (this.normals.length === 0) {
@@ -281,11 +267,12 @@ const Shape = ((() => {
                 colors = (colors && colors.length >= 3) ? colors : [0.0, 0.0, 0.0];
                 if (colors.length !== this.vertices.length) {
                     return colors.concat(
-                                                fillColors(this.vertices.length / 3 - colors.length / 3,
-                                                colors[0],
-                                                colors[1],
-                                                colors[2])
-                                              );
+                        fillColors(this.vertices.length / 3 - colors.length / 3,
+                            colors[0],
+                            colors[1],
+                            colors[2]
+                        )
+                    );
                 } else {
                     return colors;
                 }
@@ -300,8 +287,11 @@ const Shape = ((() => {
     var initBuffer = function (gl, sequence) {
         var buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(sequence),
-                      gl.STATIC_DRAW);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array(sequence),
+            gl.STATIC_DRAW
+        );
 
         return buffer;
     };

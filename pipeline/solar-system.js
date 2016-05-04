@@ -1,4 +1,3 @@
-
 ((canvas => {
 
     const gl = GLSLUtilities.getGL(canvas);
@@ -218,7 +217,17 @@
 
             gl.uniform1i(gl.getUniformLocation(shaderProgram, "sampler"), 0);
 
-            objectsToDraw[i].draw(gl, vertexDiffuseColor, vertexSpecularColor, shininess, vertexPosition, normalVector, transformMatrix, textureCoordinate, time);
+            objectsToDraw[i].draw({
+                gl,
+                vertexDiffuseColor,
+                vertexSpecularColor,
+                shininess,
+                vertexPosition,
+                normalVector,
+                transformMatrix,
+                textureCoordinate,
+                time
+            });
         }
 
         // All done.
@@ -245,8 +254,6 @@
     let animationActive = false;
     var rotationStep = -2;
     let previousTimestamp = null;
-    let zMovement = 0;
-    let xMovement = 0;
 
     const advanceScene = timestamp => {
 
@@ -258,7 +265,7 @@
                 }
             }
             return numberReady;
-        }
+        };
 
         let drawWhenReady = setInterval(function () {
             if (texturesReady() === objectsToDraw.length) {
@@ -308,7 +315,7 @@
             cameraPositionP.y() + (direction * whereCameraIsLooking.y() * 0.1),
             cameraPositionP.z() + (direction * whereCameraIsLooking.z() * 0.1)
         );
-    }
+    };
 
     const updateLeftRightPosition = (direction, progress) => {
         let tempVec;
@@ -332,7 +339,7 @@
             eyePosistionQ.y() + y,
             eyePosistionQ.z() + z
         );
-    }
+    };
 
     $(document).keydown(function(e) {
         if (animationActive) {
